@@ -1,5 +1,21 @@
-Data Driven Development Suite v1.0
-Field Hockey Stats v5.93
+Data Driven Development Suite v1.1
+Field Hockey Stats v5.94
+Stats Recorder v1.30
+
+Version 1.1 introduces the approved sport-neutral Data Driven Development identity across the connected platform.
+
+Version 1.1 / Field Hockey v5.94 / Recorder v1.30 changes:
+
+- Added the approved circular-scope DDD master logo and horizontal platform banner.
+- Added the approved shared PWA app icon for the Data Driven Development suite and Stats Recorder.
+- Updated manifest, Apple touch and favicon assets in all required icon sizes.
+- Updated the Recorder header to use the Data Driven Development banner and identify the module as Stats Recorder.
+- Unified the navy, cyan and amber platform colour palette across the launcher, Field Hockey Stats, Recorder and Trials interfaces.
+- Changed the Field Hockey desktop layout so its sidebar is flush with the far-left edge and the active screen uses all remaining width.
+- Preserved the collapsible mobile sidebar and the independently scrolling desktop sidebar/content regions.
+- Updated Field Hockey report branding to the new Data Driven Development banner.
+- Preserved the existing Field Hockey database key and Recorder storage keys.
+- Refreshed both service-worker caches so installed PWAs receive the new logos, icons, colours and layout.
 
 This package introduces the overarching Data Driven Development launcher and shared services.
 

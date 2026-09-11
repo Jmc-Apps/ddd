@@ -1,23 +1,23 @@
-const CACHE_NAME='ddd-stats-recorder-v1-29-suite-structure';
+const CACHE_NAME='ddd-stats-recorder-v1-30-platform-branding';
 const FILES=[
  './',
  './index.html',
- './goalie_stats_recorder_v1_29.html',
+ './goalie_stats_recorder_v1_30.html',
  './manifest.webmanifest',
- './manifest.webmanifest?v=1.29',
+ './manifest.webmanifest?v=1.30',
  './assets/d_heat_map.png',
  './assets/goal_box_heat_map.png',
- './assets/title-logo.png',
- './assets/home-logo.png',
- './assets/app-icon-master-v127.png',
+ './assets/ddd-banner-v1-30.png',
+ './assets/ddd-logo-v1-30.png',
+ './assets/ddd-app-icon-master-v1-30.png',
  './icon-192.png',
  './icon-512.png',
  './apple-touch-icon.png',
  './favicon-32.png',
- './icon-192-v1-29.png',
- './icon-512-v1-29.png',
- './apple-touch-icon-v1-29.png',
- './favicon-32-v1-29.png'
+ './icon-192-v1-30.png',
+ './icon-512-v1-30.png',
+ './apple-touch-icon-v1-30.png',
+ './favicon-32-v1-30.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(FILES)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
