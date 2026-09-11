@@ -1,6 +1,6 @@
 (()=>{
   'use strict';
-  const SUITE_VERSION='1.3',FIELD_KEY='hockeyGoalieStatsV3',TRIALS_KEY='hgt-data-driven-selection-v1';
+  const SUITE_VERSION='1.4',FIELD_KEY='hockeyGoalieStatsV3',TRIALS_KEY='hgt-data-driven-selection-v1';
   const RECORDER_KEYS=['gsr_v129_state','gsr_v128_state','gsr_v127_state','gsr_v126_state','goalieStatsRecorderMasterData','gsr_last_forced_refresh'];
   const AGE_GROUPS=['U10','U11','U13','U14','U16','U19','U20','Senior','Open','Not specified'],LEVELS=['School','Club','Provincial','National','Other','Not specified'],TIERS=['A / 1st','B / 2nd','C / 3rd','D / 4th','Other','Not specified'];
   const $=id=>document.getElementById(id),esc=value=>String(value??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));

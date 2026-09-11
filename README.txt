@@ -1,10 +1,17 @@
-Data Driven Development Suite v1.3
-Field Hockey Stats v5.96
-Stats Recorder v1.32
+Data Driven Development Suite v1.4
+Field Hockey Stats v5.97
+Stats Recorder v1.33
 
-Version 1.3 introduces the lighter shared suite theme and expands the Enroll Goalie layout.
+Version 1.4 applies module-specific branding and corrects Enroll Goalie field alignment.
 
-Version 1.3 / Field Hockey v5.96 / Recorder v1.32 / Trials v1.2 changes:
+Version 1.4 / Field Hockey v5.97 / Recorder v1.33 / Trials v1.3 changes:
+
+- Field Hockey Stats now uses its own banner, Home emblem, report branding and PWA icon.
+- Field Hockey Trials now uses its own approved app logo in the header, reports and installed PWA.
+- The DDD launcher and shared services retain the overarching DDD identity.
+- Stats Recorder retains the approved DDD Recorder branding and shared Recorder PWA icon.
+- Aligned Full Name, Date of Birth, Age Group and Gender labels and controls on one consistent baseline.
+- Kept the Age Group explanation below its field without shifting that field upward.
 
 - Replaced the very dark interface with a lighter blue and slate palette across the launcher, Field Hockey Stats, Trials and Recorder.
 - Removed the white backing blocks from the platform logos while maintaining readable contrast.
@@ -25,7 +32,7 @@ Version 1.3 / Field Hockey v5.96 / Recorder v1.32 / Trials v1.2 changes:
 - Expanded central Backup & Restore with complete, section, directory and single-goalie exports; previewed merge/replace imports; old Field Hockey backup compatibility; Recorder match import; and protected data clearing.
 - Removed the Data Driven Development Home button from the Recorder interface.
 - Preserved the collapsible mobile sidebar and the independently scrolling desktop sidebar/content regions.
-- Updated Field Hockey report branding to the new Data Driven Development banner.
+- Updated Field Hockey report branding to the Hockey Goalie Stats banner.
 - Preserved the existing Field Hockey database key and Recorder storage keys.
 - Refreshed both service-worker caches so installed PWAs receive the new logos, icons, colours and layout.
 

@@ -359,7 +359,7 @@
   }
 
   function reportResults(){return state.goalies.map(goalie=>{const stats=goalieStats(goalie.id);return{goalie,stats,score:goalieScore(stats)}}).sort((a,b)=>b.score-a.score)}
-  function reportHeader(title){return `<div class="report-brand"><img src="assets/banner-logo.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
+  function reportHeader(title){return `<div class="report-brand"><img src="assets/app-logo.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
 
   function renderReport(){
     const results=reportResults();const selected=$('reportGoalie').value||results[0]?.goalie.id||'';$('reportGoalie').innerHTML=optionList(state.goalies,selected);$('reportNotes').value=state.reportNotes;$('finalDecision').value=state.finalDecision;$('reportGoalieWrap').classList.toggle('hidden',$('reportType').value==='selection');

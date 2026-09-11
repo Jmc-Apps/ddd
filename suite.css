@@ -162,7 +162,10 @@ html,body{background:linear-gradient(145deg,#edf5f9 0,#dcebf3 55%,#c9dfe9 100%);
 .danger-zone{border-color:#d7a1a8;background:#fbeff1}
 .backup-preview b{color:#15374e}.inline-warning{color:#a52c38}
 .goalie-layout{grid-template-columns:1fr;gap:24px}
-.identity-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:14px}
+.identity-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:14px;align-items:start}
+.identity-grid>label{display:flex;flex-direction:column;align-self:start;align-content:start;gap:8px;margin:0}
+.identity-grid>label>input,.identity-grid>label>select{height:50px;min-height:50px}
+.identity-grid>label>small{display:block;line-height:1.25;min-height:34px}
 .team-heading{margin-top:20px;padding-top:20px}
 .team-profile{grid-template-columns:repeat(4,minmax(150px,1fr));grid-template-areas:"name name name name" "sport age level tier" "default actions actions actions";gap:14px 16px;align-items:end;padding:20px;background:#e7f1f6;border-color:#91b4c8}
 .team-profile .profile-name{grid-area:name}.team-profile .profile-sport{grid-area:sport}.team-profile .profile-age{grid-area:age}.team-profile .profile-level{grid-area:level}.team-profile .profile-tier{grid-area:tier}
