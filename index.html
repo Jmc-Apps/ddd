@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#071d33">
   <meta name="description" content="Data Driven Development sports performance suite">
-  <title>Data Driven Development v1.1</title>
+  <title>Data Driven Development v1.2</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -14,7 +14,7 @@
 <body>
   <header class="topbar">
     <button class="menu-button" id="menuButton" type="button" aria-label="Open menu">Menu</button>
-    <img class="brand-logo" src="assets/ddd-banner-v1-1.png" alt="Data Driven Development">
+    <span class="brand-panel"><img class="brand-logo" src="assets/ddd-banner-v1-2.png" alt="Data Driven Development"></span>
     <button class="install-button hidden" id="installButton" type="button">Install App</button>
   </header>
 
@@ -26,26 +26,27 @@
         <button class="nav-link" data-page="goalies">Enroll Goalie</button>
         <button class="nav-link" data-page="benchmarking">Benchmarking</button>
         <button class="nav-link" data-page="backup">Backup &amp; Restore</button>
+        <button class="nav-link" data-page="resources">Resources</button>
         <a class="nav-link anchor" href="recorder/index.html">Stats Recorder</a>
       </nav>
-      <div class="suite-version">Data Driven Development<br><b>Version 1.1</b></div>
+      <div class="suite-version">Data Driven Development<br><b>Version 1.2</b></div>
     </aside>
 
     <main>
       <section class="page active" id="page-home">
         <div class="hero">
-          <img src="assets/ddd-logo-v1-1.png" alt="Data Driven Development" class="hero-emblem">
+          <span class="hero-logo-panel"><img src="assets/ddd-logo-v1-2.png" alt="Data Driven Development" class="hero-emblem"></span>
           <div><p class="eyebrow">One connected development suite</p><h1>Choose where you want to work</h1><p>Shared goalkeepers and central services, with each performance area kept in its own focused module.</p></div>
         </div>
         <div class="module-grid">
           <a class="module-card field" href="field-hockey.html">
-            <span class="status ready">Available</span><h2>Field Hockey Stats</h2><p>Record matches, review video, analyse performance, heat maps and reports.</p><strong>Open Field Hockey Stats →</strong>
+            <div class="module-card-top"><img src="assets/hgs-app-icon-v464.png" alt="Field Hockey Stats logo" class="module-logo"><span class="status ready">Available</span></div><h2>Field Hockey Stats</h2><p>Record matches, review video, analyse performance, heat maps and reports.</p><strong>Open Field Hockey Stats →</strong>
           </a>
           <a class="module-card trials" href="trials/index.html">
-            <span class="status ready">Available</span><h2>Field Hockey Trials</h2><p>Plan fair trials, record equal drills, compare goalkeepers and create selection reports.</p><strong>Open Field Hockey Trials →</strong>
+            <div class="module-card-top"><img src="trials/assets/app-logo.png" alt="Field Hockey Trials logo" class="module-logo"><span class="status ready">Available</span></div><h2>Field Hockey Trials</h2><p>Plan fair trials, record equal drills, compare goalkeepers and create selection reports.</p><strong>Open Field Hockey Trials →</strong>
           </a>
           <article class="module-card indoor pending" aria-disabled="true">
-            <span class="status">Next module</span><h2>Indoor Hockey Stats</h2><p>The indoor-specific recording and reporting workflow will be built next.</p><strong>Not active yet</strong>
+            <div class="module-card-top"><span class="module-logo future-logo"><img src="icons/icon-192.png" alt="Data Driven Development logo"></span><span class="status">Next module</span></div><h2>Indoor Hockey Stats</h2><p>The indoor-specific recording and reporting workflow will be built next.</p><strong>Not active yet</strong>
           </article>
         </div>
         <h2 class="section-title">Shared services</h2>
@@ -54,6 +55,7 @@
           <a class="service-card" href="recorder/index.html"><span>02</span><b>Stats Recorder</b><small>Open the companion match recorder.</small></a>
           <button class="service-card" data-go="benchmarking"><span>03</span><b>Benchmarking</b><small>Central participation and upload status.</small></button>
           <button class="service-card" data-go="backup"><span>04</span><b>Backup &amp; Restore</b><small>Protect the complete connected suite.</small></button>
+          <button class="service-card" data-go="resources"><span>05</span><b>Resources</b><small>Open shared manuals, rules and development material.</small></button>
         </div>
       </section>
 
@@ -67,8 +69,10 @@
               <input type="hidden" id="goalieId">
               <label>Full Name<input id="goalieName" required autocomplete="name"></label>
               <label>Date of Birth<input id="goalieDob" type="date"></label>
+              <label>Age Group<input id="goalieAgeGroup" readonly aria-describedby="ageGroupHelp"><small id="ageGroupHelp">Calculated at 1 January of the current year.</small></label>
               <label>Gender<select id="goalieGender"><option>Male</option><option>Female</option></select></label>
-              <p class="form-note">Teams and sport-specific classifications are managed inside the relevant Stats module.</p>
+              <div class="team-heading"><div><h3>Team Profiles</h3><p class="form-note">Add the teams and classifications this goalie uses in each sport.</p></div><button class="secondary" id="addTeamProfile" type="button">Add Team</button></div>
+              <div id="teamProfiles" class="team-profiles"></div>
               <button class="primary" type="submit">Save Shared Goalie</button>
             </form>
           </article>
@@ -83,9 +87,21 @@
 
       <section class="page" id="page-backup">
         <div class="page-heading"><div><p class="eyebrow">Shared service</p><h1>Backup &amp; Restore</h1><p>One backup protects all connected Data Driven Development data on this device.</p></div></div>
-        <div class="two-column">
-          <article class="panel"><h2>Create Complete Backup</h2><p>Includes shared goalkeeper profiles, Field Hockey data, Trials data, central settings and Recorder data.</p><button class="primary" id="downloadBackup" type="button">Download Complete Backup</button></article>
-          <article class="panel"><h2>Restore Complete Backup</h2><p>Restoring replaces the connected suite data on this device. A six-digit confirmation is required.</p><input id="restoreFile" type="file" accept=".dddbackup,.json,application/json"><button class="danger" id="restoreBackup" type="button">Restore Backup</button><p id="backupStatus" class="form-note"></p></article>
+        <div class="backup-grid">
+          <article class="panel"><h2>Create Backup</h2><label>Backup contents<select id="backupScope"><option value="complete">Complete Data Driven Development suite</option><option value="field">Field Hockey only</option><option value="trials">Field Hockey Trials only</option><option value="recorder">Stats Recorder only</option><option value="goalie">One goalie and all related data</option><option value="directory">Goalkeepers &amp; team profiles only</option></select></label><label id="backupGoalieWrap" class="hidden">Goalie<select id="backupGoalie"></select></label><button class="primary" id="downloadBackup" type="button">Download Backup</button><p class="form-note">Backups include permanent record IDs and update times for safe merging.</p></article>
+          <article class="panel"><h2>Restore or Import</h2><label>Backup file<input id="restoreFile" type="file" accept=".dddbackup,.json,application/json"></label><div id="backupPreview" class="backup-preview empty">Choose a backup to preview its contents.</div><label>Restore method<select id="restoreMode"><option value="merge">Merge — keep existing data and prefer newer records</option><option value="replace">Replace included sections</option></select></label><button class="primary" id="restoreBackup" type="button" disabled>Restore Selected Backup</button><p id="backupStatus" class="form-note"></p></article>
+          <article class="panel"><h2>Recorder Match Import</h2><p>Import a match export from the Data Driven Development Stats Recorder into Field Hockey Stats.</p><input id="recorderImportFile" type="file" accept=".json,application/json"><button class="primary" id="importRecorderMatch" type="button">Import Recorder Match</button><p id="recorderImportStatus" class="form-note"></p></article>
+          <article class="panel danger-zone"><h2>Clear Local Data</h2><p>Clear the complete suite or one selected section. A six-digit confirmation is always required.</p><label>Data to clear<select id="clearScope"><option value="complete">Complete suite</option><option value="field">Field Hockey</option><option value="trials">Field Hockey Trials</option><option value="recorder">Stats Recorder</option></select></label><button class="danger" id="clearData" type="button">Clear Selected Data</button></article>
+        </div>
+      </section>
+
+      <section class="page" id="page-resources">
+        <div class="page-heading"><div><p class="eyebrow">Shared service</p><h1>Resources</h1><p>One central library for every Data Driven Development app.</p></div></div>
+        <div class="resource-grid">
+          <article class="resource-card"><h2>Data Driven Development Theory</h2><p>The principles behind the platform's evidence-led development approach.</p><div><a class="primary" href="resources/Data_Driven_Development_Theory.pdf" target="_blank" rel="noopener">Open</a><a class="secondary" href="resources/Data_Driven_Development_Theory.pdf" download>Download</a></div></article>
+          <article class="resource-card"><h2>FIH Rules of Hockey 2026</h2><p>Shared official rules reference for Field Hockey workflows.</p><div><a class="primary" href="resources/FIH_Rules_of_Hockey_2026.pdf" target="_blank" rel="noopener">Open</a><a class="secondary" href="resources/FIH_Rules_of_Hockey_2026.pdf" download>Download</a></div></article>
+          <article class="resource-card"><h2>Field Hockey Stats Manual</h2><p>Setup, recording, analysis, reports and maintenance guidance.</p><div><a class="primary" href="resources/Hockey_Goalie_Stats_Main_App_User_Manual.pdf" target="_blank" rel="noopener">Open</a><a class="secondary" href="resources/Hockey_Goalie_Stats_Main_App_User_Manual.pdf" download>Download</a></div></article>
+          <article class="resource-card"><h2>Stats Recorder Manual</h2><p>Match setup, live recording and transfer instructions.</p><div><a class="primary" href="resources/Goalie_Stats_Recorder_User_Manual.pdf" target="_blank" rel="noopener">Open</a><a class="secondary" href="resources/Goalie_Stats_Recorder_User_Manual.pdf" download>Download</a></div></article>
         </div>
       </section>
     </main>

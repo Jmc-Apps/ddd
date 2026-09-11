@@ -1,17 +1,23 @@
-Data Driven Development Suite v1.1
-Field Hockey Stats v5.94
-Stats Recorder v1.30
+Data Driven Development Suite v1.2
+Field Hockey Stats v5.95
+Stats Recorder v1.31
 
-Version 1.1 introduces the approved sport-neutral Data Driven Development identity across the connected platform.
+Version 1.2 completes the first shared-service structure and corrects the platform branding.
 
-Version 1.1 / Field Hockey v5.94 / Recorder v1.30 changes:
+Version 1.2 / Field Hockey v5.95 / Recorder v1.31 changes:
 
-- Added the approved circular-scope DDD master logo and horizontal platform banner.
+- Replaced the incorrect launcher mark with the approved three-interconnected-D scope logo.
+- Placed dark logo text on a light high-contrast panel in the launcher, Field Hockey and Recorder headers.
+- Added each available app's own logo to its launcher card.
 - Added the approved shared PWA app icon for the Data Driven Development suite and Stats Recorder.
 - Updated manifest, Apple touch and favicon assets in all required icon sizes.
 - Updated the Recorder header to use the Data Driven Development banner and identify the module as Stats Recorder.
 - Unified the navy, cyan and amber platform colour palette across the launcher, Field Hockey Stats, Recorder and Trials interfaces.
 - Changed the Field Hockey desktop layout so its sidebar is flush with the far-left edge and the active screen uses all remaining width.
+- Moved Resources to one central shared service and linked Field Hockey to it.
+- Expanded Enroll Goalie with calculated age group and multiple sport-specific team profiles.
+- Expanded central Backup & Restore with complete, section, directory and single-goalie exports; previewed merge/replace imports; old Field Hockey backup compatibility; Recorder match import; and protected data clearing.
+- Removed the Data Driven Development Home button from the Recorder interface.
 - Preserved the collapsible mobile sidebar and the independently scrolling desktop sidebar/content regions.
 - Updated Field Hockey report branding to the new Data Driven Development banner.
 - Preserved the existing Field Hockey database key and Recorder storage keys.
