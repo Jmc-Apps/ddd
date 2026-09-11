@@ -1,6 +1,18 @@
-Data Driven Development Suite v1.6
-Field Hockey Goalie Stats v5.99
+Data Driven Development Suite v1.7
+Field Hockey Goalie Stats v5.100
 Stats Recorder v1.34
+
+Version 1.7 restores the approved Field Hockey Goalie Stats artwork.
+
+Version 1.7 / Field Hockey v5.100 changes:
+
+- Removed all active references to the unintended legacy v4.64 artwork.
+- Restored the approved Hockey Goalie Stats banner in the app header and every report.
+- Restored the approved Hockey Goalie Stats emblem on the app Home screen and suite launcher card.
+- Restored the approved goalkeeper statistics icon for PWA installation and video overlays.
+- Removed the unintended legacy artwork and affected historical HTML copies from the distributable package to prevent accidental reuse.
+- Retained the complete v5.99 light-theme component correction.
+- Refreshed versioned assets and offline caches so installed apps cannot retain the incorrect artwork.
 
 Version 1.6 completes the Field Hockey light-theme conversion.
 
