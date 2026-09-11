@@ -1,6 +1,17 @@
-Data Driven Development Suite v1.5
-Field Hockey Goalie Stats v5.98
+Data Driven Development Suite v1.6
+Field Hockey Goalie Stats v5.99
 Stats Recorder v1.34
+
+Version 1.6 completes the Field Hockey light-theme conversion.
+
+Version 1.6 / Field Hockey v5.99 changes:
+
+- Replaced remaining dark shot-selection buttons with light neutral controls and high-contrast selected states.
+- Converted statistics cards and coaching-rating panels to the lighter suite palette.
+- Updated legacy Match Editor, benchmark, shootout, timeline and dialog surfaces.
+- Updated the controls surrounding Video Stats Review while retaining a dark video stage and timeline for footage visibility.
+- Preserved green Save/success, red Goal/danger, amber Angle/warning and cyan selected/active meanings.
+- Refreshed the suite cache so installed PWAs receive every corrected component style.
 
 Version 1.5 applies the approved app identities and lighter suite palette consistently.
 
