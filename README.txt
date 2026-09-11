@@ -1,8 +1,17 @@
-Data Driven Development Suite v1.4
-Field Hockey Stats v5.97
-Stats Recorder v1.33
+Data Driven Development Suite v1.5
+Field Hockey Goalie Stats v5.98
+Stats Recorder v1.34
 
-Version 1.4 applies module-specific branding and corrects Enroll Goalie field alignment.
+Version 1.5 applies the approved app identities and lighter suite palette consistently.
+
+Version 1.5 / Field Hockey v5.98 / Recorder v1.34 / Trials v1.4 changes:
+
+- Restored the approved original Hockey Goalie Stats logo throughout Field Hockey, reports, video overlays and the installed PWA.
+- Renamed the launcher card to Field Hockey Goalie Stats.
+- Applied the approved Hockey Goalie Trials banner to the Trials header and reports.
+- Derived the Trials launcher and installed-PWA icons from the goalkeeper emblem in the approved Trials logo.
+- Retained the lighter blue and slate colour scheme across the launcher, Field Hockey, Trials and Recorder.
+- Refreshed every service-worker cache and versioned icon reference so installed apps receive the new branding.
 
 Version 1.4 / Field Hockey v5.97 / Recorder v1.33 / Trials v1.3 changes:
 
