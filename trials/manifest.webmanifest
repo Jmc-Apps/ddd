@@ -1,0 +1,15 @@
+{
+  "name": "Hockey Goalie Trials: Data Driven Selection",
+  "short_name": "Goalie Trials",
+  "description": "Run fair, evidence-led hockey goalkeeper trials.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#061423",
+  "theme_color": "#071d33",
+  "orientation": "any",
+  "icons": [
+    {"src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

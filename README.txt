@@ -1,0 +1,490 @@
+Data Driven Development Suite v1.0
+Field Hockey Stats v5.93
+
+This package introduces the overarching Data Driven Development launcher and shared services.
+
+STRUCTURE
+- index.html: Data Driven Development home and central services
+- field-hockey.html: full Field Hockey Stats application
+- trials/index.html: Hockey Goalie Trials: Data Driven Selection
+- recorder/index.html: shared Stats Recorder entry point
+- Indoor Hockey Stats: reserved on the launcher for the next module
+
+SHARED DATA
+- Enroll Goalie writes to the existing hockeyGoalieStatsV3 database, so current data is retained.
+- Goalies can still be added and assigned Field Hockey teams inside Field Hockey Stats.
+- Trials can choose a shared goalie or create a trial-only goalie.
+- Trial-only goalies are never added to the shared directory.
+- Backup & Restore creates one .dddbackup file for the connected suite.
+- Benchmark participation is surfaced centrally; Field and future Indoor cohorts remain separate.
+
+Hockey Goalie Stats - Main App Package
+
+Version 5.92 standardises timeline rendering across every report type.
+
+Version 5.92 changes:
+
+- Individual Match Reports now use the same coloured S/G/A indicator dots as Data Driven Development Reports.
+- Single-match reports no longer bypass the canonical report timeline renderer.
+- Data Driven Development Reports now contain exactly one timeline addendum even when background report refreshes run repeatedly.
+- Timeline replacement is confined to the styled report content so indicator dots cannot inherit full-page SVG dimensions.
+- Added a defensive 34-pixel size constraint to every canonical report timeline indicator and SVG.
+- Preserved multiple-goalie chronology, grey Alternate Goalie entries, period markers and selected-goalie-only heat maps.
+- Refreshed the PWA cache so installed copies receive the standardised report timelines.
+
+Version 5.91 fixes complete report printing and multiple-goalie report timelines.
+
+Version 5.91 changes:
+
+- Printed and PDF reports can now flow across every required page instead of stopping after page one.
+- Major report sections keep intentional page starts, heat maps remain together and long timelines can continue cleanly across pages.
+- Report tables repeat their column headings where supported and avoid splitting individual rows.
+- Multiple-goalie report timelines now merge both goalies' shots with shared End of Period markers in their correct chronological positions.
+- The selected goalie remains the Primary Goalie with normal numbered shot icons; the other goalie is shown as grey Alternate Goalie text without an icon and does not consume shot numbers.
+- Older saved two-goalie matches use shared order, saved period and recording time to reconstruct the combined timeline.
+- Report heat maps, totals and rate calculations continue to use only the selected goalie's shots.
+- Refreshed the PWA cache so installed copies receive the report printing and timeline fixes.
+
+Version 5.90 adds complete shootout performance details to every report type.
+
+Version 5.90 changes:
+
+- Every report now includes a Shootout Performance section.
+- Reports with no relevant shootout records clearly state that no shootout data is recorded.
+- Shootout summaries show shootouts played, wins, losses, attempts faced, saves, goals conceded, save rate, defence rate and the most common save method.
+- Reports containing multiple matches include a match-by-match shootout breakdown.
+- Individual Match Reports include the selected goalie's round-by-round opponent attempts, results, save methods and notes.
+- Replaced the older Data Driven Development-only shootout summary to prevent missing or duplicated figures.
+- Shootout performance is calculated only from the matches included in the selected report.
+- Refreshed the PWA cache so installed copies receive the complete shootout reporting update.
+
+Version 5.89 improves multiple-goalie reports and the draw-to-shootout prompt.
+
+Version 5.89 changes:
+
+- Replaced the browser draw confirmation with an in-app question using explicit Yes and No buttons.
+- Reports clearly identify matches in which multiple goalies played.
+- The goalie selected for a report is always labelled Primary Goalie; the other goalie is labelled Alternate Goalie.
+- Reports show only the Alternate Goalie's save rate and defence rate alongside the primary report statistics.
+- Alternate Goalie shots appear in their correct chronological place in report timelines as grey text without shot icons.
+- Alternate Goalie timeline entries do not consume Primary Goalie shot numbers and are excluded from Primary Goalie heat maps.
+- Alternate-goalie reports now include the shared End of Period markers, including for older saved matches where the alternate mirror omitted them.
+- Future alternate-goalie mirror records retain the shared period sequence and filtered chronological shot order.
+- Refreshed the PWA cache so installed copies receive the updated report behaviour.
+
+Version 5.88 corrects Match Timeline numbering and combines two-goalie match events.
+
+Version 5.88 changes:
+
+- End of Period markers no longer consume a shot number.
+- Shot numbering continues across the complete match while period markers remain unnumbered.
+- Primary and alternate-goalie shots now appear together in their shared chronological Match Timeline.
+- Primary-goalie timeline text is white and alternate-goalie timeline text is cyan.
+- Added a named goalie colour legend whenever alternate-goalie shots are present.
+- Outcome badge colours remain based on Save, Goal or Angle Closed Off rather than the goalkeeper.
+- Newly recorded alternate shots retain their exact position in the shared timeline.
+- Previously recorded alternate shots are merged using their saved period and recording time where available.
+- Refreshed the PWA cache so installed copies receive the corrected timeline.
+
+Version 5.87 restores Data Driven Development report generation while retaining corrected outcome icons.
+
+Version 5.87 changes:
+
+- Removed the cross-script function dependency that prevented the Data Driven Development report from generating in version 5.86.
+- Data Driven Development timelines now normalise outcomes using their own report-scoped function.
+- The final timeline icon formatter is self-contained and cannot interrupt report generation.
+- Goals remain red G icons, saves remain green S icons and angles closed off remain yellow A icons.
+- Added full timeline-generation regression checks alongside the outcome-icon checks.
+- Refreshed the PWA cache so installed copies receive the corrected report generator.
+
+Version 5.86 corrects report timeline outcome icons.
+
+Version 5.86 changes:
+
+- Report timeline icons now use the outcome stored on each shot instead of relying on displayed punctuation.
+- Goals consistently display as red G icons, saves as green S icons and angles closed off as yellow A icons.
+- The correction applies to individual, multi-match, development and Data Driven Development report timelines, including printed reports.
+- Added safe compatibility fallbacks for older generated timeline markup.
+- Refreshed the PWA cache so installed copies receive the corrected report renderer.
+
+Version 5.85 protects live match progress and repairs legacy heat-map rendering.
+
+Version 5.85 changes:
+
+- Video Stats Review and Match Editor selections no longer replace the active live-match pointer.
+- Opening a completed historical match in Video Stats Review cannot repopulate the Match tab as an active match.
+- On startup and save, a stale pointer to a finalised or missing match is detached without deleting or changing the match.
+- Genuine draft matches remain resumable as active match progress.
+- Heat maps ignore missing or non-numeric coordinates while continuing to display every valid recorded point.
+- Added the current mobile-web-app-capable metadata while retaining Apple installed-PWA compatibility.
+
+Version 5.84 removes the duplicate multiple-goalie control.
+
+Version 5.84 changes:
+
+- Goalkeeper Participation is now the only control that starts the multi-goalie workflow.
+- Selecting Partial match reveals the alternate-goalie questions automatically.
+- Selecting Full match or Not specified hides the alternate-goalie workflow.
+- The separate Two goalies will play in this match checkbox has been removed.
+- The user chooses full alternate-goalie recording or a goals-conceded-only total.
+- Full recording supports another saved goalie or a named guest goalie.
+- Match and Video Stats Review shot recording can switch between the primary and alternate goalie.
+- Each goalie keeps separate shots, heat maps and calculated rates while sharing the match score.
+- Existing alternate goalies receive a linked match appearance in their own history and reports.
+- Guest appearances remain stored inside the shared match and are excluded from benchmarking.
+
+Version 5.84 adds a protected Recorder reset control.
+
+Version 5.84 changes:
+
+- Recorder Setup includes Reset Recorded Data.
+- Reset requires a generated six-digit confirmation code.
+- Reset clears the current match recording while preserving imported goalie and team master data.
+
+Version 5.84 updates the Recorder App navigation order and labels.
+
+Version 5.84 changes:
+
+- Recorder navigation now runs left to right as Setup, Match, Timeline, Finish and Import.
+- The Recorder home screen is labelled Match and uses a hockey stick-and-ball icon.
+- Recorder service-worker cache version is refreshed so the navigation update is picked up by installed copies.
+
+Version 5.84 launches the bundled Recorder App directly instead of opening its folder listing.
+
+Version 5.84 changes:
+
+- The Recorder App sidebar link now targets <code>./recorder/index.html</code> explicitly, which works from a local package folder and when hosted.
+- Resource cards now use equal-height vertical layouts.
+- Every Open and Download button row is anchored to the bottom of its card for a uniform appearance.
+- Replaced the short Main App and Recorder manuals with comprehensive tab-by-tab guides.
+- Added three end-to-end recording workflows: direct Match-tab capture, Recorder-app capture and filmed Video Stats Review capture.
+- Added detailed benchmarking, report, backup, external-video-library and troubleshooting guidance.
+- Bundled the Recorder App v1.29 under <code>./recorder/</code>; its manifest and service worker remain independent so it can also be installed as a separate PWA.
+
+Version 5.77 adds safe single-goalie backup and cross-coach merge.
+
+Version 5.77 changes:
+
+- Added a Single Goalie Transfer card to Backup.
+- A goalie transfer includes that goalie, team profiles, matches, shots, timelines and saved Video Review metadata.
+- Imports merge by stable IDs instead of replacing the whole database.
+- Newer team and match records overwrite older copies; older imports cannot overwrite newer work.
+- Deletions are transferred as explicit records and must be approved during import before any team or match is removed.
+- Declining deletion approval still allows other non-destructive additions and updates to merge.
+- Locally connected video files are retained when an incoming match update is merged; video files themselves remain on their external drive and may need reconnection on another device.
+- Benchmark consent and downloaded benchmark caches remain device-local.
+
+Version 5.76 restores independent scrolling throughout Video Stats Review.
+
+Version 5.76 changes:
+
+- Video Stats Review now uses its main workspace as a dedicated vertical scroll container on desktop.
+- The review can scroll from the playback controls through heat maps, timeline and export controls.
+- Entering and leaving Video Stats Review now applies and removes the root scrolling mode consistently.
+
+Version 5.75 clarifies the successful benchmark-upload message when no comparison cohort is available yet.
+
+Version 5.75 changes:
+
+- A successful upload with no matching comparison data now clearly confirms that the upload succeeded.
+- Stats and Benchmark Reports explain that comparison data from other matching goalies is not available yet.
+- The app no longer tells the user to repeat an upload that already succeeded.
+
+Version 5.74 separates desktop navigation and content scrolling and left-aligns the banner logo.
+
+Version 5.74 changes:
+
+- The desktop sidebar remains fixed beneath the banner while the active page scrolls independently.
+- The sidebar receives its own scrollbar only when its navigation content exceeds the available height.
+- Sidebar version information remains at the bottom of the navigation panel.
+- The banner logo is now left-aligned.
+- Mobile slide-out navigation retains its existing behaviour.
+
+Version 5.73 connects anonymous benchmarking to the prepared Cloudflare Worker API and moves version information into the sidebar.
+
+Version 5.73 additions:
+
+- Added anonymous upload and benchmark-download connections for the configured Worker address.
+- Uploads use permanent anonymous goalkeeper and match identifiers.
+- Unchanged data is not uploaded repeatedly, and server upserts prevent duplicate matches.
+- Finalising a match schedules an updated anonymous upload for opted-in users.
+- Added a manual Upload Data & Refresh Benchmarks button.
+- Opting out removes that goalkeeper's anonymous central records when a connection is available.
+- Downloaded benchmark cohorts feed the existing Stats and Benchmark Report comparisons.
+- Moved the app name and current version to the bottom of the sidebar.
+- Removed the old footer and duplicate Resources text link.
+- Included the matching Cloudflare Worker code and D1 schema in cloudflare-worker.
+
+Important: the live Worker currently returns the default Hello World response. Deploy cloudflare-worker/worker.js and run cloudflare-worker/schema.sql before using uploads.
+
+Version 5.72 fixes the Video Stats Review opening freeze while retaining context-aware return navigation and keeping Cloudflare disconnected.
+
+Version 5.72 fix:
+
+- Stopped the return-button observer from repeatedly rewriting the same label.
+- Opening Video Stats Review no longer creates a continuous page-update loop.
+- Both Match and Match Editor opening routes retain their correct return destinations.
+
+Version 5.71 adds context-aware Video Stats Review return navigation and removes Video Review from the sidebar without connecting to Cloudflare.
+
+Version 5.71 additions:
+
+- Removed Video Review from desktop and mobile sidebar navigation.
+- Video Stats Review remains available from Match and Match Editor.
+- Opening from Match changes the review return action to Back to Match.
+- Opening from Match Editor changes the review return action to Back to Match Editor.
+- The selected match and saved video-review state are preserved when returning.
+- Cloudflare remains disconnected and no benchmark data can leave the device.
+
+Version 5.70 adds sidebar navigation, historical Team Profile repair and Stats benchmark overlays without connecting to Cloudflare.
+
+Version 5.70 additions:
+
+- Replaced the horizontal navigation row with a sticky left sidebar on desktop.
+- Added a collapsible compact sidebar and a slide-out mobile menu.
+- Added Video Review and Resources to the main navigation.
+- Automatically fills missing home-team classifications in previous matches from matching Team Profiles.
+- Preserves previous-match classifications that already contain valid information.
+- Added Apply to Previous Matches to each Team Profile for deliberate historical corrections.
+- Added Include Benchmarks to Stats, locked until benchmarking is activated by a successful eligible upload.
+- Applicable Stats rate cards can show the matching benchmark and percentage-point difference.
+- Added matching cohort sample sizes and Limited Data labelling to Stats.
+- Cloudflare remains disconnected and no benchmark data can leave the device.
+
+Version 5.69 adds the gated Benchmark Report framework without connecting to Cloudflare.
+
+Version 5.69 additions:
+
+- Added Benchmark Report to the Reports selector.
+- Benchmark Report remains locked unless the goalkeeper has opted in and completed a successful eligible upload.
+- Added Full Year and Last 5 Matches report periods.
+- Added All or specific Team Level and Team Tier filters.
+- Prepared same-age-group and same-gender cohort matching.
+- Prepared overall, shot-situation, shot-type, outnumbered and rebound comparisons.
+- Prepared all-shot benchmark heat maps and sample-size labels.
+- Added Limited Data labelling for small benchmark samples.
+- Added ranked training-focus recommendations for below-benchmark areas.
+- Cloudflare remains disconnected and no benchmark data can leave the device.
+
+Version 5.68 adds saved Team Profiles and removes selective match benchmarking without connecting to Cloudflare.
+
+Version 5.68 additions:
+
+- Replaced the goalkeeper's plain team-name list with editable Team Profiles.
+- Each Team Profile stores name, age group, team level and team tier.
+- Migrated existing team names into Team Profiles without changing saved matches.
+- Changed tiers to A / 1st, B / 2nd, C / 3rd and D / 4th.
+- Migrated existing A, B, C and D tier values to the new labels.
+- Home-team classification is populated from the selected Team Profile.
+- Home classification is read-only in Match setup and Match Editor.
+- Opposition classification initially copies the home profile values.
+- Each opposition field stops auto-copying after the user changes that field.
+- Removed per-match benchmark inclusion controls from Match setup and Match Editor.
+- Opted-in goalkeepers contribute every objectively eligible finalised match.
+- Master-data export now includes Team Profiles.
+- Cloudflare remains disconnected and no benchmark data can leave the device.
+
+Version 5.67 corrects legacy match finalisation and adds Derby as a match type without connecting to Cloudflare.
+
+Version 5.67 additions:
+
+- Added Derby to Match Type in Match setup and Match Editor.
+- Added an explicit Draft / Finalised status to saved matches.
+- New matches begin as Draft and become Finalised when the match outcome is saved.
+- Older saved matches are migrated to Finalised unless they are an identifiable current-day unfinished draft.
+- Added Match Status to Match Editor for manual correction.
+- Benchmark eligibility now uses the stored match status instead of relying on legacy score fields.
+- Cloudflare remains disconnected and no benchmark data can leave the device.
+
+Version 5.66 prepares anonymous benchmarking locally without connecting to Cloudflare.
+
+Version 5.66 additions:
+
+- Corrected and centralised the displayed/exported application version.
+- Added stable anonymous goalkeeper and match benchmark identifiers.
+- Added goalkeeper team and opposition age group, level and tier snapshots to matches.
+- Added match type, goalkeeper participation and minutes-played fields.
+- Added the same benchmark classification fields to Match Editor.
+- Added per-goalkeeper Opt In / Opt Out benchmarking choices.
+- Benchmark access remains locked until a successful eligible upload in a future connected build.
+- Added local eligibility checks and an anonymous payload preview.
+- Team names, goalkeeper names, dates of birth, notes and video data are excluded from the preview.
+- Save Rate and Defence Rate are prepared for equal goalkeeper-level aggregation.
+- Heat-map benchmarking retains every anonymous shot from qualifying matches.
+- Small benchmark samples will be displayed with a Limited Data label.
+- No network endpoint is configured and no benchmark data can leave the device.
+
+Version 5.65 additions:
+
+- Number of Periods is now selected from 1, 2, 4 or Custom in Match setup.
+- Match Editor uses the same 1, 2, 4 or Custom period selector.
+- Custom period totals are recalculated from the match's End Period markers.
+- Adding, deleting or reordering period markers keeps Custom matches current.
+- Team reports list both the goalie's current profile teams and every home team retained in saved matches.
+- Removing a team from the goalie profile no longer removes that team's historical reporting option.
+- Duplicate and blank team names are removed from the report selector.
+
+Version 5.64 applies safe interface, cache and maintainability cleanup without changing match data or video calculations.
+
+Version 5.64 additions:
+
+- Reduced the main banner to 75% of its previous displayed size.
+- Removed nonessential instructional descriptions while retaining errors, warnings, progress and empty states.
+- Restyled Camera Run break controls as compact professional dividers.
+- Locked waveform sync-marker pills to 25% opacity with a solid centre alignment line.
+- Corrected sync-point colour cycling to use the complete eight-colour palette.
+- Corrected the offline service-worker fallback.
+- Preserved all v5.63 progressive waveform and authoritative period-marker improvements.
+
+Version 5.63 additions:
+- Waveform rows appear immediately instead of waiting for every large clip to decode.
+- Each clip waveform is added progressively with visible generation progress.
+- Missing video access and audio decoding failures now show a clear status.
+- Stale waveform work from another Camera Run cannot replace the selected run.
+- Visible waveforms refresh automatically after external-drive videos reconnect.
+- Period-end markers now determine each shot's authoritative period everywhere.
+- Match Timeline, shot export selector, video-linked clip lists and exported overlays use the same period.
+
+Version 5.62 fixes Camera Run-local scrubbing and playback after seeking.
+
+Version 5.62 additions:
+- The master playback clock is calculated from the selected Camera Run only.
+- Durations from earlier Camera Runs are never added to the selected run's current time.
+- Releasing the timeline or pressing Play no longer snaps Camera Run 2 back to its endpoint.
+- Timeline seeks remain locked until the source video confirms the requested position.
+- Same-clip seeking and seeking across clip boundaries use the same confirmed-seek workflow.
+- Playback and time-update events preserve the corrected Camera Run-local position.
+
+Version 5.61 per-Camera-Run state additions retained:
+- Every angle stores its clip, source position and unified playhead separately for each Camera Run.
+- Returning to a Camera Run restores that run's own saved position instead of another run's endpoint.
+- New Camera Runs open at their first available frame when they do not yet have a saved position.
+- Timeline dragging keeps the requested position locked while the video seeks or changes clips.
+- Playback updates cannot push the slider back while the user is dragging it.
+- Seeking inside the current clip changes its source time directly instead of reloading the clip.
+- Crossing a clip boundary loads only the required clip and resumes playback after the seek completes.
+- Framing is stored separately for every angle and Camera Run.
+- Playback, second-screen viewing and export all use the selected run's framing.
+
+Version 5.60 Camera Run timeline corrections retained:
+- Changing Camera Runs resets the unified playhead to the selected run's first available frame.
+- The previous Camera Run can no longer supply a sync anchor to the newly selected run.
+- Clip durations are resolved before the selected Camera Run's start and endpoint are finalized.
+- The timeline draws only clips from the selected Camera Run.
+- Shot markers are filtered to the selected Camera Run, including older saved shots when their clip can identify the run.
+- Newly saved video-linked shots record their Camera Run explicitly.
+- Main-window and second-screen time displays are clamped to the selected Camera Run's valid range.
+
+Version 5.59 second-screen additions retained:
+- Open Second-Screen Player appears beside the existing Full Screen control.
+- The separate resizable player window mirrors the exact reframed video shown in the main player.
+- Playback position, play/pause, Camera Run, active angle, speed, volume and framing stay synchronized.
+- The second-screen window includes its own playback controls, unified timeline, Camera Run selector and angle buttons.
+- Zoom, reset framing and fullscreen controls are available in the second-screen window.
+- Closing and reopening the player reconnects it to the current match and playback state.
+- Chrome pop-up blocking is detected with a clear instruction to allow the window.
+- Deleting an End of Period marker now uses a normal confirmation instead of a six-digit code.
+
+Version 5.58 Switch Angles additions retained:
+- A separate collapsible Switch Angles panel appears at the top of Video Angles.
+- One full-width button is shown for every loaded angle, using the angle's name.
+- The currently playing angle is clearly highlighted.
+- Switching angles keeps the same unified timeline position and preserves playback state, speed and volume.
+- If an angle has no footage at the current time, its existing no-footage state is shown without moving the timeline.
+- The collapsed Switch Angles header shows the active angle name.
+
+Version 5.57 sidebar additions retained:
+- Add and Batch Videos, External Video Library and Loaded Video Angles are separate collapsible panels.
+- Each panel collapses to its section header and compact live summary.
+- Header chevrons show whether a panel will expand or collapse.
+- External Video Library shows Connected, Working, Access Required or Drive Unavailable in its collapsed header.
+- Loaded Video Angles shows the current angle and clip totals.
+- Collapsed panel choices persist when returning to Video Stats Review or opening another match.
+- Collapsing a panel does not pause playback, remove video URLs or disconnect the external drive.
+
+Version 5.56 interface corrections retained:
+
+Version 5.56 interface corrections:
+- The Match Folder Name field now uses the full available width.
+- Copy Folder Name is a full-width horizontal pill beneath the folder-name field.
+- Choose Video Library Folder, Use Existing Match Folder, Import Match Folder to Library and Allow Video Access each occupy a separate full-width row.
+- Video-library button labels remain on one line and no longer form oversized circular controls.
+- Save Video-Linked Shot and Clear Shot now appear beneath the D and Goal Box heat maps.
+- End Period remains at the top of Record Shot.
+
+Version 5.55 external-drive video library retained:
+
+Version 5.55 video-library additions:
+- Choose a Video Library Folder on an internal or external drive.
+- Chrome stores the selected folder handle and reopens the match folder when permission remains available.
+- Allow Video Access restores saved folder permission without selecting every clip again.
+- Batch Add Videos connects an existing match folder directly.
+- Use Existing Match Folder finds the current match inside the selected Video Library Folder.
+- Import Match Folder to Library copies a complete match folder into the selected library using streamed file writes.
+- Import never deletes the original files.
+- Matching destination files with the same filename and size are not copied again.
+- A read-only Match Folder Name field provides the correct folder-safe match name.
+- Copy Folder Name copies that name and confirms completion.
+- Each first-level folder in the match folder becomes an angle using the folder's exact name.
+- Numbered folders inside an angle, such as 1, 2, 3 and 4, become Camera Runs in numeric order.
+- Clips inside every Camera Run use natural filename ordering.
+- Angle folders without numbered subfolders continue to load as Camera Run 1.
+- Disconnecting an external drive does not erase the saved match or clip information.
+
+Version 5.54 export and playback corrections retained:
+- Playback and export use the same source-pixel crop calculation.
+- Each angle stores normalized crop centre and zoom values independently of screen size.
+- Portrait footage can be reframed into a landscape crop without exporting the unused portrait area.
+- Export freezes the angle's normalized crop and playback aspect ratio before loading the source range.
+- Existing angle zoom and pan values are migrated into the normalized crop model when video dimensions become available.
+- Selecting an older shot no longer replaces the angle's current framing.
+- Pan and zoom changes are saved to that angle and restored when returning to it.
+- Source audio is merged into the exported recording independently of the playback volume control.
+- The complete app logo is embedded at export-safe resolution and drawn without cropping.
+- Newly recorded video-linked shots appear immediately in Shot to Export and are automatically selected.
+- The overlay shows the period without displaying a potentially inaccurate gameplay time.
+- Overlay rows now show Situation, Shot Type, Outnumbered and Rebound without inferring one field from another.
+- Set Clip In and Set Clip Out update immediately, persist their positions and validate that Out is later than In.
+- The Video Stats Review banner is displayed at 75% of its previous width.
+- A new match clears the loaded player, angles, clips, Camera Runs, sync state, waveforms and export selection from the active workspace.
+- Finalizing a match resets the active Video Stats Review workspace.
+
+Export updates:
+- The app logo is embedded in the export renderer so overlay exports remain origin-clean.
+- Exported clips use the selected angle's playback zoom and pan.
+- Shot to Export lists every video-linked shot and drives single-shot export.
+- The single-shot action is labelled Export Selected Shot - Current Angle.
+
+Playback and match updates:
+- Speaker/mute button, 0-100 volume slider, percentage readout and saved volume.
+- Playback volume remains consistent across clips and angles.
+- Record Shot selection pills visibly highlight the current choices.
+- End Period remains at the top of Record Shot.
+- New and finalized matches receive a clean active Video Stats Review workspace.
+
+Included:
+- index.html
+- goalie_stats_app_v5_73.html
+- app icons and PWA manifest
+- service worker
+- app assets
+- resources/Data_Driven_Development_Theory.pdf
+- resources/FIH_Rules_of_Hockey_2026.pdf
+- resources/Hockey_Goalie_Stats_Main_App_User_Manual.pdf
+- resources/Goalie_Stats_Recorder_User_Manual.pdf
+
+Current build notes:
+- Video Review controls are grouped by purpose.
+- Prev and Next clip buttons were removed.
+- The Reports shortcut button was removed from Video Stats Review.
+- Angle cards now show Edit Videos instead of listing all clips.
+- Edit Videos lets users add, remove and reorder clips for that angle.
+- Batch clip export now warns that browsers may ask permission to allow multiple downloads.
+- Same-day duplicate matches against the same opponent are numbered from 2 upward.
+- Existing reports, resources, print-safe timelines and single README packaging are preserved.
+
+Recommended use:
+- Back up app data before replacing an installed copy.
+- Refresh the browser or clear the PWA cache after updating if the old version remains visible.
+- For reliable automatic video reload, use Chrome or an installed Chrome PWA and grant access to the selected Video Library Folder.
+- Keep the external drive connected when opening a match. If Chrome requests access again, select Allow Video Access.

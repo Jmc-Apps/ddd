@@ -1,0 +1,23 @@
+{
+  "name": "Data Driven Development",
+  "short_name": "DDD",
+  "description": "Connected goalkeeper statistics, trials, benchmarking and backup suite.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#061423",
+  "theme_color": "#071d33",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

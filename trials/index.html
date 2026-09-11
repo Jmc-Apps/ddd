@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071d33">
+  <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
+  <title>Hockey Goalie Trials: Data Driven Selection</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <img src="assets/banner-logo.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <div class="header-actions">
+      <span id="saveStatus" class="save-status">Saved locally</span>
+      <a href="../index.html" class="button ghost">DDD Home</a>
+      <button id="installButton" class="button ghost hidden" type="button">Install App</button>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <nav id="mainNav" class="nav-list">
+        <button class="nav-button active" data-page="dashboard"><span>▦</span>Dashboard</button>
+        <button class="nav-button" data-page="setup"><span>⚙</span>Trial Setup</button>
+        <button class="nav-button" data-page="roster"><span>◉</span>Trials Roster</button>
+        <button class="nav-button" data-page="recording"><span>●</span>Trial Recording</button>
+        <button class="nav-button" data-page="video"><span>▶</span>Video Review</button>
+        <button class="nav-button" data-page="comparison"><span>⇄</span>Comparison</button>
+        <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
+      </nav>
+      <div class="sidebar-footer">Version 1.1<br><span>Data Driven Development</span></div>
+    </aside>
+
+    <main id="mainContent" class="main-content">
+      <section id="page-dashboard" class="page active" aria-labelledby="dashboardTitle">
+        <div class="page-heading">
+          <div><p class="eyebrow">Trial overview</p><h1 id="dashboardTitle">Selection dashboard</h1></div>
+          <button class="button primary" data-go="recording">Start recording</button>
+        </div>
+        <div id="setupNotice" class="notice hidden">Complete Trial Setup to begin scheduling drills and recording results.</div>
+        <div class="metric-grid" id="dashboardMetrics"></div>
+        <div class="dashboard-grid">
+          <article class="panel feature-panel">
+            <div class="panel-header"><div><p class="eyebrow">Current trial</p><h2 id="dashboardTrialName">No trial configured</h2></div><span id="trialStatePill" class="pill">Setup required</span></div>
+            <div id="dashboardTrialDetails" class="detail-grid"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-header"><div><p class="eyebrow">Scheduled work</p><h2>Drill progress</h2></div></div>
+            <div id="dashboardDrills" class="stack-list"></div>
+          </article>
+        </div>
+        <article class="panel">
+          <div class="panel-header"><div><p class="eyebrow">Roster snapshot</p><h2>Goalkeepers</h2></div><button class="button ghost" data-go="roster">Manage roster</button></div>
+          <div id="dashboardRoster" class="goalie-card-grid"></div>
+        </article>
+      </section>
+
+      <section id="page-setup" class="page" aria-labelledby="setupTitle">
+        <div class="page-heading"><div><p class="eyebrow">Create the trial</p><h1 id="setupTitle">Trial Setup</h1></div><button id="saveSetup" class="button primary">Save setup</button></div>
+        <div class="two-column">
+          <article class="panel">
+            <div class="panel-header"><div><p class="eyebrow">Trial details</p><h2>Team and classification</h2></div></div>
+            <form id="setupForm" class="form-grid">
+              <label class="field span-2"><span>Trial name</span><input id="trialName" required placeholder="e.g. U16 Girls First Team Trials"></label>
+              <label class="field"><span>Team</span><input id="teamName" required placeholder="Team name"></label>
+              <label class="field"><span>Age group</span><select id="ageGroup"><option>U13</option><option>U14</option><option>U16</option><option>U18</option><option>U21</option><option>Senior</option><option>Masters</option></select></label>
+              <label class="field"><span>Level</span><select id="teamLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
+              <label class="field"><span>Tier</span><select id="teamTier"><option>A/1st</option><option>B/2nd</option><option>C/3rd</option><option>D/4th</option><option>Other</option></select></label>
+            </form>
+          </article>
+          <article class="panel">
+            <div class="panel-header"><div><p class="eyebrow">Trial calendar</p><h2>Trial days</h2></div></div>
+            <form id="dayForm" class="inline-form"><label class="field grow"><span>Date</span><input type="date" id="trialDayDate"></label><button class="button secondary" type="submit">Add day</button></form>
+            <div id="trialDaysList" class="stack-list compact"></div>
+          </article>
+        </div>
+        <article class="panel">
+          <div class="panel-header"><div><p class="eyebrow">Trial programme</p><h2>Schedule drills and sections</h2></div><span class="muted">Every drill needs a target per goalie</span></div>
+          <form id="drillForm" class="drill-form">
+            <label class="field"><span>Trial day</span><select id="drillDay"></select></label>
+            <label class="field"><span>Drill or section</span><select id="drillType"><option>Penalty Corners</option><option>Penalty Strokes</option><option>8Sec 1v1</option><option>Match Situation</option></select></label>
+            <label class="field"><span>Attempts per goalie</span><input id="drillTarget" type="number" min="1" value="10" required></label>
+            <button class="button secondary" type="submit">Add to trial</button>
+          </form>
+          <div id="scheduledDrills" class="table-wrap"></div>
+        </article>
+      </section>
+
+      <section id="page-roster" class="page" aria-labelledby="rosterTitle">
+        <div class="page-heading"><div><p class="eyebrow">Candidates</p><h1 id="rosterTitle">Trials Roster</h1></div><div class="toolbar"><button id="addSharedGoalie" class="button secondary">Choose Shared Goalie</button><button id="openGoalieDialog" class="button primary">Add Trial-only Goalie</button></div></div>
+        <div class="toolbar"><label class="field"><span>Smock colours for</span><select id="rosterDayFilter"></select></label></div>
+        <div id="rosterGrid" class="goalie-card-grid large"></div>
+      </section>
+
+      <section id="page-recording" class="page" aria-labelledby="recordingTitle">
+        <div class="page-heading"><div><p class="eyebrow">Live capture</p><h1 id="recordingTitle">Trial Recording</h1></div><span id="recordingModePill" class="pill">Select a section</span></div>
+        <article class="panel recording-setup">
+          <div class="recording-selectors">
+            <label class="field"><span>Trial day</span><select id="recordingDay"></select></label>
+            <label class="field"><span>Trial section</span><select id="recordingDrill"></select></label>
+            <label class="field"><span>Shot type</span><select id="shotType"><option>First Shot</option><option>Rebound Shot</option><option>Deflection</option><option>Tip</option><option>Other</option></select></label>
+            <label class="field"><span>Situation</span><select id="shotSituation"><option>Open Play</option><option>Penalty Corner</option><option>Penalty Stroke</option><option>1v1</option><option>8Sec 1v1</option><option>Outnumbered</option></select></label>
+          </div>
+        </article>
+        <div id="recordingStations" class="station-grid"></div>
+        <article class="panel">
+          <div class="panel-header"><div><p class="eyebrow">Latest events</p><h2>Section timeline</h2></div><button id="undoLastEvent" class="button ghost">Undo last</button></div>
+          <div id="eventTimeline" class="timeline-list"></div>
+        </article>
+      </section>
+
+      <section id="page-video" class="page" aria-labelledby="videoTitle">
+        <div class="page-heading"><div><p class="eyebrow">Post-session capture</p><h1 id="videoTitle">Video Stats Review</h1></div></div>
+        <article class="panel">
+          <div class="recording-selectors">
+            <label class="field"><span>Trial day</span><select id="videoDay"></select></label>
+            <label class="field"><span>Trial section</span><select id="videoDrill"></select></label>
+          </div>
+          <p class="muted">Load one camera angle above each goalkeeper recording section. Videos remain on this device and are not stored in the trial database.</p>
+        </article>
+        <div class="video-review-grid">
+          <section class="video-lane">
+            <div class="video-stage"><video id="videoA" controls playsinline></video><label class="file-button">Load angle for Goal A<input type="file" id="videoFileA" accept="video/*"></label></div>
+            <div id="videoStationA" class="video-station"></div>
+          </section>
+          <section class="video-lane">
+            <div class="video-stage"><video id="videoB" controls playsinline></video><label class="file-button">Load angle for Goal B<input type="file" id="videoFileB" accept="video/*"></label></div>
+            <div id="videoStationB" class="video-station"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="page-comparison" class="page" aria-labelledby="comparisonTitle">
+        <div class="page-heading"><div><p class="eyebrow">Fair comparison</p><h1 id="comparisonTitle">Comparison Dashboard</h1></div></div>
+        <article class="panel filter-panel">
+          <div class="filter-grid">
+            <label class="field"><span>Trial day</span><select id="compareDay"><option value="all">All days</option></select></label>
+            <label class="field"><span>Drill</span><select id="compareDrill"><option value="all">All drills</option></select></label>
+            <label class="field"><span>Shot type</span><select id="compareShot"><option value="all">All shot types</option></select></label>
+            <label class="field"><span>Situation</span><select id="compareSituation"><option value="all">All situations</option></select></label>
+          </div>
+        </article>
+        <div class="comparison-layout">
+          <article class="panel weights-panel">
+            <div class="panel-header"><div><p class="eyebrow">Selection model</p><h2>Category weightings</h2></div><span id="weightTotal" class="pill">100%</span></div>
+            <div id="weightControls" class="weight-controls"></div>
+          </article>
+          <article class="panel ranking-panel">
+            <div class="panel-header"><div><p class="eyebrow">Overall</p><h2>Current ranking</h2></div></div>
+            <div id="rankingList" class="ranking-list"></div>
+          </article>
+        </div>
+        <div id="comparisonWarnings"></div>
+        <div id="comparisonCards" class="comparison-cards"></div>
+      </section>
+
+      <section id="page-reports" class="page" aria-labelledby="reportsTitle">
+        <div class="page-heading"><div><p class="eyebrow">Decision evidence</p><h1 id="reportsTitle">Selection Report</h1></div><button id="printReport" class="button primary">Print / Save PDF</button></div>
+        <article class="panel report-controls no-print">
+          <label class="field"><span>Report</span><select id="reportType"><option value="selection">Selector report</option><option value="feedback">Individual feedback</option></select></label>
+          <label class="field" id="reportGoalieWrap"><span>Goalkeeper</span><select id="reportGoalie"></select></label>
+          <label class="field grow"><span>Final decision</span><select id="finalDecision"><option>Pending</option><option>Selected</option><option>Shortlisted</option><option>Development squad</option><option>Not selected</option></select></label>
+        </article>
+        <div id="reportCanvas" class="report-canvas"></div>
+        <article class="panel no-print">
+          <label class="field"><span>Coach notes and final decision evidence</span><textarea id="reportNotes" rows="6" placeholder="Add the selectors’ observations, context and final reasoning..."></textarea></label>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="goalieDialog" class="modal">
+    <form id="goalieForm" method="dialog">
+      <div class="modal-header"><div><p class="eyebrow">Roster profile</p><h2>Add goalkeeper</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <div class="form-grid">
+        <label class="field span-2"><span>Name</span><input id="goalieName" required></label>
+        <label class="field"><span>Date of birth</span><input id="goalieDob" type="date" required></label>
+        <label class="field"><span>Gender</span><select id="goalieGender"><option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></label>
+        <label class="field span-2"><span>Playing experience</span><textarea id="goalieExperience" rows="3" placeholder="Teams, years played and relevant experience"></textarea></label>
+        <label class="field"><span>Preferred level</span><select id="goaliePreferredLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
+        <label class="field"><span>Photograph (optional)</span><input id="goaliePhoto" type="file" accept="image/*"></label>
+      </div>
+      <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Add to roster</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="sharedGoalieDialog" class="modal">
+    <form id="sharedGoalieForm" method="dialog" class="modal-card">
+      <div class="modal-header"><div><p class="eyebrow">Shared directory</p><h2>Choose Existing Goalie</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <p class="muted">Selecting a shared goalie adds them to this Trials roster. Removing them later will not delete their shared profile.</p>
+      <label class="field"><span>Goalkeeper</span><select id="sharedGoalieSelect" required></select></label>
+      <div class="modal-actions"><button class="button ghost" type="button" data-close-dialog>Cancel</button><button class="button primary" type="submit">Add to Trials Roster</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="ratingDialog" class="modal">
+    <form id="ratingForm" method="dialog">
+      <div class="modal-header"><div><p class="eyebrow">Station review</p><h2>Ratings and notes</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <input id="ratingGoalieId" type="hidden">
+      <div class="rating-grid" id="ratingInputs"></div>
+      <label class="field"><span>Coach notes</span><textarea id="ratingNotes" rows="5" placeholder="Positioning, decisions, movement, communication and development points..."></textarea></label>
+      <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Save station review</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
