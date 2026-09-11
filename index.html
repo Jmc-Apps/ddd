@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#071d33">
+  <meta name="theme-color" content="#d4e5ee">
   <meta name="description" content="Data Driven Development sports performance suite">
-  <title>Data Driven Development v1.2</title>
+  <title>Data Driven Development v1.3</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -14,7 +14,7 @@
 <body>
   <header class="topbar">
     <button class="menu-button" id="menuButton" type="button" aria-label="Open menu">Menu</button>
-    <span class="brand-panel"><img class="brand-logo" src="assets/ddd-banner-v1-2.png" alt="Data Driven Development"></span>
+    <span class="brand-panel"><img class="brand-logo" src="assets/ddd-banner-v1-3.png" alt="Data Driven Development"></span>
     <button class="install-button hidden" id="installButton" type="button">Install App</button>
   </header>
 
@@ -29,18 +29,18 @@
         <button class="nav-link" data-page="resources">Resources</button>
         <a class="nav-link anchor" href="recorder/index.html">Stats Recorder</a>
       </nav>
-      <div class="suite-version">Data Driven Development<br><b>Version 1.2</b></div>
+      <div class="suite-version">Data Driven Development<br><b>Version 1.3</b></div>
     </aside>
 
     <main>
       <section class="page active" id="page-home">
         <div class="hero">
-          <span class="hero-logo-panel"><img src="assets/ddd-logo-v1-2.png" alt="Data Driven Development" class="hero-emblem"></span>
+          <span class="hero-logo-panel"><img src="assets/ddd-logo-v1-3.png" alt="Data Driven Development" class="hero-emblem"></span>
           <div><p class="eyebrow">One connected development suite</p><h1>Choose where you want to work</h1><p>Shared goalkeepers and central services, with each performance area kept in its own focused module.</p></div>
         </div>
         <div class="module-grid">
           <a class="module-card field" href="field-hockey.html">
-            <div class="module-card-top"><img src="assets/hgs-app-icon-v464.png" alt="Field Hockey Stats logo" class="module-logo"><span class="status ready">Available</span></div><h2>Field Hockey Stats</h2><p>Record matches, review video, analyse performance, heat maps and reports.</p><strong>Open Field Hockey Stats →</strong>
+            <div class="module-card-top"><img src="assets/home-emblem-v467.png" alt="Field Hockey Stats logo" class="module-logo"><span class="status ready">Available</span></div><h2>Field Hockey Stats</h2><p>Record matches, review video, analyse performance, heat maps and reports.</p><strong>Open Field Hockey Stats →</strong>
           </a>
           <a class="module-card trials" href="trials/index.html">
             <div class="module-card-top"><img src="trials/assets/app-logo.png" alt="Field Hockey Trials logo" class="module-logo"><span class="status ready">Available</span></div><h2>Field Hockey Trials</h2><p>Plan fair trials, record equal drills, compare goalkeepers and create selection reports.</p><strong>Open Field Hockey Trials →</strong>
@@ -61,16 +61,18 @@
 
       <section class="page" id="page-goalies">
         <div class="page-heading"><div><p class="eyebrow">Shared directory</p><h1>Enroll Goalie</h1><p>Goalies enrolled here are available to Field Hockey, Indoor Hockey and Trials.</p></div><button class="primary" id="newGoalieButton" type="button">Enroll New Goalie</button></div>
-        <div class="two-column">
+        <div class="two-column goalie-layout">
           <article class="panel"><h2>Shared Goalkeepers</h2><div id="goalieList" class="goalie-list"></div></article>
           <article class="panel form-panel">
             <h2 id="goalieFormTitle">Enroll New Goalie</h2>
             <form id="goalieForm">
               <input type="hidden" id="goalieId">
-              <label>Full Name<input id="goalieName" required autocomplete="name"></label>
-              <label>Date of Birth<input id="goalieDob" type="date"></label>
-              <label>Age Group<input id="goalieAgeGroup" readonly aria-describedby="ageGroupHelp"><small id="ageGroupHelp">Calculated at 1 January of the current year.</small></label>
-              <label>Gender<select id="goalieGender"><option>Male</option><option>Female</option></select></label>
+              <div class="identity-grid">
+                <label>Full Name<input id="goalieName" required autocomplete="name"></label>
+                <label>Date of Birth<input id="goalieDob" type="date"></label>
+                <label>Age Group<input id="goalieAgeGroup" readonly aria-describedby="ageGroupHelp"><small id="ageGroupHelp">Calculated at 1 January of the current year.</small></label>
+                <label>Gender<select id="goalieGender"><option>Male</option><option>Female</option></select></label>
+              </div>
               <div class="team-heading"><div><h3>Team Profiles</h3><p class="form-note">Add the teams and classifications this goalie uses in each sport.</p></div><button class="secondary" id="addTeamProfile" type="button">Add Team</button></div>
               <div id="teamProfiles" class="team-profiles"></div>
               <button class="primary" type="submit">Save Shared Goalie</button>

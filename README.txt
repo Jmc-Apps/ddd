@@ -1,13 +1,19 @@
-Data Driven Development Suite v1.2
-Field Hockey Stats v5.95
-Stats Recorder v1.31
+Data Driven Development Suite v1.3
+Field Hockey Stats v5.96
+Stats Recorder v1.32
 
-Version 1.2 completes the first shared-service structure and corrects the platform branding.
+Version 1.3 introduces the lighter shared suite theme and expands the Enroll Goalie layout.
 
-Version 1.2 / Field Hockey v5.95 / Recorder v1.31 changes:
+Version 1.3 / Field Hockey v5.96 / Recorder v1.32 / Trials v1.2 changes:
+
+- Replaced the very dark interface with a lighter blue and slate palette across the launcher, Field Hockey Stats, Trials and Recorder.
+- Removed the white backing blocks from the platform logos while maintaining readable contrast.
+- Expanded Enroll Goalie to use the full available page width.
+- Rebuilt every Team Profile as a spacious card with a full-width Team Name field and larger classification controls.
+- Corrected the Field Hockey launcher card to use the complete Hockey Goalie Stats emblem.
 
 - Replaced the incorrect launcher mark with the approved three-interconnected-D scope logo.
-- Placed dark logo text on a light high-contrast panel in the launcher, Field Hockey and Recorder headers.
+- Kept the approved dark logo text readable against the lighter application surfaces.
 - Added each available app's own logo to its launcher card.
 - Added the approved shared PWA app icon for the Data Driven Development suite and Stats Recorder.
 - Updated manifest, Apple touch and favicon assets in all required icon sizes.
