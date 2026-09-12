@@ -44,3 +44,33 @@ body{background:linear-gradient(145deg,#edf5f9 0,#dcebf3 55%,#c9dfe9 100%)}
 .panel,.metric-card,.goalie-card,.station-card,.comparison-card,.report-canvas{background:#f7fbfd;border-color:#a1bdcc}
 .feature-panel{background:linear-gradient(135deg,#f7fbfd,#e7f2f7)}
 @media(max-width:760px){.sidebar{background:#cfe1eb;border-top:1px solid #91b4c8}.nav-button{color:#35566c}}
+
+/* v1.10 trial events, inline capture and promotion workflow */
+.drill-form{grid-template-columns:1fr 1.5fr .8fr auto auto}
+.recording-selectors.two-only{grid-template-columns:repeat(2,minmax(0,1fr))}
+.heading-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.shot-form{padding:16px;border-top:1px solid var(--line);display:grid;gap:8px}
+.shot-form>label:not(.field){font-size:.75rem;font-weight:800;color:#476074;margin-top:5px}
+.choice-row{display:flex;flex-wrap:wrap;gap:7px}
+.choice-button{border:1px solid #9bb9c9;background:#e8f2f7;color:#153a52;border-radius:999px;padding:8px 11px;font-size:.75rem;font-weight:750}
+.choice-button.selected{background:#087fa4;color:white;border-color:#087fa4;box-shadow:0 3px 9px rgba(8,127,164,.2)}
+.shot-form>.button{width:100%;margin-top:6px}
+.inline-review{border-top:1px solid var(--line);background:#f4f9fc;padding:16px;display:grid;gap:13px}
+.inline-review h3{margin:0;color:#12364e}.inline-rating-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.inline-rating{display:grid;gap:6px}.inline-rating>span{font-size:.75rem;font-weight:800;color:#476074}.inline-rating>div{display:flex;gap:5px}
+.rating-choice{width:34px;height:34px;border:1px solid #9bb9c9;border-radius:9px;background:white;color:#18394f;font-weight:800}
+.rating-choice.selected{background:#0b7599;color:white;border-color:#0b7599}.inline-review>.button{width:100%}
+.event-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+.event-card{background:white;border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow);display:grid;gap:18px}
+.event-card.active{border-color:#0c91bd;box-shadow:0 0 0 2px rgba(12,145,189,.12),var(--shadow)}
+.event-card h2{margin:10px 0 4px;color:#12334a}.event-card p{margin:0;color:var(--muted)}
+.event-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.event-summary span{background:#eff6fa;border-radius:10px;padding:9px;text-align:center;font-size:.72rem;color:var(--muted)}.event-summary strong{display:block;font-size:1.2rem;color:#12364e}
+.promotion-toolbar{display:flex;align-items:end;gap:14px}.promotion-toolbar .field{min-width:300px;flex:1}
+.promotion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:18px;margin-bottom:20px}
+.promotion-card{background:white;border:1px solid var(--line);border-radius:17px;padding:18px;box-shadow:var(--shadow)}.promotion-card h2{margin:13px 0 10px}
+.promotion-select{display:flex;align-items:center;gap:8px;background:#eaf6fb;border-radius:10px;padding:10px;font-size:.8rem;font-weight:800;color:#0a6687}.promotion-select input{width:18px;height:18px;accent-color:#087fa4}
+.round-summary{display:grid;grid-template-columns:1fr 1fr;gap:11px}.round-summary section{background:#f4f8fb;border:1px solid #dce8ef;border-radius:11px;padding:12px}.round-summary h3{margin:0 0 8px;color:#17415d}.round-summary p{font-size:.77rem;color:#536f82;line-height:1.55;margin:5px 0}
+.late-entry-note{background:#fff6df;border-left:4px solid #d89616;padding:9px;color:#704b00;font-size:.78rem}
+.late-entry-grid{display:grid;grid-template-columns:1fr 2fr auto;gap:12px;align-items:end}.promotion-actions{display:flex;justify-content:flex-end;margin-bottom:20px}
+@media(max-width:1050px){.late-entry-grid{grid-template-columns:1fr 1fr}.late-entry-grid .grow{grid-column:span 2}}
+@media(max-width:760px){.recording-selectors.two-only,.inline-rating-grid,.round-summary,.late-entry-grid{grid-template-columns:1fr}.late-entry-grid .grow{grid-column:auto}.promotion-toolbar{align-items:stretch;flex-direction:column}.promotion-toolbar .field{min-width:0;width:100%}.promotion-grid{grid-template-columns:1fr}}
