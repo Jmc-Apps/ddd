@@ -1,8 +1,10 @@
-Data Driven Development Suite v1.13
+Data Driven Development Suite v1.14
 Field Hockey Goalie Stats v5.105
 Indoor Hockey Goalie Stats v1.1
 Hockey Goalie Trials v1.9
-Stats Recorder v1.40
+Stats Recorder v1.41
+
+Version 1.14 removes the Recorder's operating-system file-type filter so custom .dddbackup files remain selectable in iPhone, iPad and other restrictive file pickers. Files are validated safely by their parsed contents after selection. The import was verified against the supplied Goalkeeper directory backup containing three goalkeepers and five team profiles.
 
 Version 1.13 adds central backup compatibility to the Stats Recorder. The Recorder now accepts .dddbackup and legacy .json files, previews the number of shared goalkeepers and team profiles before import, merges Field and Indoor profiles by permanent goalkeeper ID, and deliberately excludes matches, trials and benchmarking data.
 

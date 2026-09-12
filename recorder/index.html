@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Data Driven Development Stats Recorder v1.40</title>
-<link rel="manifest" href="manifest.webmanifest?v=1.40">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-v1-40.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32-v1-40.png">
+<title>Data Driven Development Stats Recorder v1.41</title>
+<link rel="manifest" href="manifest.webmanifest?v=1.41">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-v1-41.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32-v1-41.png">
 <meta name="theme-color" content="#d4e5ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Goalie Recorder">
@@ -255,7 +255,7 @@ html,body{background:#dceaf2!important;color:#17374e!important}.app{background:l
 <body>
 <div class="recorderShell">
 <div class="app">
-<header><div class="topbar"><img class="recorderHeaderLogo" src="assets/ddd-banner-v1-40.png" alt="Data Driven Development"><span class="recorderModuleTitle">Stats Recorder</span><div class="ver">v1.40</div></div></header>
+<header><div class="topbar"><img class="recorderHeaderLogo" src="assets/ddd-banner-v1-41.png" alt="Data Driven Development"><span class="recorderModuleTitle">Stats Recorder</span><div class="ver">v1.41</div></div></header>
 <main>
 <section id="home" class="screen active">
   <div class="recorderHomeLogo"></div>
@@ -267,7 +267,7 @@ html,body{background:#dceaf2!important;color:#17374e!important}.app{background:l
   <button class="btn blue" id="finishBtn">FINISH MATCH</button>
 </section>
 <section id="setup" class="screen"><div class="scroll"><div class="card"><h2>Match Setup</h2><label>Sport</label><select id="sportType"><option value="field_hockey">Field Hockey</option><option value="indoor_hockey">Indoor Hockey</option></select><label>Goalie</label><select id="goalieSelect"></select><label>Team</label><select id="teamSelect"></select><label>Date</label><input id="matchDate" type="date"><label>Opponent</label><input id="opponentTeam" placeholder="Opponent team"><label>Number of Periods</label><input id="periodCount" type="number" min="1" max="12" step="1" value="4"><span class="period-help">Indoor Hockey defaults to four 10-minute periods and uses the six-second shoot-out format.</span><button class="btn green" id="saveSetupBtn">SAVE SETUP</button><button class="btn red" id="resetRecorderBtn">RESET RECORDED DATA</button><p class="small">Clears this match recording after six-digit confirmation. Shared goalie and team data is preserved.</p></div></div></section>
-<section id="import" class="screen"><div class="scroll"><div class="card" style="text-align:center"><div style="font-size:56px">☁️</div><h2>Import Goalies &amp; Teams</h2><p class="small">Import shared goalkeeper and team profiles from a Data Driven Development backup or a legacy master-data export.</p><input id="masterFile" type="file" accept=".dddbackup,.json,application/json"><button class="btn green" id="importBtn" disabled>IMPORT</button><p id="importStatus" class="small">Choose a .dddbackup or .json file to preview it.</p></div></div></section>
+<section id="import" class="screen"><div class="scroll"><div class="card" style="text-align:center"><div style="font-size:56px">☁️</div><h2>Import Goalies &amp; Teams</h2><p class="small">Import shared goalkeeper and team profiles from a Data Driven Development backup or a legacy master-data export. The selected file is validated by its contents.</p><input id="masterFile" type="file" aria-describedby="importStatus"><button class="btn green" id="importBtn" disabled>IMPORT</button><p id="importStatus" class="small">Choose a .dddbackup or .json file to preview it.</p></div></div></section>
 <section id="timeline" class="screen"><div class="scroll"><div class="card"><h2>Match Timeline</h2><div id="timelineList"></div><button class="btn ghost" id="closeTimelineBtn">CLOSE</button></div></div></section>
 <section id="wizard" class="screen"><div class="wizard-head"><button class="back" id="backWizardBtn">‹</button><h2 id="wizardTitle">Record Shot</h2></div><div class="progress"><div id="progressBar"></div></div><div id="wizardBody" class="scroll"></div><div class="bottom-save"><button class="btn green" id="quickSaveBtn">CONFIRM & SAVE NOW</button></div></section>
 <section id="finish" class="screen"><div class="scroll"><div class="card"><h2>Finish Match</h2><label>Home Team Goals</label><input id="finishHomeGoals" type="number" min="0" value="0"><p class="small">Tap stars to score coaching ratings.</p><div id="ratings"></div><div id="shootoutPanel" class="v129ShootoutBox"></div><button class="btn green" id="finishSaveBtn">SAVE RATINGS & FINISH</button><button class="btn ghost" id="finishBackBtn">BACK</button></div></div></section>
@@ -277,7 +277,7 @@ html,body{background:#dceaf2!important;color:#17374e!important}.app{background:l
 </div>
 </div>
 <script>
-const RECORDER_VERSION="1.40", HOCKEY_STATS_VERSION="5.105", LS_STATE="gsr_v129_state", LS_MASTER="goalieStatsRecorderMasterData";
+const RECORDER_VERSION="1.41", HOCKEY_STATS_VERSION="5.105", LS_STATE="gsr_v129_state", LS_MASTER="goalieStatsRecorderMasterData";
 let state=JSON.parse(localStorage.getItem(LS_STATE)||localStorage.getItem("gsr_v128_state")||localStorage.getItem("gsr_v127_state")||localStorage.getItem("gsr_v126_state")||"null")||{goalieName:"",homeTeam:"",opponentTeam:"",date:new Date().toISOString().slice(0,10),homeGoals:0,periodCount:4,shots:[],timeline:[],ratings:{"Positioning":4,"Communication":4,"Rebound Control":4,"Decision Making":4}};
 if(!state.periodCount)state.periodCount=4;
 let pending=null,pendingMasterImport=null;
@@ -397,7 +397,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 
 <script>
 (function(){
-  window.RECORDER_VERSION="1.40";
+  window.RECORDER_VERSION="1.41";
 
   function n(v){ var x=Number(v||0); return Number.isFinite(x)?x:0; }
 
@@ -467,7 +467,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* v1.34: live Save Rate and Defence Rate on Home screen */
 (function(){
-  window.RECORDER_VERSION="1.40";
+  window.RECORDER_VERSION="1.41";
 
   function pct(a,b){
     return b > 0 ? Math.round((a / b) * 100) + "%" : "N/C";
@@ -584,7 +584,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
     renderLiveRates();
     document.querySelectorAll("*").forEach(function(el){
       if(el.children.length === 0 && /v1\.\d+/.test(el.textContent || "")){
-        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.40");
+        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.41");
       }
     });
   }, 0);
@@ -595,7 +595,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* v1.34: restore live Save Rate, prominent final save, confirm before cancel */
 (function(){
-  window.RECORDER_VERSION="1.40";
+  window.RECORDER_VERSION="1.41";
 
   function pct(a,b){
     return b > 0 ? Math.round((a / b) * 100) + "%" : "N/C";
@@ -786,7 +786,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
     refreshUi();
     document.querySelectorAll("*").forEach(function(el){
       if(el.children.length === 0 && /v1\.\d+/.test(el.textContent || "")){
-        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.40");
+        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.41");
       }
     });
   }, 0);
@@ -797,7 +797,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* v1.34: restore Home layout and remove duplicate old defence card */
 (function(){
-  window.RECORDER_VERSION="1.40";
+  window.RECORDER_VERSION="1.41";
 
   function pct(a,b){
     return b > 0 ? Math.round((a / b) * 100) + "%" : "N/C";
@@ -940,7 +940,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
     renderRates();
     document.querySelectorAll("*").forEach(function(el){
       if(el.children.length === 0 && /v1\.\d+/.test(el.textContent || "")){
-        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.40");
+        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.41");
       }
     });
   }, 0);
@@ -951,7 +951,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* v1.34: branding + period count safety sync */
 (function(){
-  window.RECORDER_VERSION="1.40";
+  window.RECORDER_VERSION="1.41";
   function byId(id){return document.getElementById(id)}
   function n(v){var x=Number(v||4);if(!Number.isFinite(x)||x<1)x=4;if(x>12)x=12;return Math.round(x)}
   function ensurePeriodField(){
@@ -1034,7 +1034,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* v1.34: Hockey Goalie Stats v5.14 compatible fields, shootout export, and iPhone icon cache support */
 (function(){
-  window.RECORDER_VERSION="1.40";
+  window.RECORDER_VERSION="1.41";
   const SIT129=["Normal Game Play","Penalty Corner","Penalty Stroke","6 Second Shoot-out"];
   const TYPE129=["1st Shot","Rebound","In Game 1v1","Own Goal","Other"];
   const OUT129=["Not Out Numbered","2 vs 1","3 vs 1","4+ vs 1"];
@@ -1226,7 +1226,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
     let match={sportType:state.sportType||"field_hockey",goalieName:state.goalieName,date:state.date,homeTeam:state.homeTeam,opponentTeam:state.opponentTeam,homeGoals:state.homeGoals,periodCount:maxPeriods(),periods:maxPeriods(),shots:shotOnly(),timeline:state.timeline||[],ratings:state.ratings};
     let so=shootoutPayload129();
     if(so)match.shootout=so;
-    let payload={sourceApp:"Data Driven Development Stats Recorder",sourceVersion:"1.40",sportType:match.sportType,targetApp:(match.sportType==="indoor_hockey"?"Indoor Hockey Goalie Stats":"Field Hockey Goalie Stats"),targetMajorVersion:"5",compatibleWith:(match.sportType==="indoor_hockey"?"Indoor Hockey Goalie Stats v1.1":"Field Hockey Goalie Stats v5.105"),exportedAt:new Date().toISOString(),match:match};
+    let payload={sourceApp:"Data Driven Development Stats Recorder",sourceVersion:"1.41",sportType:match.sportType,targetApp:(match.sportType==="indoor_hockey"?"Indoor Hockey Goalie Stats":"Field Hockey Goalie Stats"),targetMajorVersion:"5",compatibleWith:(match.sportType==="indoor_hockey"?"Indoor Hockey Goalie Stats v1.1":"Field Hockey Goalie Stats v5.105"),exportedAt:new Date().toISOString(),match:match};
     let blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
     let a=document.createElement("a");
     a.href=URL.createObjectURL(blob);
@@ -1276,7 +1276,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
           .then(regs=>Promise.all((regs||[]).map(r=>r.unregister())))
           .then(()=>caches?caches.keys():[])
           .then(keys=>Promise.all((keys||[]).map(k=>caches.delete(k))))
-          .then(()=>{localStorage.setItem("gsr_last_forced_refresh","v1.40 "+new Date().toISOString());location.reload(true)})
+          .then(()=>{localStorage.setItem("gsr_last_forced_refresh","v1.41 "+new Date().toISOString());location.reload(true)})
           .catch(()=>location.reload(true));
       }
     }
