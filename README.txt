@@ -1,8 +1,10 @@
-Data Driven Development Suite v1.12
+Data Driven Development Suite v1.13
 Field Hockey Goalie Stats v5.105
 Indoor Hockey Goalie Stats v1.1
 Hockey Goalie Trials v1.9
-Stats Recorder v1.39
+Stats Recorder v1.40
+
+Version 1.13 adds central backup compatibility to the Stats Recorder. The Recorder now accepts .dddbackup and legacy .json files, previews the number of shared goalkeepers and team profiles before import, merges Field and Indoor profiles by permanent goalkeeper ID, and deliberately excludes matches, trials and benchmarking data.
 
 Version 1.12 applies the approved Home banner to the platform, Field Hockey, Indoor Hockey and Trials home destinations. Field and Indoor Match Editors now use the same readable light input palette as their Match tabs. Indoor coaching ratings now use Positioning, Communication, Rebound Control and Decision Making only; Low Movement and Footwork and Distribution and Board Use have been removed. The Recorder remains menu-free with no route back to the main platform.
 
