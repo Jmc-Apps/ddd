@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Field Hockey Goalie Stats: Data Driven Development v5.104</title>
-<link rel="manifest" href="field-hockey.webmanifest">
+<title>Indoor Hockey Goalie Stats: Data Driven Development v1.0</title>
+<link rel="manifest" href="indoor-hockey.webmanifest">
 <meta name="theme-color" content="#d4e5ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1987,8 +1987,8 @@ body .v523EditVideosPanel .v521Danger{background:#c6404d!important;color:#fff!im
 <body>
 <header>
   <div class="titleLogoWrap">
-    <img src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats" class="titleLogo">
-    <span class="v594ModuleTitle">Field Hockey Stats</span>
+    <img src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats" class="titleLogo">
+    <span class="v594ModuleTitle">Indoor Hockey Stats</span>
   </div>
   <button type="button" id="v570MobileMenu" class="v570MobileMenu noPrint" aria-expanded="false" aria-controls="v570Sidebar">Menu</button>
 </header>
@@ -1996,16 +1996,16 @@ body .v523EditVideosPanel .v521Danger{background:#c6404d!important;color:#fff!im
 <nav id="v570Sidebar" class="tabs noPrint" aria-label="Main navigation">
 <button type="button" id="v570SidebarToggle" class="v570SidebarToggle" aria-expanded="true"><span class="v570Wide">Collapse Menu</span><span class="v570Narrow" aria-hidden="true">›</span></button>
 <button class="tab active" data-tab="home" data-short="H"><span>Home</span></button><button class="tab" data-tab="goalies" data-short="G"><span>Goalies</span></button><button class="tab" data-tab="match" data-short="M"><span>Match</span></button><button class="tab" data-tab="matchEditor" data-short="ME"><span>Match Editor</span></button><button class="tab" data-tab="stats" data-short="S"><span>Stats</span></button><button class="tab" data-tab="heat" data-short="HM"><span>Heat Maps</span></button><button class="tab" data-tab="reports" data-short="R"><span>Reports</span></button><a class="tab v570ExternalTab" href="./index.html#resources" data-short="?"><span>Shared Resources</span></a><a class="dddSidebarReturn" href="./index.html" aria-label="Return to Data Driven Development Home"><img src="assets/ddd-banner-v1-10.png" alt="Data Driven Development Home"></a>
-<div class="v573SidebarMeta"><span class="v573Full">Field Hockey Goalie Stats<br>Data Driven Development · Version 5.104</span><span class="v573Compact">v5.104</span></div>
+<div class="v573SidebarMeta"><span class="v573Full">Indoor Hockey Goalie Stats<br>Data Driven Development · Version 1.0</span><span class="v573Compact">v1.0</span></div>
 </nav>
 
 <section id="home" class="panel active">
   <div class="card">
     <div class="homeLogoWrap">
-      <img src="assets/home-emblem-v467.png" alt="Hockey Goalie Stats" class="homeLogo">
+      <img src="assets/indoor-hockey-logo-v1-0.png" alt="Indoor Hockey Goalie Stats" class="homeLogo">
     </div>
     <div class="versionBox">
-      <b>Version 5.104</b>
+      <b>Version 1.0</b>
       <div class="small">Build Date: 2026-09-11</div>
     </div>
     <div id="homeSummary" class="hiddenHomeSummary"></div>
@@ -2017,7 +2017,7 @@ body .v523EditVideosPanel .v521Danger{background:#c6404d!important;color:#fff!im
 <section id="match" class="panel">
 <div class="card"><h2>Match Details</h2><label>Goalie</label><select id="matchGoalie"></select><div class="grid2"><div><label>Date</label><input id="matchDate" type="date"></div><div><label>Match Name</label><input id="matchName" readonly></div></div><div class="grid2"><div><label>Home Team</label><select id="homeTeam"></select></div><div><label>Opponent</label><input id="opponentTeam" list="opponentList"><datalist id="opponentList"></datalist></div></div><div class="grid3"><div><label>Number of Periods</label><select id="matchPeriods"><option value="1">1</option><option value="2">2</option><option value="4" selected>4</option><option value="custom">Custom</option></select></div><div><label>Match Type</label><select id="matchType"><option>League</option><option>Tournament</option><option>Friendly</option><option>Derby</option><option>Training</option><option>Trial</option><option>Other</option><option selected>Not specified</option></select></div><div><label>Goalkeeper Participation</label><select id="matchParticipation"><option>Full match</option><option>Partial match</option><option selected>Not specified</option></select></div></div><div class="grid2"><div><label>Minutes Played</label><input id="matchMinutesPlayed" type="number" min="0" step="1" placeholder="Optional for a full match"></div><div></div></div><h3>Home Team Classification</h3><div class="grid3"><div><label>Age Group</label><input id="matchGoalieAgeGroup" readonly></div><div><label>Team Level</label><input id="matchGoalieLevel" readonly></div><div><label>Team Tier</label><input id="matchGoalieTier" readonly></div></div><h3>Opposition Classification</h3><div class="grid3"><div><label>Age Group</label><select id="matchOpponentAgeGroup"><option>U10</option><option>U11</option><option>U13</option><option>U14</option><option>U16</option><option>U19</option><option>U20</option><option>Senior</option><option>Open</option><option selected>Not specified</option></select></div><div><label>Team Level</label><select id="matchOpponentLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option><option>Other</option><option selected>Not specified</option></select></div><div><label>Team Tier</label><select id="matchOpponentTier"><option>A / 1st</option><option>B / 2nd</option><option>C / 3rd</option><option>D / 4th</option><option>Other</option><option selected>Not specified</option></select></div></div><button class="btn good" onclick="startOrUpdateMatch()">Start / Save Match Details</button><div id="activeMatchInfo" class="small"></div></div>
 
-<div class="card"><h2>Record Shot</h2><label>Shot Outcome</label><div id="outcomeButtons" class="chiprow"></div><label>Shot Situation</label><div id="shotSituationButtons" class="chiprow"></div><label>Shot Type</label><div id="shotTypeButtons" class="chiprow"></div><label>Out Numbered</label><div id="outnumberedButtons" class="chiprow"></div><label>Rebound Result</label><div id="reboundButtons" class="chiprow"></div><label>Notes</label><input id="shotNote"><button class="btn good" onclick="saveShotWithoutHeat()">Save Shot Without Heat Map</button><div class="small">Use this during live play. Add the heat map locations later in the Heat Map Editor.</div><div class="grid2"><div><h3>D Heat Map</h3><div class="mapBox" id="dTap"></div></div><div><h3>Goal Box Heat Map</h3><div class="mapBox" id="goalTap"></div><div class="small">Angle Closed Off is D heat map only and cannot be placed on the goal-box heat map.</div><label><input id="mirrorGoal" type="checkbox" style="width:auto"> Mirror goal-box tap when recording from behind goal</label></div></div><button class="btn good" onclick="saveShot()">Save Shot With Heat Map</button><button class="btn secondary" onclick="resetShotInputs()">Clear Shot Options</button><div id="shotStatus" class="small"></div></div>
+<div class="card"><h2>Record Shot</h2><div class="indoorKeeperBar"><b>Goalkeeper status: <span id="indoorKeeperStatus">On court</span></b><div><button type="button" class="btn secondary" onclick="setIndoorKeeperActive(true)">Goalkeeper On</button><button type="button" class="btn secondary" onclick="setIndoorKeeperActive(false)">Goalkeeper Off — Field Players Only</button></div></div><label>Shot Outcome</label><div id="outcomeButtons" class="chiprow"></div><label>Shot Situation</label><div id="shotSituationButtons" class="chiprow"></div><label>Shot Type</label><div id="shotTypeButtons" class="chiprow"></div><label>Out Numbered</label><div id="outnumberedButtons" class="chiprow"></div><label>Rebound Result</label><div id="reboundButtons" class="chiprow"></div><label>Indoor Detail Tags</label><div id="indoorTagButtons" class="chiprow"></div><label>Notes</label><input id="shotNote"><button class="btn good" onclick="saveShotWithoutHeat()">Save Shot Without Heat Map</button><div class="small">Use this during live play. Add the heat map locations later in the Heat Map Editor.</div><div class="grid2"><div><h3>D Heat Map</h3><div class="mapBox" id="dTap"></div><div id="indoorPenaltySpotNote" class="small"></div></div><div><h3>Goal Box Heat Map</h3><div class="mapBox" id="goalTap"></div><div class="small">Angle Closed Off is D heat map only and cannot be placed on the goal-box heat map.</div><label><input id="mirrorGoal" type="checkbox" style="width:auto"> Mirror goal-box tap when recording from behind goal</label></div></div><button class="btn good" onclick="saveShot()">Save Shot With Heat Map</button><button class="btn secondary" onclick="resetShotInputs()">Clear Shot Options</button><div id="shotStatus" class="small"></div></div>
 
 <div class="card"><h2>Match Outcomes</h2><div class="grid2"><div><label>Home Team Goals</label><input id="homeGoals" type="number" min="0" value="0"></div><div><label>Opponent Goals</label><input id="oppGoals" type="number" min="0" value="0" readonly><div class="small">Calculated automatically from recorded Goal shots.</div></div></div><h3>Coaching Ratings</h3><div id="coachingSliders"></div><button class="btn good" onclick="completeMatch()">Save Match Outcome & Prepare Next Match</button><button class="btn danger" onclick="clearActiveMatchProgress()">Clear Match Progress & Start Again</button><div class="small">Permanently removes the unsaved active match, including its details, shots and Video Stats Review data. A six-digit confirmation code is required.</div></div>
 
@@ -2124,23 +2124,52 @@ body .v523EditVideosPanel .v521Danger{background:#c6404d!important;color:#fff!im
 </main>
 
 <script>
-const APP_VERSION_566='5.104';
+const APP_VERSION_566='1.0';
 window.APP_VERSION=APP_VERSION_566;
-const STORAGE_KEY='hockeyGoalieStatsV3';
-const ratings=['Positioning','Communication','Rebound Control','Decision Making'];
+const STORAGE_KEY='indoorHockeyGoalieStatsV1';
+const SHARED_DIRECTORY_KEY='hockeyGoalieStatsV3';
+const ratings=['Positioning','Communication','Rebound Control','Decision Making','Low Movement and Footwork','Distribution and Board Use'];
 const shotTypes=['1st Shot','Rebound','In Game 1v1','Own Goal','Other'];
-const shotSituations=['Normal Game Play','Penalty Corner','Penalty Stroke','8 Second 1v1'];
+const shotSituations=['Normal Game Play','Penalty Corner','Penalty Stroke','6 Second Shoot-out'];
 const outcomes=['Save','Goal','Angle Closed Off'];
 const rebounds=['No rebound','Safe','Dangerous'];
-const outnumberedOptions=['Not Out Numbered','2 vs 1','3 vs 1','4+ vs 1'];
+const outnumberedOptions=['Not Out Numbered','2 vs 1','3 vs 1','4 vs 1','5 vs 1','Empty Goal'];
+const indoorDetailTags=['Played off Sideboard','Direct Circle Entry','Baseline Entry','Deflection / Tip','Close-range Shot','Low Shot','Lifted Shot','Back-post Chance'];
 let db=loadDB(), currentGoalieId=db.currentGoalieId||'', activeMatchId=db.activeMatchId||'';
 let tapD=null,tapGoal=null,editDPoint=null,editGoalPoint=null, selectedShotType='1st Shot', selectedShotSituation='Normal Game Play', selectedOutcome='Save', selectedRebound='No rebound', selectedOutnumbered='Not Out Numbered', editType='1st Shot', editSituation='Normal Game Play', editOutcome='Save', editRebound='No rebound', editOutnumbered='Not Out Numbered';
+let selectedIndoorTags=[];
 
 function uid(){return 'id_'+Math.random().toString(36).slice(2)+Date.now().toString(36)}
 function today(){return new Date().toISOString().slice(0,10)}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function loadDB(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{goalies:[]}}catch(e){return {goalies:[]}}}
-function saveDB(){refreshCustomPeriodCounts565();ensureBenchmarkModel566();sanitizeActiveMatchPointer585();db.currentGoalieId=currentGoalieId;db.activeMatchId=activeMatchId;localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}
+function loadDB(){
+  let indoor={goalies:[]},shared={goalies:[]};
+  try{indoor=JSON.parse(localStorage.getItem(STORAGE_KEY))||{goalies:[]}}catch(e){}
+  try{shared=JSON.parse(localStorage.getItem(SHARED_DIRECTORY_KEY))||{goalies:[]}}catch(e){}
+  if(!Array.isArray(indoor.goalies))indoor.goalies=[];
+  const byId=new Map(indoor.goalies.map(g=>[String(g.id),g]));
+  (shared.goalies||[]).forEach(s=>{
+    let g=byId.get(String(s.id));
+    if(!g){g={id:s.id,matches:[]};indoor.goalies.push(g);byId.set(String(s.id),g)}
+    const indoorProfiles=(s.teamProfiles||[]).filter(p=>p.sportType==='indoor_hockey').map(p=>({...p}));
+    Object.assign(g,{name:s.name||g.name||'',dob:s.dob||g.dob||'',gender:s.gender||g.gender||'Male',ageGroup:s.ageGroup||g.ageGroup||'',benchmarkGoalieId:s.benchmarkGoalieId||g.benchmarkGoalieId,benchmarkConsent:s.benchmarkConsent||g.benchmarkConsent||'undecided',teamProfiles:indoorProfiles,teams:indoorProfiles.map(p=>p.name).filter(Boolean),centralProfile:true});
+    g.matches=Array.isArray(g.matches)?g.matches:[];
+  });
+  return indoor;
+}
+function syncIndoorGoaliesToShared(){
+  let shared={goalies:[]};try{shared=JSON.parse(localStorage.getItem(SHARED_DIRECTORY_KEY))||{goalies:[]}}catch(e){}
+  if(!Array.isArray(shared.goalies))shared.goalies=[];
+  (db.goalies||[]).forEach(g=>{
+    let s=shared.goalies.find(x=>String(x.id)===String(g.id));
+    if(!s){s={id:g.id,matches:[],teamProfiles:[]};shared.goalies.push(s)}
+    const kept=(s.teamProfiles||[]).filter(p=>(p.sportType||'field_hockey')!=='indoor_hockey');
+    const indoor=(g.teamProfiles||[]).filter(p=>p.name).map(p=>({...p,sportType:'indoor_hockey'}));
+    Object.assign(s,{name:g.name||s.name||'',dob:g.dob||s.dob||'',gender:g.gender||s.gender||'Male',ageGroup:g.ageGroup||s.ageGroup||'',benchmarkGoalieId:g.benchmarkGoalieId||s.benchmarkGoalieId,benchmarkConsent:g.benchmarkConsent||s.benchmarkConsent||'undecided',teamProfiles:[...kept,...indoor],teams:kept.filter(p=>(p.sportType||'field_hockey')==='field_hockey').map(p=>p.name).filter(Boolean),centralProfile:true,syncUpdatedAt:new Date().toISOString()});
+  });
+  localStorage.setItem(SHARED_DIRECTORY_KEY,JSON.stringify(shared));
+}
+function saveDB(){refreshCustomPeriodCounts565();ensureBenchmarkModel566();sanitizeActiveMatchPointer585();db.currentGoalieId=currentGoalieId;db.activeMatchId=activeMatchId;(db.goalies||[]).forEach(g=>(g.matches||[]).forEach(m=>m.sportType='indoor_hockey'));localStorage.setItem(STORAGE_KEY,JSON.stringify(db));syncIndoorGoaliesToShared()}
 function randomSixDigitCode(){try{const a=new Uint32Array(1);crypto.getRandomValues(a);return String(100000+(a[0]%900000))}catch(e){return String(100000+Math.floor(Math.random()*900000))}}
 function confirmSixDigit(action){const code=randomSixDigitCode();const typed=prompt(action+'\n\nThis cannot be undone. To continue, type this 6-digit code exactly:\n\n'+code);if(typed===null)return false;if(String(typed).trim()!==code){alert('The code did not match. Nothing was deleted.');return false}return true}
 function goalie(id=currentGoalieId){return db.goalies.find(g=>g.id===id)||null}
@@ -2191,7 +2220,7 @@ function benchmarkFinalized566(m){return m?.matchStatus==='finalised'||!!m?.fina
 function benchmarkEligibility566(m){if(!benchmarkFinalized566(m))return {eligible:false,reason:'Not finalised'};if(!(m.shots||[]).length)return {eligible:false,reason:'No recorded shots'};if(!benchmarkRequiredComplete566(m))return {eligible:false,reason:'Classification incomplete'};return {eligible:true,reason:'Ready'}}
 function benchmarkRates566(m){const shots=m.shots||[],saves=shots.filter(s=>s.outcome==='Save').length,goals=shots.filter(s=>s.outcome==='Goal').length,angles=shots.filter(s=>s.outcome==='Angle Closed Off').length;return {saveRate:(saves+goals)?saves/(saves+goals):null,defenceRate:shots.length?(saves+angles)/shots.length:null}}
 function anonymousBenchmarkMatch566(g,m){const rates=benchmarkRates566(m);return {benchmarkMatchId:m.benchmarkMatchId,season:String(m.date||'').slice(0,4),goalkeeperAgeGroup:m.goalieAgeGroupAtMatch,goalkeeperGender:g.gender||BENCHMARK_NOT_SPECIFIED_566,goalkeeperTeamLevel:m.goalieTeamLevel,goalkeeperTeamTier:m.goalieTeamTier,opponentAgeGroup:m.opponentAgeGroup,opponentTeamLevel:m.opponentTeamLevel,opponentTeamTier:m.opponentTeamTier,matchType:m.matchType,participation:m.goalkeeperParticipation,minutesPlayed:m.minutesPlayed===''?null:Number(m.minutesPlayed),periods:effectivePeriodCount565(m),saveRate:rates.saveRate,defenceRate:rates.defenceRate,shots:(m.shots||[]).map(s=>({outcome:s.outcome||'',shotType:s.shotType||s.type||'',situation:s.shotSituation||s.situation||'',outnumbered:s.outnumbered||'',rebound:s.rebound||'',dPoint:(s.dPoint||Number.isFinite(Number(s.dX))&&Number.isFinite(Number(s.dY))?{x:Number(s.dPoint?.x??s.dX),y:Number(s.dPoint?.y??s.dY)}:null),goalPoint:(s.goalPoint||Number.isFinite(Number(s.gX))&&Number.isFinite(Number(s.gY))?{x:Number(s.goalPoint?.x??s.gX),y:Number(s.goalPoint?.y??s.gY)}:null)}))}}
-function benchmarkPayload566(g){ensureBenchmarkGoalie566(g);const matches=(g.matches||[]).filter(m=>benchmarkEligibility566(m).eligible).map(m=>anonymousBenchmarkMatch566(g,m));return {sourceApp:'Hockey Goalie Stats',sourceVersion:APP_VERSION_566,schemaVersion:BENCHMARK_SCHEMA_VERSION_566,benchmarkGoalieId:g.benchmarkGoalieId,generatedAt:new Date().toISOString(),matches}}
+function benchmarkPayload566(g){ensureBenchmarkGoalie566(g);const matches=(g.matches||[]).filter(m=>benchmarkEligibility566(m).eligible).map(m=>anonymousBenchmarkMatch566(g,m));return {sourceApp:'Indoor Hockey Goalie Stats',sourceVersion:APP_VERSION_566,schemaVersion:BENCHMARK_SCHEMA_VERSION_566,benchmarkGoalieId:g.benchmarkGoalieId,generatedAt:new Date().toISOString(),matches}}
 function benchmarkSampleQuality566(goalkeepers,matches,shots){return Number(goalkeepers)<5||Number(matches)<15||Number(shots)<100?'Limited Data':'Benchmark'}
 window.benchmarkSampleQuality566=benchmarkSampleQuality566;
 ensureBenchmarkModel566();
@@ -2238,7 +2267,7 @@ function shotTypeDotColor(x){
   if(x==='Penalty Corner')return '#ffca28';
   if(x==='Penalty Stroke')return '#ff8a00';
   if(x==='In Game 1v1')return '#b56cff';
-  if(x==='8 Second 1v1')return '#00d4c8';
+  if(x==='6 Second Shoot-out')return '#00d4c8';
   if(x==='Own Goal')return '#ef5350';
   return '#9e9e9e';
 }
@@ -2253,18 +2282,21 @@ function renderButtonGroup(id,items,selected,fn){
 }
 function selectShotType(x){selectedShotType=x;renderShotButtons()} function selectShotSituation(x){selectedShotSituation=x||'Normal Game Play'; if(selectedShotSituation==='Penalty Stroke'){tapD={x:50,y:26}} else if(tapD&&tapD.x===50&&tapD.y===26){tapD=null} renderShotButtons();renderShotMaps()} function selectOutcome(x){selectedOutcome=x;renderShotButtons();renderShotMaps()} function selectRebound(x){selectedRebound=x;renderShotButtons()} function selectOutnumbered(x){selectedOutnumbered=x;renderShotButtons()}
 function selectEditType(x){editType=x;renderEditorSelectors()} function selectEditSituation(x){editSituation=x||'Normal Game Play';renderEditorSelectors()} function selectEditOutcome(x){editOutcome=x;renderEditorSelectors()} function selectEditRebound(x){editRebound=x;renderEditorSelectors()} function selectEditOutnumbered(x){editOutnumbered=x;renderEditorSelectors()}
-function renderShotButtons(){renderButtonGroup('outcomeButtons',outcomes,selectedOutcome,'selectOutcome');renderButtonGroup('shotSituationButtons',shotSituations,selectedShotSituation||'Normal Game Play','selectShotSituation');renderButtonGroup('shotTypeButtons',shotTypes,selectedShotType,'selectShotType');renderButtonGroup('outnumberedButtons',outnumberedOptions,selectedOutnumbered,'selectOutnumbered');renderButtonGroup('reboundButtons',rebounds,selectedRebound,'selectRebound');renderButtonGroup('editOutcomeButtons',outcomes,editOutcome,'selectEditOutcome');renderButtonGroup('editSituationButtons',shotSituations,editSituation||'Normal Game Play','selectEditSituation');renderButtonGroup('editTypeButtons',shotTypes,editType,'selectEditType');renderButtonGroup('editOutnumberedButtons',outnumberedOptions,editOutnumbered,'selectEditOutnumbered');renderButtonGroup('editReboundButtons',rebounds,editRebound,'selectEditRebound')}
+function toggleIndoorTag(tag){selectedIndoorTags=selectedIndoorTags.includes(tag)?selectedIndoorTags.filter(x=>x!==tag):[...selectedIndoorTags,tag];renderIndoorTagButtons()}
+function renderIndoorTagButtons(){const el=document.getElementById('indoorTagButtons');if(!el)return;el.innerHTML=indoorDetailTags.map(tag=>`<button type="button" class="chip ${selectedIndoorTags.includes(tag)?'on':''}" onclick="toggleIndoorTag('${tag.replaceAll("'","\\'")}')">${esc(tag)}</button>`).join('')}
+function renderShotButtons(){renderButtonGroup('outcomeButtons',outcomes,selectedOutcome,'selectOutcome');renderButtonGroup('shotSituationButtons',shotSituations,selectedShotSituation||'Normal Game Play','selectShotSituation');renderButtonGroup('shotTypeButtons',shotTypes,selectedShotType,'selectShotType');renderButtonGroup('outnumberedButtons',outnumberedOptions,selectedOutnumbered,'selectOutnumbered');renderButtonGroup('reboundButtons',rebounds,selectedRebound,'selectRebound');renderButtonGroup('editOutcomeButtons',outcomes,editOutcome,'selectEditOutcome');renderButtonGroup('editSituationButtons',shotSituations,editSituation||'Normal Game Play','selectEditSituation');renderButtonGroup('editTypeButtons',shotTypes,editType,'selectEditType');renderButtonGroup('editOutnumberedButtons',outnumberedOptions,editOutnumbered,'selectEditOutnumbered');renderButtonGroup('editReboundButtons',rebounds,editRebound,'selectEditRebound');renderIndoorTagButtons()}
 
 function ptColor(out){return out==='Goal'?'#ef5350':out==='Angle Closed Off'?'#ffca28':'#2fd17c'}
 function handleSvgClick(ev,svg,cb){const r=svg.getBoundingClientRect(),vb=svg.getAttribute('viewBox').split(' ').map(Number);cb({x:+(((ev.clientX-r.left)/r.width*vb[2]).toFixed(1)),y:+(((ev.clientY-r.top)/r.height*vb[3]).toFixed(1))})}
 function finiteHeatValue585(value){if(value===undefined||value===null||value==='')return null;const n=Number(value);return Number.isFinite(n)?n:null}
 function basePitch(points=[],cb=null,sel=null){const id='svg_'+uid(),pts=points.map(p=>{const x=finiteHeatValue585(p?.dPoint?.x??p?.dX),y=finiteHeatValue585(p?.dPoint?.y??p?.dY);return x===null||y===null?'':`<circle cx="${x}" cy="${y}" r="3.8" fill="${ptColor(p.outcome)}" stroke="#111" stroke-width=".4" opacity=".9"></circle>`}).join(''),sx=finiteHeatValue585(sel?.x),sy=finiteHeatValue585(sel?.y),s=sx===null||sy===null?'':`<circle cx="${sx}" cy="${sy}" r="7" fill="#2d7ff9" stroke-width="2.6"></circle><circle cx="${sx}" cy="${sy}" r="10" fill="none" stroke="#2d7ff9" stroke-width="1.6" opacity=".55"></circle>`;setTimeout(()=>{const svg=document.getElementById(id);if(svg&&cb)svg.onclick=ev=>handleSvgClick(ev,svg,cb)},0);return `<svg id="${id}" viewBox="0 0 100 80"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#f8fbfd"/><stop offset="1" stop-color="#e1eaf0"/></linearGradient></defs><rect width="100" height="80" fill="url(#g)"/><rect x="0" y="69" width="100" height="11" fill="#d1dbe1"/><line x1="0" y1="69" x2="100" y2="69" stroke="#222" stroke-width="2"/><path d="M12 69 Q50 21 88 69" fill="none" stroke="#222" stroke-width="2.2"/><path d="M25 69 Q50 42 75 69" fill="none" stroke="#9aa5aa" stroke-width="1.2" stroke-dasharray="3 3"/><rect x="40" y="66" width="20" height="4" fill="none" stroke="#222" stroke-width="1.5"/><text x="50" y="77" fill="#555" font-size="4" text-anchor="middle">GOAL LINE</text>${pts}${s}</svg>`}
 function baseGoal(points=[],cb=null,sel=null){const id='svg_'+uid(),pts=points.map(p=>{const x=finiteHeatValue585(p?.goalPoint?.x??p?.gX),y=finiteHeatValue585(p?.goalPoint?.y??p?.gY);return x===null||y===null?'':`<circle cx="${x}" cy="${y}" r="3.8" fill="${ptColor(p.outcome)}" stroke="#111" stroke-width=".4" opacity=".9"></circle>`}).join(''),sx=finiteHeatValue585(sel?.x),sy=finiteHeatValue585(sel?.y),s=sx===null||sy===null?'':`<circle cx="${sx}" cy="${sy}" r="7" fill="#2d7ff9" stroke-width="2.6"></circle><circle cx="${sx}" cy="${sy}" r="10" fill="none" stroke="#2d7ff9" stroke-width="1.6" opacity=".55"></circle>`;setTimeout(()=>{const svg=document.getElementById(id);if(svg&&cb)svg.onclick=ev=>handleSvgClick(ev,svg,cb)},0);return `<svg id="${id}" viewBox="0 0 100 60"><rect width="100" height="60" fill="#e8eef2"/><rect x="9" y="8" width="82" height="40" fill="#fff" stroke="#222" stroke-width="2.2"/><line x1="36.33" y1="8" x2="36.33" y2="48" stroke="#b3b3b3" stroke-width="1"/><line x1="63.66" y1="8" x2="63.66" y2="48" stroke="#b3b3b3" stroke-width="1"/><line x1="9" y1="21.33" x2="91" y2="21.33" stroke="#d0d0d0"/><line x1="9" y1="34.66" x2="91" y2="34.66" stroke="#d0d0d0"/><text x="50" y="56" fill="#555" font-size="4" text-anchor="middle">GOAL BOX</text>${pts}${s}</svg>`}
-function renderShotMaps(){if(selectedShotSituation==='Penalty Stroke')tapD={x:50,y:26};const dcb=selectedShotSituation==='Penalty Stroke'?null:(p=>{tapD=p;renderShotMaps()});dTap.innerHTML=basePitch([],dcb,tapD);goalTap.innerHTML=baseGoal([],p=>{if(selectedOutcome==='Angle Closed Off'){tapGoal=null;showStatus('shotStatus','Angle Closed Off is recorded on the D heat map only.');renderShotMaps();return;}tapGoal=p;renderShotMaps()},tapGoal)}
+function renderShotMaps(){if(selectedShotSituation==='Penalty Stroke')tapD={x:50,y:26};const dcb=selectedShotSituation==='Penalty Stroke'?null:(p=>{tapD=p;renderShotMaps()});dTap.innerHTML=basePitch([],dcb,tapD);goalTap.innerHTML=baseGoal([],p=>{if(selectedOutcome==='Angle Closed Off'){tapGoal=null;showStatus('shotStatus','Angle Closed Off is recorded on the D heat map only.');renderShotMaps();return;}tapGoal=p;renderShotMaps()},tapGoal);const note=document.getElementById('indoorPenaltySpotNote');if(note)note.textContent=selectedShotSituation==='Penalty Stroke'?'Penalty Stroke location is fixed automatically at the indoor penalty spot.':''}
 
 function saveShotWithoutHeat(){
   const m=activeMatch();
   if(!m){alert('Start a match first.');return;}
+  if(m.indoorKeeperActive===false){alert('The goalkeeper is marked off court. Empty-goal events are not charged to the goalkeeper. Mark the goalkeeper on court before recording a goalkeeper shot.');return}
   m.shots=m.shots||[];
   const sit=selectedShotSituation||'Normal Game Play';
   const shot={
@@ -2276,6 +2308,7 @@ function saveShotWithoutHeat(){
     outnumbered:selectedOutnumbered,
     rebound:selectedRebound==='No rebound'?'':selectedRebound,
     note:shotNote.value,
+    indoorTags:selectedIndoorTags.slice(),
     time:new Date().toISOString()
   };
   if(sit==='Penalty Stroke'){shot.dX=50;shot.dY=26;}
@@ -2287,7 +2320,7 @@ function saveShotWithoutHeat(){
   showStatus('shotStatus','Shot saved without heat map. Add placement later in Heat Map Editor.');
 }
 
-function saveShot(){const m=activeMatch();if(!m){alert('Start a match first.');return}const sit=selectedShotSituation||'Normal Game Play';if(sit==='Penalty Stroke')tapD={x:50,y:26};if(!tapD){alert('Tap the D heat map.');return} if(selectedOutcome!=='Angle Closed Off' && !tapGoal){alert('Tap the goal box heat map for saves and goals.');return}let dpt=sit==='Penalty Stroke'?{x:50,y:26}:tapD;let shot={id:uid(),type:selectedShotType,shotSituation:sit,situation:sit,outcome:selectedOutcome,outnumbered:selectedOutnumbered,rebound:selectedRebound==='No rebound'?'':selectedRebound,note:shotNote.value,dX:dpt.x,dY:dpt.y,time:new Date().toISOString()};
+function saveShot(){const m=activeMatch();if(!m){alert('Start a match first.');return}if(m.indoorKeeperActive===false){alert('The goalkeeper is marked off court. Empty-goal events are not charged to the goalkeeper. Mark the goalkeeper on court before recording a goalkeeper shot.');return}const sit=selectedShotSituation||'Normal Game Play';if(sit==='Penalty Stroke')tapD={x:50,y:26};if(!tapD){alert('Tap the D heat map.');return} if(selectedOutcome!=='Angle Closed Off' && !tapGoal){alert('Tap the goal box heat map for saves and goals.');return}let dpt=sit==='Penalty Stroke'?{x:50,y:26}:tapD;let shot={id:uid(),type:selectedShotType,shotSituation:sit,situation:sit,outcome:selectedOutcome,outnumbered:selectedOutnumbered,rebound:selectedRebound==='No rebound'?'':selectedRebound,note:shotNote.value,indoorTags:selectedIndoorTags.slice(),dX:dpt.x,dY:dpt.y,time:new Date().toISOString()};
   if(selectedOutcome!=='Angle Closed Off'){
     let gx=tapGoal.x;
     if(mirrorGoal.checked)gx=100-gx;
@@ -2295,7 +2328,7 @@ function saveShot(){const m=activeMatch();if(!m){alert('Start a match first.');r
     shot.gY=tapGoal.y;
   }
   m.shots.push(shot);saveDB();resetShotInputs();renderAll();updateOpponentGoalsDisplay();showStatus('shotStatus','Shot saved.')}
-function resetShotInputs(){selectedShotType='1st Shot';selectedShotSituation='Normal Game Play';selectedOutcome='Save';selectedRebound='No rebound';selectedOutnumbered='Not Out Numbered';shotNote.value='';tapD=null;tapGoal=null;renderShotButtons();renderShotMaps()}
+function resetShotInputs(){selectedShotType='1st Shot';selectedShotSituation='Normal Game Play';selectedOutcome='Save';selectedRebound='No rebound';selectedOutnumbered='Not Out Numbered';selectedIndoorTags=[];shotNote.value='';tapD=null;tapGoal=null;renderShotButtons();renderShotMaps()}
 
 
 function calculatedOpponentGoals(m){
@@ -2312,7 +2345,7 @@ function clearActiveMatchProgress(){const g=goalie(),m=activeMatch();if(!g||!m){
 
 function shotsFor(ms){return ms.flatMap(m=>m.shots||[])}
 function pct(n,d){return d?Math.round(n/d*100):0}
-function calcStats(ms){const sh=shotsFor(ms),saves=sh.filter(s=>s.outcome==='Save').length,goals=sh.filter(s=>s.outcome==='Goal').length,angles=sh.filter(s=>s.outcome==='Angle Closed Off').length,sot=saves+goals,safe=sh.filter(s=>s.rebound==='Safe').length,danger=sh.filter(s=>s.rebound==='Dangerous').length;const count=t=>sh.filter(s=>s.type===t).length,save=t=>sh.filter(s=>s.type===t&&s.outcome==='Save').length;return {'Games Played':ms.length,'Wins':ms.filter(m=>m.result==='Win').length,'Losses':ms.filter(m=>m.result==='Loss').length,'Draws':ms.filter(m=>m.result==='Draw').length,'Shot Records':sh.length,'Saves':saves,'Goals':goals,'Angle Closed Off':angles,'Save Rate':pct(saves,sot)+'%','1st Shot Save Rate':pct(save('1st Shot'),count('1st Shot'))+'%','Rebound Save Rate':pct(save('Rebound'),count('Rebound'))+'%','Penalty Corner Save Rate':pct(save('Penalty Corner'),count('Penalty Corner'))+'%','Penalty Stroke Save Rate':pct(save('Penalty Stroke'),count('Penalty Stroke'))+'%','In Game 1v1 Save Rate':pct(save('In Game 1v1'),count('In Game 1v1'))+'%','8 Second 1v1 Save Rate':pct(save('8 Second 1v1'),count('8 Second 1v1'))+'%','Safe Rebound Rate':pct(safe,safe+danger)+'%','Rate of Attempts at Goals Out Numbered':pct(sh.filter(s=>s.outnumbered&&s.outnumbered!=='1 vs 1').length,sh.length)+'%'}}
+function calcStats(ms){const sh=shotsFor(ms),saves=sh.filter(s=>s.outcome==='Save').length,goals=sh.filter(s=>s.outcome==='Goal').length,angles=sh.filter(s=>s.outcome==='Angle Closed Off').length,sot=saves+goals,safe=sh.filter(s=>s.rebound==='Safe').length,danger=sh.filter(s=>s.rebound==='Dangerous').length;const count=t=>sh.filter(s=>s.type===t).length,save=t=>sh.filter(s=>s.type===t&&s.outcome==='Save').length;return {'Games Played':ms.length,'Wins':ms.filter(m=>m.result==='Win').length,'Losses':ms.filter(m=>m.result==='Loss').length,'Draws':ms.filter(m=>m.result==='Draw').length,'Shot Records':sh.length,'Saves':saves,'Goals':goals,'Angle Closed Off':angles,'Save Rate':pct(saves,sot)+'%','1st Shot Save Rate':pct(save('1st Shot'),count('1st Shot'))+'%','Rebound Save Rate':pct(save('Rebound'),count('Rebound'))+'%','Penalty Corner Save Rate':pct(save('Penalty Corner'),count('Penalty Corner'))+'%','Penalty Stroke Save Rate':pct(save('Penalty Stroke'),count('Penalty Stroke'))+'%','In Game 1v1 Save Rate':pct(save('In Game 1v1'),count('In Game 1v1'))+'%','6 Second Shoot-out Save Rate':pct(save('6 Second Shoot-out'),count('6 Second Shoot-out'))+'%','Safe Rebound Rate':pct(safe,safe+danger)+'%','Rate of Attempts at Goals Out Numbered':pct(sh.filter(s=>s.outnumbered&&s.outnumbered!=='1 vs 1').length,sh.length)+'%'}}
 function filterMatches(g,period='year',year='',home='All',opp='All'){let ms=allMatches(g);if(period==='match')ms=[matchById(g,statsMatch.value)].filter(Boolean);if(period==='year')ms=ms.filter(m=>yearOf(m)===String(year));if(period==='last5')ms=ms.slice(0,5);if(home&&home!=='All')ms=ms.filter(m=>m.homeTeam===home);if(opp&&opp!=='All')ms=ms.filter(m=>m.opponentTeam===opp);return ms}
 function renderStats(){const g=goalie();if(!g){statsOutput.innerHTML='<p class="muted">No goalie selected.</p>';return}statsMatch.disabled=statsPeriod.value!=='match';statsYear.disabled=statsPeriod.value==='match'||statsPeriod.value==='last5'||statsPeriod.value==='all';const ms=filterMatches(g,statsPeriod.value,statsYear.value,statsHome.value,statsOpp.value);statsOutput.innerHTML='<div class="statgrid">'+statCards(calcStats(ms))+'</div>'+matchTable(ms)}
 function matchTable(ms){return `<h3>Matches</h3><table><tr><th>Date</th><th>Match</th><th>Score</th><th>Result</th></tr>${ms.map(m=>`<tr><td>${esc(m.date)}</td><td>${esc(m.name)}</td><td>${esc(window.v511ReportScore?window.v511ReportScore(m):((m.homeGoals??'')+'-'+(m.oppGoals??'')))}</td><td>${esc(window.v511ReportResult?window.v511ReportResult(m):(m.result||''))}</td></tr>`).join('')}</table>`}
@@ -2321,7 +2354,7 @@ function matchesForHeat(){const g=goalie();if(!g)return[];if(heatView.value==='m
 function renderHeatMaps(){const pts=shotsFor(matchesForHeat());dHeat.innerHTML=basePitch(pts);goalHeat.innerHTML=baseGoal(pts)}
 
 function renderEditorSelectors(){const g=goalie(),m=matchById(g,editMatch.value)||allMatches(g)[0];if(m)editMatch.value=m.id;setOptions('editShot',(m?.shots||[]).map((s,i)=>({id:s.id,name:`${i+1}. ${s.outcome} - ${s.type}`})),editShot.value||m?.shots?.[0]?.id||'','New shot / select shot');const s=(m?.shots||[]).find(x=>x.id===editShot.value);if(s){editType=s.type;editOutcome=s.outcome;editOutnumbered=s.outnumbered||'Not Out Numbered';editRebound=s.rebound||'No rebound';editDPoint={x:s.dX,y:s.dY};editGoalPoint={x:s.gX,y:s.gY}}else{editDPoint=editDPoint||{x:50,y:55};editGoalPoint=editGoalPoint||{x:50,y:28}}renderShotButtons();editD.innerHTML=basePitch([],p=>{editDPoint=p;renderEditorSelectors()},editDPoint);editGoal.innerHTML=baseGoal([],p=>{editGoalPoint=p;renderEditorSelectors()},editGoalPoint)}
-function saveEditedShot(){const g=goalie(),m=matchById(g,editMatch.value);if(!m){alert('Select a match.');return}let s=(m.shots||[]).find(x=>x.id===editShot.value);if(!s){s={id:uid(),time:new Date().toISOString()};m.shots=m.shots||[];m.shots.push(s)}let gx=editGoalPoint?.x??s.gX??50;if(editMirrorGoal.checked)gx=100-gx;Object.assign(s,{type:editType,outcome:editOutcome,outnumbered:editOutnumbered,rebound:editRebound==='No rebound'?'':editRebound,dX:editDPoint?.x??50,dY:editDPoint?.y??55,gX:gx,gY:editGoalPoint?.y??28});saveDB();renderAll();showStatus('editStatus','Shot saved/updated.')} 
+function saveEditedShot(){const g=goalie(),m=matchById(g,editMatch.value);if(!m){alert('Select a match.');return}let s=(m.shots||[]).find(x=>x.id===editShot.value);if(!s){s={id:uid(),time:new Date().toISOString()};m.shots=m.shots||[];m.shots.push(s)}let gx=editGoalPoint?.x??s.gX??50;if(editMirrorGoal.checked)gx=100-gx;const fixedPS=editSituation==='Penalty Stroke';Object.assign(s,{type:editType,outcome:editOutcome,shotSituation:editSituation,situation:editSituation,outnumbered:editOutnumbered,rebound:editRebound==='No rebound'?'':editRebound,dX:fixedPS?50:(editDPoint?.x??50),dY:fixedPS?26:(editDPoint?.y??55),gX:gx,gY:editGoalPoint?.y??28});saveDB();renderAll();showStatus('editStatus','Shot saved/updated.')}
 function addShotInEditor(){editShot.value='';editDPoint={x:50,y:55};editGoalPoint={x:50,y:28};editType='1st Shot';editOutcome='Save';editOutnumbered='Not Out Numbered';editRebound='No rebound';saveEditedShot()}
 function removeEditedShot(){const g=goalie(),m=matchById(g,editMatch.value);if(!m||!editShot.value){alert('Select a shot to remove.');return}if(!confirm('Remove this shot record?'))return;m.shots=(m.shots||[]).filter(s=>s.id!==editShot.value);editShot.value='';saveDB();renderAll();showStatus('editStatus','Shot removed.')}
 
@@ -2369,7 +2402,7 @@ function buildReport(title,g,ms){
     return `<div class="reportTimelineMatch"><h3>${titleLine||('Match '+(mi+1))}</h3><div class="reportTimelineList">${rows||'<p class="reportTimelineMuted">No timeline recorded for this match.</p>'}</div></div>`;
   }).join('');
   reportOutput.style.display='block';
-  reportOutput.innerHTML=`<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">`
+  reportOutput.innerHTML=`<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">`
     +reportHeader(title,g,`${ms.length} match(es)`)
     +`<div class="statgrid">${statCards(st)}</div>${matchTable(ms)}`
     +(typeof areaRows==='function'&&typeof groupStats==='function'?areaRows('Shot Situation Breakdown',groupStats(pts,function(s){return s.shotSituation||s.situation||'Normal Game Play'}))+areaRows('Shot Type Breakdown',groupStats(pts,function(s){return s.type||s.shotType||'1st Shot'})):'')
@@ -2402,7 +2435,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
 
 <script>
 function exportGoaliesTeams(){
- const payload={sourceApp:'Hockey Goalie Stats',sourceVersion:APP_VERSION_566,exportType:'MasterData',exportedAt:new Date().toISOString(),
+ const payload={sourceApp:'Indoor Hockey Goalie Stats',sourceVersion:APP_VERSION_566,exportType:'MasterData',exportedAt:new Date().toISOString(),
  goalies:(db.goalies||[]).map(g=>({name:g.name||'',dob:g.dob||'',gender:g.gender||'',teams:teamsFor(g),teamProfiles:ensureTeamProfiles568(g).map(t=>({...t}))}))};
  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
@@ -2514,14 +2547,14 @@ function exportGoaliesTeams(){
 </style>
 
 <script>
-/* Hockey Goalie Stats v5.23: single clean controller */
+/* Indoor Hockey Goalie Stats v5.23: single clean controller */
 (function(){
   window.APP_VERSION = APP_VERSION_566;
 
   const state = {mode:"", outcome:"", message:"", editingShotId:""};
   const OUTCOMES = ["Save","Goal","Angle Closed Off"];
   const SHOT_TYPES = ["1st Shot","Rebound","In Game 1v1","Own Goal","Other"];
-  const SITUATIONS = ["Normal Game Play","Penalty Corner","Penalty Stroke","8 Second 1v1"];
+  const SITUATIONS = ["Normal Game Play","Penalty Corner","Penalty Stroke","6 Second Shoot-out"];
   const OUTNUMBERED = ["Not Out Numbered","2 vs 1","3 vs 1","4+ vs 1"];
   const REBOUNDS = ["","Safe","Dangerous"];
   const ratings = ["Positioning","Communication","Rebound Control","Decision Making"];
@@ -2730,7 +2763,7 @@ function exportGoaliesTeams(){
     return {x:Math.max(0,Math.min(100,+loc.x.toFixed(1))),y:Math.max(0,Math.min(60,+loc.y.toFixed(1)))};
   }
 
-  function situationStroke(sh){const s=sh&&sh.shotSituation; if(s==="Penalty Corner")return {stroke:"#111",width:".75"}; if(s==="Penalty Stroke")return {stroke:"#1e6bff",width:".9"}; if(s==="8 Second 1v1")return {stroke:"#8d35d8",width:".9"}; return {stroke:"#111",width:".25"};}
+  function situationStroke(sh){const s=sh&&sh.shotSituation; if(s==="Penalty Corner")return {stroke:"#111",width:".75"}; if(s==="Penalty Stroke")return {stroke:"#1e6bff",width:".9"}; if(s==="6 Second Shoot-out")return {stroke:"#8d35d8",width:".9"}; return {stroke:"#111",width:".25"};}
   function pointDot(p,out,idx,cls="v459Dot",sh=null){
     if(!p)return"";
     const st=situationStroke(sh||{});
@@ -2843,7 +2876,7 @@ function exportGoaliesTeams(){
       "Penalty Corner Save Rate":pctText(save(s=>s.shotSituation==="Penalty Corner"||s.type==="Penalty Corner"),count(s=>s.shotSituation==="Penalty Corner"||s.type==="Penalty Corner")),
       "Penalty Stroke Save Rate":pctText(save(s=>s.shotSituation==="Penalty Stroke"||s.type==="Penalty Stroke"),count(s=>s.shotSituation==="Penalty Stroke"||s.type==="Penalty Stroke")),
       "In Game 1v1 Save Rate":pctText(save(s=>s.shotSituation==="In Game 1v1"||s.type==="In Game 1v1"),count(s=>s.shotSituation==="In Game 1v1"||s.type==="In Game 1v1")),
-      "8 Second 1v1 Save Rate":pctText(save(s=>s.shotSituation==="8 Second 1v1"||s.type==="8 Second 1v1"),count(s=>s.shotSituation==="8 Second 1v1"||s.type==="8 Second 1v1")),
+      "6 Second Shoot-out Save Rate":pctText(save(s=>s.shotSituation==="6 Second Shoot-out"||s.type==="6 Second Shoot-out"),count(s=>s.shotSituation==="6 Second Shoot-out"||s.type==="6 Second Shoot-out")),
       "Safe Rebound Rate":pctText(safe,safe+dangerous),
       "Rate of Attempts at Goals Out Numbered":pctText(outAttempts,attempts),
       "Average Save %":pctText(saves,attempts),
@@ -3288,7 +3321,7 @@ function exportGoaliesTeams(){
 
   // Import/Export compatibility in one controller.
   window.exportGoaliesTeams = window.exportGoaliesTeams || function(){
-    const payload={sourceApp:"Hockey Goalie Stats",sourceVersion:APP_VERSION_566,exportType:"MasterData",exportedAt:new Date().toISOString(),goalies:goalies().map(g=>({name:g.name||"",dob:g.dob||"",gender:g.gender||"",teams:teamsFor(g),teamProfiles:ensureTeamProfiles568(g).map(t=>({...t}))}))};
+    const payload={sourceApp:"Indoor Hockey Goalie Stats",sourceVersion:APP_VERSION_566,exportType:"MasterData",exportedAt:new Date().toISOString(),goalies:goalies().map(g=>({name:g.name||"",dob:g.dob||"",gender:g.gender||"",teams:teamsFor(g),teamProfiles:ensureTeamProfiles568(g).map(t=>({...t}))}))};
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
     const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="goalie_stats_master_data.json"; a.click(); URL.revokeObjectURL(a.href);
     showMsg("masterExportStatus","Master data exported.");
@@ -3412,7 +3445,7 @@ function exportGoaliesTeams(){
 
 
 <script>
-/* Hockey Goalie Stats v5.23: added reports only */
+/* Indoor Hockey Goalie Stats v5.23: added reports only */
 (function(){
   function e(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}}
   function pctText(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100)+"%":"N/C"}
@@ -3427,7 +3460,7 @@ function exportGoaliesTeams(){
   function shots(ms){return (ms||[]).flatMap(m=>sh(m).map(s=>normShot(s,m)))}
   function out(s){const o=String(s?.outcome||'Save');return /^goal$/i.test(o)?'Goal':/^angle/i.test(o)?'Angle Closed Off':'Save'}
   function typ(s){const t=String(s?.type||s?.shotType||'1st Shot');return t||'1st Shot'}
-  function sit(s){const t=typ(s);return String(s?.shotSituation||s?.situation||(/Penalty Corner|Penalty Stroke|8 Second 1v1/i.test(t)?t:'Normal Game Play')||'Normal Game Play').replace('Normal Gameplay','Normal Game Play')}
+  function sit(s){const t=typ(s);return String(s?.shotSituation||s?.situation||(/Penalty Corner|Penalty Stroke|6 Second Shoot-out/i.test(t)?t:'Normal Game Play')||'Normal Game Play').replace('Normal Gameplay','Normal Game Play')}
   function rebound(s){const r=String(s?.rebound||'');return r==='No rebound'?'':r}
   function normShot(s,m){return Object.assign({},s,{_match:m,outcome:out(s),type:typ(s),shotSituation:sit(s),rebound:rebound(s),outnumbered:String(s?.outnumbered||s?.outNumbered||'Not Out Numbered')})}
   function stats(ms){
@@ -3439,7 +3472,7 @@ function exportGoaliesTeams(){
     if(!gx){alert('Select a goalie.');return}
     const subtitle=`${(ms||[]).length} match(es)`;
     const header=typeof reportHeader==='function'?reportHeader(title,gx,subtitle):`<h1>${e(title)}</h1><p>${e(gx.name||'')} • ${e(subtitle)}</p>`;
-    const banner=`<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">`;
+    const banner=`<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">`;
     reportOutput.style.display='block';
     reportOutput.innerHTML=banner+header+body+`</div></td></tr></tbody></table>`;
     showTab('reports');
@@ -3570,7 +3603,7 @@ function exportGoaliesTeams(){
 
 
 <script>
-/* Hockey Goalie Stats v5.23: dropdown report UI, graphs, and Data Driven Development Report */
+/* Indoor Hockey Goalie Stats v5.23: dropdown report UI, graphs, and Data Driven Development Report */
 (function(){
 function e(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}}
 function gx(){try{return goalie()}catch(x){return null}}
@@ -3586,7 +3619,7 @@ function pct(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100):n
 function pctText(n,d){var v=pct(n,d);return v===null?'N/C':v+'%'}
 function stats(ms){var a=shots(ms),s=a.filter(function(x){return x.outcome==='Save'}).length,g=a.filter(function(x){return x.outcome==='Goal'}).length,ang=a.filter(function(x){return x.outcome==='Angle Closed Off'}).length;return {records:a.length,saves:s,goals:g,angles:ang,attempts:s+g,savePct:pct(s,s+g),defPct:pct(s+ang,a.length),saveRate:pctText(s,s+g),defenceRate:pctText(s+ang,a.length)}}
 function statHtml(obj){try{return '<div class="statgrid">'+statCards(obj)+'</div>'}catch(x){return '<table>'+Object.entries(obj).map(function(kv){return '<tr><th>'+e(kv[0])+'</th><td>'+e(kv[1])+'</td></tr>'}).join('')+'</table>'}}
-function reportShell(title,g,ms,body){if(!g){alert('Select a goalie.');return}var header=typeof reportHeader==='function'?reportHeader(title,g,(ms||[]).length+' match(es)'):'<h1>'+e(title)+'</h1><p>'+e(g.name||'')+'</p>';reportOutput.style.display='block';reportOutput.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+header+body+'</div></td></tr></tbody></table>';showTab('reports')}
+function reportShell(title,g,ms,body){if(!g){alert('Select a goalie.');return}var header=typeof reportHeader==='function'?reportHeader(title,g,(ms||[]).length+' match(es)'):'<h1>'+e(title)+'</h1><p>'+e(g.name||'')+'</p>';reportOutput.style.display='block';reportOutput.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+header+body+'</div></td></tr></tbody></table>';showTab('reports')}
 function rateRows(ms){return (ms||[]).slice().sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''))}).map(function(m,i){var st=stats([m]);return {label:m.date?String(m.date).slice(5):'M'+(i+1),fullLabel:(m.date||'')+' '+(m.homeTeam||'')+' vs '+(m.opponentTeam||m.opponent||''),save:st.savePct,defence:st.defPct}}).filter(function(r){return r.save!==null||r.defence!==null})}
 function graphSvg(title,rows){if(!rows.length)return '<div class="v471GraphWrap"><h2>'+e(title)+'</h2><p class="v471Small">Not enough recorded shot data to draw a graph.</p></div>';var W=920,H=320,pL=54,pR=24,pT=28,pB=64,iW=W-pL-pR,iH=H-pT-pB,n=Math.max(1,rows.length-1);function x(i){return pL+iW*(i/n)}function y(v){return v===null?null:pT+iH-(Math.max(0,Math.min(100,v))/100*iH)}function path(key){var d='',open=false;rows.forEach(function(r,i){var yy=y(r[key]);if(yy===null){open=false;return}d+=(open?'L':'M')+x(i).toFixed(1)+','+yy.toFixed(1)+' ';open=true});return d.trim()}var ticks=[0,25,50,75,100].map(function(t){return '<line x1="'+pL+'" y1="'+y(t)+'" x2="'+(W-pR)+'" y2="'+y(t)+'" stroke="#d6d6d6" stroke-width="1"/><text x="'+(pL-10)+'" y="'+(y(t)+4)+'" text-anchor="end" font-size="11" fill="#555">'+t+'%</text>'}).join('');var step=Math.max(1,Math.ceil(rows.length/10));var labels=rows.map(function(r,i){return (i%step===0||i===rows.length-1)?'<text x="'+x(i)+'" y="'+(H-34)+'" text-anchor="end" font-size="10" fill="#555" transform="rotate(-45 '+x(i)+' '+(H-34)+')">'+e(r.label)+'</text>':''}).join('');var dots=rows.map(function(r,i){var sx=y(r.save),dy=y(r.defence),cx=x(i);return (sx===null?'':'<circle cx="'+cx+'" cy="'+sx+'" r="3.5" fill="#2fd17c"><title>'+e(r.fullLabel)+' Save Rate: '+r.save+'%</title></circle>')+(dy===null?'':'<circle cx="'+cx+'" cy="'+dy+'" r="3.5" fill="#48a8f0"><title>'+e(r.fullLabel)+' Defence Rate: '+r.defence+'%</title></circle>')}).join('');return '<div class="v471GraphWrap"><h2>'+e(title)+'</h2><div class="v471Legend"><span><i class="v471Swatch save"></i>Save Rate</span><span><i class="v471Swatch defence"></i>Defence Rate</span></div><svg class="v471Graph" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+e(title)+' line graph"><text x="'+pL+'" y="18" font-size="14" font-weight="700" fill="#222">'+e(title)+'</text>'+ticks+'<line x1="'+pL+'" y1="'+pT+'" x2="'+pL+'" y2="'+(H-pB)+'" stroke="#777"/><line x1="'+pL+'" y1="'+(H-pB)+'" x2="'+(W-pR)+'" y2="'+(H-pB)+'" stroke="#777"/>'+labels+'<path d="'+path('save')+'" fill="none" stroke="#2fd17c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="'+path('defence')+'" fill="none" stroke="#48a8f0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+dots+'</svg></div>'}
 function groupStats(items,fn){var map={};items.forEach(function(s){var k=fn(s)||'None',r=map[k]||(map[k]={name:k,records:0,saves:0,goals:0,angles:0});r.records++;if(s.outcome==='Save')r.saves++;if(s.outcome==='Goal')r.goals++;if(s.outcome==='Angle Closed Off')r.angles++});return Object.values(map).sort(function(a,b){return b.records-a.records})}
@@ -3608,7 +3641,7 @@ var oldRefresh=window.refreshV470ReportSelectors;window.refreshV470ReportSelecto
 
 
 <script>
-/* Hockey Goalie Stats v5.23: Data Driven Development match range, full training focus, and timeline addendum */
+/* Indoor Hockey Goalie Stats v5.23: Data Driven Development match range, full training focus, and timeline addendum */
 (function(){
 function e(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}}
 function G(){try{return goalie()}catch(x){return null}}
@@ -3622,7 +3655,7 @@ function pct(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100):n
 function pt(n,d){var v=pct(n,d);return v===null?'N/C':v+'%'} function pn(n,d){var v=pct(n,d);return v===null?0:v}
 function ST(ms){var a=SH(ms),s=a.filter(x=>x.outcome==='Save').length,g=a.filter(x=>x.outcome==='Goal').length,an=a.filter(x=>x.outcome==='Angle Closed Off').length;return{records:a.length,saves:s,goals:g,angles:an,attempts:s+g,savePct:pct(s,s+g),defPct:pct(s+an,a.length),saveRate:pt(s,s+g),defenceRate:pt(s+an,a.length)}}
 function Cards(o){try{return '<div class="statgrid">'+statCards(o)+'</div>'}catch(x){return '<table>'+Object.entries(o).map(kv=>'<tr><th>'+e(kv[0])+'</th><td>'+e(kv[1])+'</td></tr>').join('')+'</table>'}}
-function Shell(title,g,ms,body){if(!g){alert('Select a goalie.');return}var h=typeof reportHeader==='function'?reportHeader(title,g,(ms||[]).length+' match(es)'):'<h1>'+e(title)+'</h1><p>'+e(g.name||'')+'</p>';reportOutput.style.display='block';reportOutput.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+h+body+'</div></td></tr></tbody></table>';showTab('reports')}
+function Shell(title,g,ms,body){if(!g){alert('Select a goalie.');return}var h=typeof reportHeader==='function'?reportHeader(title,g,(ms||[]).length+' match(es)'):'<h1>'+e(title)+'</h1><p>'+e(g.name||'')+'</p>';reportOutput.style.display='block';reportOutput.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+h+body+'</div></td></tr></tbody></table>';showTab('reports')}
 function rateRows(ms){return (ms||[]).slice().sort((a,b)=>String(a.date||'').localeCompare(String(b.date||''))).map(function(m,i){var st=ST([m]);return{label:m.date?String(m.date).slice(5):'M'+(i+1),full:(m.date||'')+' '+(m.homeTeam||'')+' vs '+(m.opponentTeam||m.opponent||''),save:st.savePct,defence:st.defPct}}).filter(r=>r.save!==null||r.defence!==null)}
 function graph(title,rows){if(!rows.length)return '<div class="v471GraphWrap"><h2>'+e(title)+'</h2><p class="v471Small">Not enough recorded shot data to draw a graph.</p></div>';var W=920,H=320,pL=54,pR=24,pT=28,pB=64,iW=W-pL-pR,iH=H-pT-pB,n=Math.max(1,rows.length-1);function x(i){return pL+iW*(i/n)}function y(v){return v===null?null:pT+iH-(Math.max(0,Math.min(100,v))/100*iH)}function path(k){var d='',op=false;rows.forEach(function(r,i){var yy=y(r[k]);if(yy===null){op=false;return}d+=(op?'L':'M')+x(i).toFixed(1)+','+yy.toFixed(1)+' ';op=true});return d.trim()}var ticks=[0,25,50,75,100].map(t=>'<line x1="'+pL+'" y1="'+y(t)+'" x2="'+(W-pR)+'" y2="'+y(t)+'" stroke="#d6d6d6"/><text x="'+(pL-10)+'" y="'+(y(t)+4)+'" text-anchor="end" font-size="11" fill="#555">'+t+'%</text>').join('');var step=Math.max(1,Math.ceil(rows.length/10));var labs=rows.map((r,i)=>(i%step===0||i===rows.length-1)?'<text x="'+x(i)+'" y="'+(H-34)+'" text-anchor="end" font-size="10" fill="#555" transform="rotate(-45 '+x(i)+' '+(H-34)+')">'+e(r.label)+'</text>':'').join('');var dots=rows.map(function(r,i){var sx=y(r.save),dy=y(r.defence),cx=x(i);return (sx===null?'':'<circle cx="'+cx+'" cy="'+sx+'" r="3.5" fill="#2fd17c"><title>'+e(r.full)+' Save Rate: '+r.save+'%</title></circle>')+(dy===null?'':'<circle cx="'+cx+'" cy="'+dy+'" r="3.5" fill="#48a8f0"><title>'+e(r.full)+' Defence Rate: '+r.defence+'%</title></circle>')}).join('');return '<div class="v471GraphWrap"><h2>'+e(title)+'</h2><div class="v471Legend"><span><i class="v471Swatch save"></i>Save Rate</span><span><i class="v471Swatch defence"></i>Defence Rate</span></div><svg class="v471Graph" viewBox="0 0 '+W+' '+H+'" role="img"><text x="'+pL+'" y="18" font-size="14" font-weight="700" fill="#222">'+e(title)+'</text>'+ticks+'<line x1="'+pL+'" y1="'+pT+'" x2="'+pL+'" y2="'+(H-pB)+'" stroke="#777"/><line x1="'+pL+'" y1="'+(H-pB)+'" x2="'+(W-pR)+'" y2="'+(H-pB)+'" stroke="#777"/>'+labs+'<path d="'+path('save')+'" fill="none" stroke="#2fd17c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="'+path('defence')+'" fill="none" stroke="#48a8f0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+dots+'</svg></div>'}
 function GS(items,fn){var map={};items.forEach(function(s){var k=fn(s)||'None',r=map[k]||(map[k]={name:k,records:0,saves:0,goals:0,angles:0});r.records++;if(s.outcome==='Save')r.saves++;if(s.outcome==='Goal')r.goals++;if(s.outcome==='Angle Closed Off')r.angles++});return Object.values(map).sort((a,b)=>b.records-a.records)}
@@ -3643,7 +3676,7 @@ var oldU=window.updateV471ReportFields;window.updateV471ReportFields=function(){
 
 
 <script>
-/* Hockey Goalie Stats v5.23: final Reports cleanup and upgraded Individual Match Report */
+/* Indoor Hockey Goalie Stats v5.23: final Reports cleanup and upgraded Individual Match Report */
 (function(){
 function e(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}}
 function gx(){try{return goalie()}catch(x){return null}}
@@ -3662,7 +3695,7 @@ function pctText(n,d){var v=pct(n,d);return v===null?'N/C':v+'%'}
 function pnum(n,d){var v=pct(n,d);return v===null?0:v}
 function stats(ms){var a=shots(ms),s=a.filter(function(x){return x.outcome==='Save'}).length,g=a.filter(function(x){return x.outcome==='Goal'}).length,ang=a.filter(function(x){return x.outcome==='Angle Closed Off'}).length;return {records:a.length,saves:s,goals:g,angles:ang,attempts:s+g,savePct:pct(s,s+g),defPct:pct(s+ang,a.length),saveRate:pctText(s,s+g),defenceRate:pctText(s+ang,a.length)}}
 function statHtml(obj){try{return '<div class="statgrid">'+statCards(obj)+'</div>'}catch(x){return '<table>'+Object.entries(obj).map(function(kv){return '<tr><th>'+e(kv[0])+'</th><td>'+e(kv[1])+'</td></tr>'}).join('')+'</table>'}}
-function reportShell(title,g,ms,body){if(!g){alert('Select a goalie.');return}var header=typeof reportHeader==='function'?reportHeader(title,g,(ms||[]).length+' match(es)'):'<h1>'+e(title)+'</h1><p>'+e(g.name||'')+'</p>';reportOutput.style.display='block';reportOutput.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+header+body+'</div></td></tr></tbody></table>';showTab('reports')}
+function reportShell(title,g,ms,body){if(!g){alert('Select a goalie.');return}var header=typeof reportHeader==='function'?reportHeader(title,g,(ms||[]).length+' match(es)'):'<h1>'+e(title)+'</h1><p>'+e(g.name||'')+'</p>';reportOutput.style.display='block';reportOutput.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+header+body+'</div></td></tr></tbody></table>';showTab('reports')}
 function groupStats(items,fn){var map={};items.forEach(function(s){var k=fn(s)||'None',r=map[k]||(map[k]={name:k,records:0,saves:0,goals:0,angles:0});r.records++;if(s.outcome==='Save')r.saves++;if(s.outcome==='Goal')r.goals++;if(s.outcome==='Angle Closed Off')r.angles++});return Object.values(map).sort(function(a,b){return b.records-a.records})}
 function areaRows(title,rows){return '<div class="v470Section"><h2>'+e(title)+'</h2><table><tr><th>Area</th><th>Records</th><th>Saves</th><th>Goals</th><th>Angles</th><th>Save Rate</th><th>Defence Rate</th></tr>'+rows.map(function(r){return '<tr><td>'+e(r.name)+'</td><td>'+r.records+'</td><td>'+r.saves+'</td><td>'+r.goals+'</td><td>'+r.angles+'</td><td>'+pctText(r.saves,r.saves+r.goals)+'</td><td>'+pctText(r.saves+r.angles,r.records)+'</td></tr>'}).join('')+'</table></div>'}
 function timelineEvents(m){var p=1,list=[],shotMap=new Map(shotList(m).map(function(s){return [s.id,normShot(s,m)]})),order=Array.isArray(m.orderItems)?m.orderItems:[];if(order.length){order.forEach(function(it){if(it.kind==='shot'&&shotMap.has(it.id)){var s=shotMap.get(it.id);s._period=p;list.push({kind:'shot',period:p,shot:s})}if(it.kind==='period'){list.push({kind:'period',period:p});p++}});shotList(m).forEach(function(s){if(!list.some(function(x){return x.shot&&x.shot.id===s.id})){var ns=normShot(s,m);ns._period=1;list.push({kind:'shot',period:1,shot:ns})}});return list}if(Array.isArray(m.timeline)&&m.timeline.length){m.timeline.forEach(function(ev){if(ev.eventType==='periodMarker'||ev.type==='End of Period'||/End of Period/i.test(ev.note||'')){list.push({kind:'period',period:p});p++}else{var sh=(ev.shotId&&shotMap.get(ev.shotId))||normShot(ev,m);sh._period=p;list.push({kind:'shot',period:p,shot:sh})}});return list}shotList(m).forEach(function(s){var ns=normShot(s,m);ns._period=1;list.push({kind:'shot',period:1,shot:ns})});return list}
@@ -3696,7 +3729,7 @@ setTimeout(function(){hideBaseFields();if(typeof window.refreshV470ReportSelecto
 
 
 <script>
-/* Hockey Goalie Stats v5.23: keep Reports card visible while hiding only static Year/Match fields */
+/* Indoor Hockey Goalie Stats v5.23: keep Reports card visible while hiding only static Year/Match fields */
 (function(){
   function fixReportsVisibility(){
     var card=document.querySelector('#reports .card.noPrint');
@@ -3781,7 +3814,7 @@ setTimeout(function(){hideBaseFields();if(typeof window.refreshV470ReportSelecto
 
 
 <script>
-/* Hockey Goalie Stats v5.23: clean report timeline detail text */
+/* Indoor Hockey Goalie Stats v5.23: clean report timeline detail text */
 (function(){
   function cleanTimelineTextValue(value){
     var raw=String(value||'').trim();
@@ -3868,7 +3901,7 @@ setTimeout(function(){hideBaseFields();if(typeof window.refreshV470ReportSelecto
 
 
 <script>
-/* Hockey Goalie Stats v5.23: report fields, period ordering, Normal Gameplay, and Overtime */
+/* Indoor Hockey Goalie Stats v5.23: report fields, period ordering, Normal Gameplay, and Overtime */
 (function(){
 function esc2(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}}
 function goalieSafe(){try{return goalie()}catch(x){return null}}
@@ -3886,9 +3919,9 @@ function pctText(n,d){var v=pct(n,d);return v===null?'N/C':v+'%'}
 function pnum(n,d){var v=pct(n,d);return v===null?0:v}
 function stat(ms){var a=shots(ms),s=a.filter(function(x){return x.outcome==='Save'}).length,g=a.filter(function(x){return x.outcome==='Goal'}).length,ang=a.filter(function(x){return x.outcome==='Angle Closed Off'}).length;return {records:a.length,saves:s,goals:g,angles:ang,attempts:s+g,savePct:pct(s,s+g),defPct:pct(s+ang,a.length),saveRate:pctText(s,s+g),defenceRate:pctText(s+ang,a.length)}}
 function statHtml(obj){try{return '<div class="statgrid">'+statCards(obj)+'</div>'}catch(x){return '<table>'+Object.entries(obj).map(function(kv){return '<tr><th>'+esc2(kv[0])+'</th><td>'+esc2(kv[1])+'</td></tr>'}).join('')+'</table>'}}
-function reportShell(title,g,ms,body){if(!g){alert('Select a goalie.');return}var h=typeof reportHeader==='function'?reportHeader(title,g,(ms||[]).length+' match(es)'):'<h1>'+esc2(title)+'</h1><p>'+esc2(g.name||'')+'</p>';reportOutput.style.display='block';reportOutput.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+h+body+'</div></td></tr></tbody></table>';showTab('reports');setTimeout(cleanGeneratedReport,0)}
+function reportShell(title,g,ms,body){if(!g){alert('Select a goalie.');return}var h=typeof reportHeader==='function'?reportHeader(title,g,(ms||[]).length+' match(es)'):'<h1>'+esc2(title)+'</h1><p>'+esc2(g.name||'')+'</p>';reportOutput.style.display='block';reportOutput.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+h+body+'</div></td></tr></tbody></table>';showTab('reports');setTimeout(cleanGeneratedReport,0)}
 function groupStats(items,fn){var map={};items.forEach(function(s){var k=fn(s)||'Normal Gameplay',r=map[k]||(map[k]={name:k,records:0,saves:0,goals:0,angles:0});r.records++;if(s.outcome==='Save')r.saves++;if(s.outcome==='Goal')r.goals++;if(s.outcome==='Angle Closed Off')r.angles++});return Object.values(map)}
-function orderedRows(rows){var order={'Period 1':1,'Period 2':2,'Period 3':3,'Period 4':4,'Period 5':5,'Period 6':6,'First Half':101,'Second Half':102,'Full Match':103,'Overtime':104,'Normal Gameplay':201,'Penalty Corner':202,'Penalty Stroke':203,'In Game 1v1':204,'8 Second 1v1':205,'Own Goal':206,'Other':207,'Not Out Numbered':999};return rows.slice().sort(function(a,b){var aa=order[a.name]||500,bb=order[b.name]||500;return aa-bb||String(a.name).localeCompare(String(b.name))})}
+function orderedRows(rows){var order={'Period 1':1,'Period 2':2,'Period 3':3,'Period 4':4,'Period 5':5,'Period 6':6,'First Half':101,'Second Half':102,'Full Match':103,'Overtime':104,'Normal Gameplay':201,'Penalty Corner':202,'Penalty Stroke':203,'In Game 1v1':204,'6 Second Shoot-out':205,'Own Goal':206,'Other':207,'Not Out Numbered':999};return rows.slice().sort(function(a,b){var aa=order[a.name]||500,bb=order[b.name]||500;return aa-bb||String(a.name).localeCompare(String(b.name))})}
 function areaRows(title,rows){rows=orderedRows(rows);return '<div class="v470Section"><h2>'+esc2(title)+'</h2><table><tr><th>Area</th><th>Records</th><th>Saves</th><th>Goals</th><th>Angles</th><th>Save Rate</th><th>Defence Rate</th></tr>'+rows.map(function(r){return '<tr><td>'+esc2(r.name)+'</td><td>'+r.records+'</td><td>'+r.saves+'</td><td>'+r.goals+'</td><td>'+r.angles+'</td><td>'+pctText(r.saves,r.saves+r.goals)+'</td><td>'+pctText(r.saves+r.angles,r.records)+'</td></tr>'}).join('')+'</table></div>'}
 function maxPeriods(m){return Math.max(1,Number(m&&(m.periods||m.periodCount)||2))}
 function timelineEvents(m){var p=1,max=maxPeriods(m),ot=false,list=[],shotMap=new Map(shotList(m).map(function(s){return [s.id,normShot(s,m)]})),order=Array.isArray(m.orderItems)?m.orderItems:[];function currentLabel(){return ot||p>max?'Overtime':('Period '+p)}function addShot(s){s._period=p;s._periodLabel=currentLabel();s._halfLabel=halfLabel(m,p,ot);list.push({kind:'shot',period:p,label:s._periodLabel,half:s._halfLabel,shot:s})}function addPeriod(){list.push({kind:'period',period:p,label:currentLabel()});if(p>=max){ot=true;p=max+1}else p++}if(order.length){order.forEach(function(it){if(it.kind==='shot'&&shotMap.has(it.id))addShot(shotMap.get(it.id));if(it.kind==='period')addPeriod()});shotList(m).forEach(function(s){if(!list.some(function(x){return x.shot&&x.shot.id===s.id})){var ns=normShot(s,m);ns._periodLabel='Period 1';ns._halfLabel=halfLabel(m,1,false);list.push({kind:'shot',period:1,label:'Period 1',half:ns._halfLabel,shot:ns})}});return list}if(Array.isArray(m.timeline)&&m.timeline.length){m.timeline.forEach(function(ev){if(ev.eventType==='periodMarker'||ev.type==='End of Period'||/End of Period/i.test(ev.note||''))addPeriod();else{var sh=(ev.shotId&&shotMap.get(ev.shotId))||normShot(ev,m);addShot(sh)}});return list}shotList(m).forEach(function(s){addShot(normShot(s,m))});return list}
@@ -3932,7 +3965,7 @@ setTimeout(function(){populateSelectors();updateV471ReportFields()},0)
 
 
 <script>
-/* Hockey Goalie Stats v5.23: clean shootout prompt timing and overlay-only report dot numbers */
+/* Indoor Hockey Goalie Stats v5.23: clean shootout prompt timing and overlay-only report dot numbers */
 (function(){
 function by88(id){return document.getElementById(id)}
 function esc88(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}}
@@ -3959,9 +3992,9 @@ function ensureShootout88(m){
   if(!m.shootout)m.shootout={};
   var so=m.shootout;
   so.enabled=true;
-  so.format=so.format||'Best of 5';
+  so.format=so.format||'Best of 3';
   if(!Array.isArray(so.rounds))so.rounds=[];
-  while(so.rounds.length<5)so.rounds.push({home:blank88(),opponent:blank88()});
+  while(so.rounds.length<3)so.rounds.push({home:blank88(),opponent:blank88()});
   so.rounds.forEach(function(r){if(!r.home)r.home=blank88();if(!r.opponent)r.opponent=blank88()});
   syncScores88(m);
   return so;
@@ -3987,7 +4020,7 @@ function resultOptions88(v){return ['Not Taken','Goal','Save','Miss / Wide / Out
 function methodOptions88(v){return ['','Block','Stick save','Foot save','Smother','Forced wide','Stayed up / delayed'].map(function(o){return '<option '+(o===v?'selected':'')+'>'+esc88(o)+'</option>'}).join('')}
 function completeRound88(r){return r&&r.home&&r.opponent&&r.home.result&&r.opponent.result&&r.home.result!=='Not Taken'&&r.opponent.result!=='Not Taken'}
 function tiedAfter88(so,count){var h=0,o=0;for(var i=0;i<count;i++){h+=goalCell88(so.rounds[i]?.home);o+=goalCell88(so.rounds[i]?.opponent)}return h===o}
-function firstFiveDone88(so){for(var i=0;i<5;i++){if(!completeRound88(so.rounds[i]))return false}return true}
+function firstFiveDone88(so){for(var i=0;i<3;i++){if(!completeRound88(so.rounds[i]))return false}return true}
 function ensureSuddenDeath88(m){
   var so=ensureShootout88(m);
   if(firstFiveDone88(so)&&tiedAfter88(so,so.rounds.length)){
@@ -3998,7 +4031,7 @@ function ensureSuddenDeath88(m){
 function canFinalize88(m){
   var so=ensureShootout88(m);
   if(!firstFiveDone88(so))return false;
-  if(!tiedAfter88(so,5))return true;
+  if(!tiedAfter88(so,3))return true;
   for(var i=5;i<so.rounds.length;i++){
     if(!completeRound88(so.rounds[i]))return false;
     if(!tiedAfter88(so,i+1))return true;
@@ -4029,7 +4062,7 @@ function renderShootout88(){
   if(!m){by88('v488ShootoutModal').hidden=true;return}
   var so=ensureShootout88(m), st=stat88(m);
   var rows=so.rounds.map(function(r,i){
-    var label=i<5?'Round '+(i+1):'Sudden Death '+(i-4);
+    var label=i<3?'Round '+(i+1):'Sudden Death '+(i-2);
     return '<tr><td class="v488RoundCell">'+esc88(label)+'</td><td>'+cellHtml88(r,'home',i,homeName88(m))+'</td><td>'+cellHtml88(r,'opponent',i,oppName88(m))+'</td></tr>';
   }).join('');
   var status=canFinalize88(m)?'Winner decided - ready to finalize':(firstFiveDone88(so)&&tiedAfter88(so,so.rounds.length)?'Tie after completed rounds - one sudden-death round will be added':'Complete the listed rounds');
@@ -4057,7 +4090,7 @@ window.v488SaveShootout=function(){
 window.v488FinalizeShootout=function(){
   var m=window.v488ActiveShootoutMatch; if(!m)return;
   v488SaveShootout();
-  if(!canFinalize88(m)){alert('Complete the shootout rounds first. If the first 5 rounds are tied, one sudden-death round is added at a time until there is a winner.');return}
+  if(!canFinalize88(m)){alert('Complete the shootout rounds first. If the first 3 rounds are tied, one sudden-death round is added at a time until there is a winner.');return}
   syncScores88(m);
   m.shootout.finalized=true;
   m.result=m.shootout.result;
@@ -4220,7 +4253,7 @@ window.v488PromptAfterCompletedDraw=promptAfterCompletedDraw88;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: dot label sizing/positioning and sudden-death single-row fix */
+/* Indoor Hockey Goalie Stats v5.23: dot label sizing/positioning and sudden-death single-row fix */
 (function(){
 function by89(id){return document.getElementById(id)}
 function n89(v,d){v=Number(v);return isFinite(v)?v:(d||0)}
@@ -4322,7 +4355,7 @@ function syncShootout89(m){
 }
 function ensureOneSuddenDeathOnly89(m){
   var so=m&&m.shootout; if(!so||!Array.isArray(so.rounds))return;
-  while(so.rounds.length<5)so.rounds.push({home:blank89(),opponent:blank89()});
+  while(so.rounds.length<3)so.rounds.push({home:blank89(),opponent:blank89()});
 
   // Remove duplicate blank rows beyond the one currently needed.
   for(var i=so.rounds.length-1;i>=5;i--){
@@ -4352,7 +4385,7 @@ window.v488SaveShootout=function(){
   if(!m){return oldSaveShootout89?oldSaveShootout89.apply(this,arguments):undefined}
   if(!m.shootout)m.shootout={enabled:true,rounds:[]};
   var so=m.shootout;
-  while(so.rounds.length<5)so.rounds.push({home:blank89(),opponent:blank89()});
+  while(so.rounds.length<3)so.rounds.push({home:blank89(),opponent:blank89()});
   document.querySelectorAll('#v488ShootoutPanel [data-v488-field]').forEach(function(el){
     var i=Number(el.dataset.v488Row||0), side=el.dataset.v488Side, field=el.dataset.v488Field;
     if(!so.rounds[i])so.rounds[i]={home:blank89(),opponent:blank89()};
@@ -4391,7 +4424,7 @@ window.v489EnsureOneSuddenDeathOnly=ensureOneSuddenDeathOnly89;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: timeline shot-only numbering */
+/* Indoor Hockey Goalie Stats v5.23: timeline shot-only numbering */
 (function(){
 function isPeriodRow92(row){
   var txt=(row&&row.textContent||'').trim();
@@ -4520,7 +4553,7 @@ window.v492FixTimelineShotNumbers=fixTimelineNumbering92;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: Outnumbered Breakdown label fix */
+/* Indoor Hockey Goalie Stats v5.23: Outnumbered Breakdown label fix */
 (function(){
 function normOutnumbered93(v){
   v=String(v||'').trim();
@@ -4608,7 +4641,7 @@ window.v493NormOutnumbered=normOutnumbered93;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: Match Editor shot placement and shootout editor */
+/* Indoor Hockey Goalie Stats v5.23: Match Editor shot placement and shootout editor */
 (function(){
 function by(id){return document.getElementById(id)}
 function esc(v){try{return window.esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}}
@@ -4622,7 +4655,7 @@ function pitch(s){let pts=(s&&s.dX!==undefined&&s.dX!==''&&s.dY!==undefined&&s.d
 function goal(s){let pts=(s&&s.gX!==undefined&&s.gX!==''&&s.gY!==undefined&&s.gY!=='')?[s]:[];try{return baseGoal(pts,null,pts.length?{x:Number(s.gX),y:Number(s.gY)}:null)}catch(x){return '<svg viewBox="0 0 100 60"><rect width="100" height="60" fill="#eef3f7"/><rect x="9" y="8" width="82" height="40" fill="#fff" stroke="#111" stroke-width="2.2"/>'+(pts.length?'<circle cx="'+s.gX+'" cy="'+s.gY+'" r="4.2" fill="'+color(s.outcome)+'"></circle>':'')+'</svg>'}}
 function blank(){return {result:'Not Taken',saveMethod:'',shooter:'',note:''}}
 function hasSO(m){return !!(m&&m.shootout&&m.shootout.enabled)}
-function ensureSO(m){if(!m.shootout)m.shootout={enabled:true,rounds:[]};let so=m.shootout;if(!Array.isArray(so.rounds))so.rounds=[];if(!so.rounds.length&&Array.isArray(so.attempts)){so.attempts.forEach(a=>{let i=Math.max(0,Number(a.round||a.attemptNumber||1)-1);if(!so.rounds[i])so.rounds[i]={home:blank(),opponent:blank()};let side=a.team==='Home'?'home':'opponent';so.rounds[i][side]={result:a.result||'Not Taken',saveMethod:a.saveMethod||'',note:a.note||''}})}while(so.rounds.length<5)so.rounds.push({home:blank(),opponent:blank()});so.rounds.forEach(r=>{if(!r.home)r.home=blank();if(!r.opponent)r.opponent=blank()});syncSO(m);return so}
+function ensureSO(m){if(!m.shootout)m.shootout={enabled:true,rounds:[]};let so=m.shootout;if(!Array.isArray(so.rounds))so.rounds=[];if(!so.rounds.length&&Array.isArray(so.attempts)){so.attempts.forEach(a=>{let i=Math.max(0,Number(a.round||a.attemptNumber||1)-1);if(!so.rounds[i])so.rounds[i]={home:blank(),opponent:blank()};let side=a.team==='Home'?'home':'opponent';so.rounds[i][side]={result:a.result||'Not Taken',saveMethod:a.saveMethod||'',note:a.note||''}})}while(so.rounds.length<3)so.rounds.push({home:blank(),opponent:blank()});so.rounds.forEach(r=>{if(!r.home)r.home=blank();if(!r.opponent)r.opponent=blank()});syncSO(m);return so}
 function goalCell(c){return ['Goal','Penalty Stroke Scored'].includes(String(c&&c.result||''))?1:0}
 function taken(c){return !!(c&&c.result&&c.result!=='Not Taken')}
 function complete(r){return !!(r&&taken(r.home)&&taken(r.opponent))}
@@ -4631,7 +4664,7 @@ function syncSO(m){let so=m.shootout;if(!so)return;let h=0,o=0;so.rounds.forEach
 function soStats(m){let so=ensureSO(m),opp=[],cr=completed(m);for(let i=0;i<cr;i++){if(taken(so.rounds[i].opponent))opp.push(so.rounds[i].opponent)}let on=opp.filter(c=>['Goal','Save'].includes(c.result)),saves=opp.filter(c=>c.result==='Save').length,def=opp.filter(c=>['Save','Miss / Wide / Out','Time Expired','Forced Wide','Penalty Stroke Saved / Missed'].includes(c.result)).length;return {rounds:cr,attempts:opp.length,saves,goals:opp.filter(c=>['Goal','Penalty Stroke Scored'].includes(c.result)).length,saveRate:on.length?Math.round(saves/on.length*100)+'%':'N/C',defenceRate:opp.length?Math.round(def/opp.length*100)+'%':'N/C'}}
 function opts(v,arr){return arr.map(o=>'<option '+(o===v?'selected':'')+'>'+esc(o)+'</option>').join('')}
 function cell(r,side,i){let c=r[side]||blank();return '<label>Result</label><select data-v494-row="'+i+'" data-v494-side="'+side+'" data-v494-field="result">'+opts(c.result,['Not Taken','Goal','Save','Miss / Wide / Out','Time Expired','Forced Wide','Retake','Penalty Stroke Awarded','Penalty Stroke Scored','Penalty Stroke Saved / Missed'])+'</select><label>Save Method</label><select data-v494-row="'+i+'" data-v494-side="'+side+'" data-v494-field="saveMethod">'+opts(c.saveMethod||'', ['','Block','Stick save','Foot save','Smother','Forced wide','Stayed up / delayed'])+'</select><label>Shooter</label><input data-v494-row="'+i+'" data-v494-side="'+side+'" data-v494-field="shooter" value="'+esc(c.shooter||'')+'" placeholder="optional"><label>Note</label><input data-v494-row="'+i+'" data-v494-side="'+side+'" data-v494-field="note" value="'+esc(c.note||'')+'" placeholder="optional">'}
-function shootoutHtml(m){if(!hasSO(m))return '<div class="v494EditorCard"><h3>Shootout Editor</h3><p class="v494Mini">This match does not have a shootout saved.</p></div>';let so=ensureSO(m),st=soStats(m);let rows=so.rounds.map((r,i)=>'<tr><td><b>'+(i<5?'Round '+(i+1):'Sudden Death '+(i-4))+'</b></td><td>'+cell(r,'home',i)+'</td><td>'+cell(r,'opponent',i)+'</td></tr>').join('');return '<div class="v494EditorCard"><h3>Shootout Editor</h3><p class="v494Mini">Edit shootout rounds for this match. Completed sudden-death rounds must stay paired.</p><p><b>Shootout Score:</b> '+so.ourScore+':'+so.opponentScore+' &nbsp; <b>Result:</b> '+esc(so.result)+' &nbsp; <b>Rounds:</b> '+st.rounds+' &nbsp; <b>Opponent Attempts:</b> '+st.attempts+' &nbsp; <b>Shootout Save Rate:</b> '+st.saveRate+' &nbsp; <b>Shootout Defence Rate:</b> '+st.defenceRate+'</p><table class="v494ShootoutTable"><tr><th>Round</th><th>'+esc(m.homeTeam||'Home')+'</th><th>'+esc(m.opponentTeam||m.opponent||'Opponent')+'</th></tr>'+rows+'</table><div class="v494BtnRow"><button type="button" class="v494Good" id="v494SaveSO">Save Shootout Edit</button><button type="button" class="v494Blue" id="v494AddSD">Add Sudden-Death Round</button><button type="button" class="v494Warn" id="v494RemoveSD">Remove Last Sudden-Death Round</button></div><div id="v494SOStatus" class="v494Mini"></div></div>'}
+function shootoutHtml(m){if(!hasSO(m))return '<div class="v494EditorCard"><h3>Shootout Editor</h3><p class="v494Mini">This match does not have a shootout saved.</p></div>';let so=ensureSO(m),st=soStats(m);let rows=so.rounds.map((r,i)=>'<tr><td><b>'+(i<3?'Round '+(i+1):'Sudden Death '+(i-2))+'</b></td><td>'+cell(r,'home',i)+'</td><td>'+cell(r,'opponent',i)+'</td></tr>').join('');return '<div class="v494EditorCard"><h3>Shootout Editor</h3><p class="v494Mini">Edit shootout rounds for this match. Completed sudden-death rounds must stay paired.</p><p><b>Shootout Score:</b> '+so.ourScore+':'+so.opponentScore+' &nbsp; <b>Result:</b> '+esc(so.result)+' &nbsp; <b>Rounds:</b> '+st.rounds+' &nbsp; <b>Opponent Attempts:</b> '+st.attempts+' &nbsp; <b>Shootout Save Rate:</b> '+st.saveRate+' &nbsp; <b>Shootout Defence Rate:</b> '+st.defenceRate+'</p><table class="v494ShootoutTable"><tr><th>Round</th><th>'+esc(m.homeTeam||'Home')+'</th><th>'+esc(m.opponentTeam||m.opponent||'Opponent')+'</th></tr>'+rows+'</table><div class="v494BtnRow"><button type="button" class="v494Good" id="v494SaveSO">Save Shootout Edit</button><button type="button" class="v494Blue" id="v494AddSD">Add Sudden-Death Round</button><button type="button" class="v494Warn" id="v494RemoveSD">Remove Last Sudden-Death Round</button></div><div id="v494SOStatus" class="v494Mini"></div></div>'}
 function readSO(m){let so=ensureSO(m);document.querySelectorAll('[data-v494-field]').forEach(el=>{let i=Number(el.dataset.v494Row),side=el.dataset.v494Side,field=el.dataset.v494Field;if(!so.rounds[i])so.rounds[i]={home:blank(),opponent:blank()};if(!so.rounds[i][side])so.rounds[i][side]=blank();so.rounds[i][side][field]=el.value});syncSO(m)}
 function render(){
   let root=by('matchEditorRoot')||by('matchEditorShell')||by('matchEditor')||document.body,host=by('v494MatchEditorExtras');if(!host){host=document.createElement('div');host.id='v494MatchEditorExtras';root.appendChild(host)}
@@ -4655,7 +4688,7 @@ window.v494RenderMatchEditorExtras=render;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: explicit shot placement selector in Match Editor */
+/* Indoor Hockey Goalie Stats v5.23: explicit shot placement selector in Match Editor */
 (function(){
 function by95(id){return document.getElementById(id)}
 function esc95(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}}
@@ -4793,7 +4826,7 @@ window.v495RenderShotPlacementEditor=render95;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: Edit Shot panel placement button */
+/* Indoor Hockey Goalie Stats v5.23: Edit Shot panel placement button */
 (function(){
 function by96(id){return document.getElementById(id)}
 function esc96(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}}
@@ -4939,7 +4972,7 @@ window.v496OpenShotPlacementEditor=openEditor96;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: direct button inside actual Edit Shot form */
+/* Indoor Hockey Goalie Stats v5.23: direct button inside actual Edit Shot form */
 (function(){
 function by97(id){return document.getElementById(id)}
 function esc97(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}}
@@ -5039,16 +5072,16 @@ window.v497OpenPlacementFromEditShot=open97;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: Match Editor Add/Edit Shootout */
+/* Indoor Hockey Goalie Stats v5.23: Match Editor Add/Edit Shootout */
 (function(){
 const $=id=>document.getElementById(id);function esc(v){try{return window.esc(v)}catch(e){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}}function save(){try{saveDB()}catch(e){try{saveState()}catch(f){try{window.save()}catch(g){}}}}function goalieX(){try{return goalie()}catch(e){let id=$('goalieSelect')?.value||$('reportGoalie')?.value||$('statsGoalie')?.value;return (window.state?.goalies||[]).find(g=>g.id===id)}}function all(g){try{return allMatches(g)}catch(e){return (g&&Array.isArray(g.matches))?g.matches:[]}}function selMatch(){let g=goalieX();if(!g)return null;for(let id of ['editMatchSelect','matchEditorSelect','matchSelect','reportMatch','v471_reportMatch']){let v=$(id)?.value;if(v){let m=all(g).find(x=>x.id===v);if(m)return m}}let root=$('matchEditorRoot')||$('matchEditorShell')||$('matchEditor')||document;for(let s of root.querySelectorAll('select')){let m=all(g).find(x=>x.id===s.value);if(m)return m}return null}
 function hg(m){return Number((m&&(m.homeGoals??m.ourGoals??m.goalsFor??m.goals))||0)||0}function og(m){return Number((m&&(m.oppGoals??m.opponentGoals??m.awayGoals??m.goalsAgainst??m.opponentScoreNormal))||0)||0}function isDraw(m){return hg(m)===og(m)}function blank(){return{result:'Not Taken',saveMethod:'',note:''}}function hasSO(m){return !!(m&&m.shootout&&m.shootout.enabled)}function taken(c){return !!(c&&c.result&&c.result!=='Not Taken')}function goal(c){return ['Goal','Penalty Stroke Scored'].includes(String(c&&c.result||''))?1:0}function complete(r){return !!(r&&taken(r.home)&&taken(r.opponent))}
-function ensureSO(m){if(!m.shootout)m.shootout={enabled:true,rounds:[],format:'Standard'};let so=m.shootout;so.enabled=true;if(!Array.isArray(so.rounds))so.rounds=[];if(!so.rounds.length&&Array.isArray(so.attempts)){so.attempts.forEach(a=>{let i=Math.max(0,Number(a.round||a.attemptNumber||1)-1);if(!so.rounds[i])so.rounds[i]={home:blank(),opponent:blank()};let side=a.team==='Home'?'home':'opponent';so.rounds[i][side]={result:a.result||'Not Taken',saveMethod:a.saveMethod||'',note:a.note||''}})}while(so.rounds.length<5)so.rounds.push({home:blank(),opponent:blank()});so.rounds.forEach(r=>{if(!r.home)r.home=blank();if(!r.opponent)r.opponent=blank()});syncSO(m);return so}
+function ensureSO(m){if(!m.shootout)m.shootout={enabled:true,rounds:[],format:'Standard'};let so=m.shootout;so.enabled=true;if(!Array.isArray(so.rounds))so.rounds=[];if(!so.rounds.length&&Array.isArray(so.attempts)){so.attempts.forEach(a=>{let i=Math.max(0,Number(a.round||a.attemptNumber||1)-1);if(!so.rounds[i])so.rounds[i]={home:blank(),opponent:blank()};let side=a.team==='Home'?'home':'opponent';so.rounds[i][side]={result:a.result||'Not Taken',saveMethod:a.saveMethod||'',note:a.note||''}})}while(so.rounds.length<3)so.rounds.push({home:blank(),opponent:blank()});so.rounds.forEach(r=>{if(!r.home)r.home=blank();if(!r.opponent)r.opponent=blank()});syncSO(m);return so}
 function completed(m){let so=m&&m.shootout;if(!so||!Array.isArray(so.rounds))return 0;let c=0;for(let r of so.rounds){if(complete(r))c++;else break}return c}function soScore(m){let h=0,o=0;if(m?.shootout?.rounds)m.shootout.rounds.forEach(r=>{h+=goal(r.home);o+=goal(r.opponent)});return{h,o}}function syncSO(m){let so=m&&m.shootout;if(!so)return;let sc=soScore(m);so.ourScore=sc.h;so.opponentScore=sc.o;so.result=sc.h>sc.o?'Won':sc.o>sc.h?'Lost':'Drawn';so.completedRounds=completed(m);so.attempts=[];(so.rounds||[]).forEach((r,i)=>['home','opponent'].forEach(side=>{let c=r[side]||{};if(taken(c))(()=>{let att={id:'so_'+i+'_'+side,round:i+1,attemptNumber:i+1,team:side==='home'?'Home':'Opponent',result:c.result};if(side==='opponent'){att.saveMethod=c.saveMethod||'';att.note=c.note||''}so.attempts.push(att)})()}));if(so.result==='Won')m.result='Won';else if(so.result==='Lost')m.result='Lost';else if(isDraw(m))m.result='Draw'}
 function stats(m){ensureSO(m);let cr=completed(m),opp=[];for(let i=0;i<cr;i++){let c=m.shootout.rounds[i].opponent;if(taken(c))opp.push(c)}let on=opp.filter(c=>['Goal','Save'].includes(c.result)),saves=opp.filter(c=>c.result==='Save').length,def=opp.filter(c=>['Save','Miss / Wide / Out','Time Expired','Forced Wide','Penalty Stroke Saved / Missed'].includes(c.result)).length;return{rounds:cr,attempts:opp.length,saves,goals:opp.filter(c=>['Goal','Penalty Stroke Scored'].includes(c.result)).length,saveRate:on.length?Math.round(saves/on.length*100)+'%':'N/C',defenceRate:opp.length?Math.round(def/opp.length*100)+'%':'N/C'}}
 function opts(v,a){return a.map(o=>'<option '+(o===v?'selected':'')+'>'+esc(o)+'</option>').join('')}function resultNorm(v){return v==='Goal'?'Goal':(v==='Not Taken'?'Not Taken':'Save')}function cell(r,side,i){let c=r[side]||blank();if(side==='home'){return '<label>Result</label><select data-v498-row="'+i+'" data-v498-side="'+side+'" data-v498-field="result">'+opts(resultNorm(c.result),['Not Taken','Goal','Save'])+'</select>'}return '<label>Result</label><select data-v498-row="'+i+'" data-v498-side="'+side+'" data-v498-field="result">'+opts(c.result,['Not Taken','Goal','Save','Miss / Wide / Out','Time Expired','Forced Wide','Retake','Penalty Stroke Awarded','Penalty Stroke Scored','Penalty Stroke Saved / Missed'])+'</select><label>Save Method</label><select data-v498-row="'+i+'" data-v498-side="'+side+'" data-v498-field="saveMethod">'+opts(c.saveMethod||'', ['','Block','Stick save','Foot save','Smother','Forced wide','Stayed up / delayed'])+'</select><label>Note</label><input data-v498-row="'+i+'" data-v498-side="'+side+'" data-v498-field="note" value="'+esc(c.note||'')+'" placeholder="optional">'}
 function read(m){ensureSO(m);document.querySelectorAll('[data-v498-field]').forEach(el=>{let i=Number(el.dataset.v498Row||0),side=el.dataset.v498Side,field=el.dataset.v498Field;if(!m.shootout.rounds[i])m.shootout.rounds[i]={home:blank(),opponent:blank()};if(!m.shootout.rounds[i][side])m.shootout.rounds[i][side]=blank();m.shootout.rounds[i][side][field]=el.value});syncSO(m)}
-function editor(m){ensureSO(m);let so=m.shootout,st=stats(m),sc=soScore(m);let rows=so.rounds.map((r,i)=>'<tr><td><b>'+(i<5?'Round '+(i+1):'Sudden Death '+(i-4))+'</b></td><td>'+cell(r,'home',i)+'</td><td>'+cell(r,'opponent',i)+'</td></tr>').join('');return '<div id="v498ShootoutEditor" class="v498ShootoutEditor"><h3>Edit Shootout</h3><p class="v498Mini">Edit the shootout for this match. Stats and reports update from this saved data.</p><p><b>Normal Score:</b> '+hg(m)+'-'+og(m)+' &nbsp; <b>Shootout Score:</b> '+sc.h+':'+sc.o+' &nbsp; <b>Result:</b> '+esc(so.result)+' &nbsp; <b>Rounds:</b> '+st.rounds+' &nbsp; <b>Opponent Attempts:</b> '+st.attempts+' &nbsp; <b>Save Rate:</b> '+st.saveRate+' &nbsp; <b>Defence Rate:</b> '+st.defenceRate+'</p><table class="v498ShootoutTable"><tr><th>Round</th><th>'+esc(m.homeTeam||'Home')+'</th><th>'+esc(m.opponentTeam||m.opponent||'Opponent')+'</th></tr>'+rows+'</table><div class="v498BtnRow"><button type="button" class="v498Green" id="v498SaveSO">Save Shootout</button><button type="button" class="v498Blue" id="v498AddSD">Add Sudden-Death Round</button><button type="button" class="v498Warn" id="v498RemoveSD">Remove Last Sudden-Death Round</button><button type="button" class="v498Grey" id="v498CloseSO">Close Shootout Editor</button></div><div id="v498Status" class="v498Status"></div></div>'}
+function editor(m){ensureSO(m);let so=m.shootout,st=stats(m),sc=soScore(m);let rows=so.rounds.map((r,i)=>'<tr><td><b>'+(i<3?'Round '+(i+1):'Sudden Death '+(i-2))+'</b></td><td>'+cell(r,'home',i)+'</td><td>'+cell(r,'opponent',i)+'</td></tr>').join('');return '<div id="v498ShootoutEditor" class="v498ShootoutEditor"><h3>Edit Shootout</h3><p class="v498Mini">Edit the shootout for this match. Stats and reports update from this saved data.</p><p><b>Normal Score:</b> '+hg(m)+'-'+og(m)+' &nbsp; <b>Shootout Score:</b> '+sc.h+':'+sc.o+' &nbsp; <b>Result:</b> '+esc(so.result)+' &nbsp; <b>Rounds:</b> '+st.rounds+' &nbsp; <b>Opponent Attempts:</b> '+st.attempts+' &nbsp; <b>Save Rate:</b> '+st.saveRate+' &nbsp; <b>Defence Rate:</b> '+st.defenceRate+'</p><table class="v498ShootoutTable"><tr><th>Round</th><th>'+esc(m.homeTeam||'Home')+'</th><th>'+esc(m.opponentTeam||m.opponent||'Opponent')+'</th></tr>'+rows+'</table><div class="v498BtnRow"><button type="button" class="v498Green" id="v498SaveSO">Save Shootout</button><button type="button" class="v498Blue" id="v498AddSD">Add Sudden-Death Round</button><button type="button" class="v498Warn" id="v498RemoveSD">Remove Last Sudden-Death Round</button><button type="button" class="v498Grey" id="v498CloseSO">Close Shootout Editor</button></div><div id="v498Status" class="v498Status"></div></div>'}
 function host(){let root=$('matchEditorRoot')||$('matchEditorShell')||$('matchEditor')||document.body;let h=$('v498ShootoutBox');if(!h){h=document.createElement('div');h.id='v498ShootoutBox';h.className='v498ShootoutBox';root.appendChild(h)}return h}
 function render(open){let h=host(),m=selMatch();if(!m){h.innerHTML='<h3>Shootout</h3><p class="v498Mini">Select a match to add or edit a shootout.</p>';return}let has=hasSO(m),draw=isDraw(m);if(!has&&!draw){h.innerHTML='<h3>Shootout</h3><p class="v498Mini">Shootouts can be added here for matches that ended in a draw. This match is not currently a draw.</p>';return}let summary='',btn='';if(has){ensureSO(m);let sc=soScore(m),st=stats(m);summary='<p><b>Current Shootout:</b> '+sc.h+':'+sc.o+' — '+esc(m.shootout.result)+' | Rounds '+st.rounds+' | Opponent Attempts '+st.attempts+'</p>';btn='<button type="button" class="v498Blue" id="v498OpenSO">Edit Shootout</button>'}else{summary='<p class="v498Mini">This match ended in a draw and does not have a shootout yet.</p>';btn='<button type="button" class="v498Green" id="v498AddSO">Add Shootout</button>'}h.innerHTML='<h3>Shootout</h3>'+summary+'<div class="v498BtnRow">'+btn+'</div>'+(open&&has?editor(m):'');bind(m)}
 function bind(m){let o=$('v498OpenSO');if(o)o.addEventListener('click',()=>render(true));let a=$('v498AddSO');if(a)a.addEventListener('click',()=>{if(!isDraw(m)&&!confirm('This match is not a draw. Add a shootout anyway?'))return;m.shootout={enabled:true,rounds:[],format:'Standard'};ensureSO(m);save();render(true)});let sv=$('v498SaveSO');if(sv)sv.addEventListener('click',()=>{read(m);m.shootout.finalized=true;save();let st=$('v498Status');if(st)st.textContent='Shootout saved.';try{renderAll()}catch(e){}setTimeout(()=>render(true),120)});let ad=$('v498AddSD');if(ad)ad.addEventListener('click',()=>{read(m);m.shootout.rounds.push({home:blank(),opponent:blank()});m.shootout.format='Sudden Death';syncSO(m);save();render(true)});let rm=$('v498RemoveSD');if(rm)rm.addEventListener('click',()=>{read(m);if(m.shootout.rounds.length<=5){alert('The first 5 shootout rounds cannot be removed.');return}m.shootout.rounds.pop();syncSO(m);save();render(true)});let cl=$('v498CloseSO');if(cl)cl.addEventListener('click',()=>render(false))}
@@ -5058,7 +5091,7 @@ function boot(){patch();if($('matchEditorRoot')||$('matchEditorShell')||$('match
 </script>
 
 <script>
-/* Hockey Goalie Stats v5.23: clean safeguards from v4.98 base */
+/* Indoor Hockey Goalie Stats v5.23: clean safeguards from v4.98 base */
 (function(){
   window.APP_VERSION = APP_VERSION_566;
   window.v503PSpot={x:50,y:26};
@@ -5068,7 +5101,7 @@ function boot(){patch();if($('matchEditorRoot')||$('matchEditorShell')||$('match
 
 
 <script>
-/* Hockey Goalie Stats v5.23: reports show both Shot Situation and Shot Type breakdowns */
+/* Indoor Hockey Goalie Stats v5.23: reports show both Shot Situation and Shot Type breakdowns */
 (function(){
 function by504(id){return document.getElementById(id)}
 function esc504(v){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -5077,7 +5110,7 @@ function normSit504(s){
   if(!s||/^none$/i.test(s)||/^normal gameplay$/i.test(s)||/^normal game play$/i.test(s))return 'Normal Game Play';
   if(/^penalty corner$/i.test(s))return 'Penalty Corner';
   if(/^penalty stroke$/i.test(s))return 'Penalty Stroke';
-  if(/^8 second 1v1$/i.test(s))return '8 Second 1v1';
+  if(/^8 second 1v1$/i.test(s))return '6 Second Shoot-out';
   return s;
 }
 function normType504(s){
@@ -5218,9 +5251,9 @@ window.v504EnsureReportBreakdowns=ensureReportBreakdowns504;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: Delete Shootout, DDD restore, shootout summary, heat-map legends */
+/* Indoor Hockey Goalie Stats v5.23: Delete Shootout, DDD restore, shootout summary, heat-map legends */
 (function(){
-const SIT_ORDER_506=["Normal Game Play","Penalty Corner","Penalty Stroke","8 Second 1v1"];
+const SIT_ORDER_506=["Normal Game Play","Penalty Corner","Penalty Stroke","6 Second Shoot-out"];
 const TYPE_ORDER_506=["1st Shot","Rebound","In Game 1v1","Own Goal","Other"];
 const OUTN_ORDER_506=["Not Out Numbered","2 vs 1","3 vs 1","4+ vs 1"];
 const REB_ORDER_506=["No rebound","Safe","Dangerous"];
@@ -5229,7 +5262,7 @@ function by506(id){return document.getElementById(id)}
 function esc506(v){try{return window.esc(v)}catch(e){return String(v??'').replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]||c})}}
 function pct506(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100)+"%":"N/C"}
 function normOutcome506(v){v=String(v||'Save');return /^goal$/i.test(v)?'Goal':(/^angle/i.test(v)?'Angle Closed Off':'Save')}
-function normSit506(v){v=String(v||'').trim();if(!v||/^none$/i.test(v)||/^normal gameplay$/i.test(v)||/^normal game play$/i.test(v))return 'Normal Game Play';if(/^penalty corner$/i.test(v))return 'Penalty Corner';if(/^penalty stroke$/i.test(v))return 'Penalty Stroke';if(/^8\s*second\s*1v1$/i.test(v)||/^8 second 1v1$/i.test(v))return '8 Second 1v1';return 'Normal Game Play'}
+function normSit506(v){v=String(v||'').trim();if(!v||/^none$/i.test(v)||/^normal gameplay$/i.test(v)||/^normal game play$/i.test(v))return 'Normal Game Play';if(/^penalty corner$/i.test(v))return 'Penalty Corner';if(/^penalty stroke$/i.test(v))return 'Penalty Stroke';if(/^8\s*second\s*1v1$/i.test(v)||/^8 second 1v1$/i.test(v))return '6 Second Shoot-out';return 'Normal Game Play'}
 function normType506(v){v=String(v||'').trim();if(/^rebound$/i.test(v))return 'Rebound';if(/^in game 1v1$/i.test(v)||/^in-game 1v1$/i.test(v))return 'In Game 1v1';if(/^own goal$/i.test(v))return 'Own Goal';if(/^other$/i.test(v))return 'Other';if(/^1st shot$/i.test(v)||/^first shot$/i.test(v)||!v)return '1st Shot';return 'Other'}
 function normOut506(v){v=String(v||'').trim();return OUTN_ORDER_506.includes(v)?v:'Not Out Numbered'}
 function normReb506(v){v=String(v||'').trim();if(!v)return 'No rebound';return REB_ORDER_506.includes(v)?v:'No rebound'}
@@ -5249,7 +5282,7 @@ function calcStats506(ms){const sh=shotList506(ms),saves=sh.filter(s=>s.outcome=
 function statCards506(obj){return '<div class="statgrid">'+Object.entries(obj).map(([k,v])=>'<div class="stat"><b>'+esc506(k)+'</b><br>'+esc506(v)+'</div>').join('')+'</div>'}
 function groupFixed506(sh,order,fn){let map={};order.forEach(k=>map[k]={name:k,records:0,saves:0,goals:0,angles:0});sh.forEach(s=>{let k=fn(s);if(!map[k])map[k]=map.Other||{name:k,records:0,saves:0,goals:0,angles:0};let r=map[k];r.records++;if(s.outcome==='Save')r.saves++;if(s.outcome==='Goal')r.goals++;if(s.outcome==='Angle Closed Off')r.angles++;});return order.map(k=>map[k]).filter(Boolean)}
 function statsTable506(title,rows){return '<div class="v470Camera Run v506StatsSection" data-v506-title="'+esc506(title)+'"><h2>'+esc506(title)+'</h2><table><tr><th>Area</th><th>Records</th><th>Saves</th><th>Goals</th><th>Angles</th><th>Save Rate</th><th>Defence Rate</th></tr>'+rows.map(r=>'<tr><td>'+esc506(r.name)+'</td><td>'+r.records+'</td><td>'+r.saves+'</td><td>'+r.goals+'</td><td>'+r.angles+'</td><td>'+pct506(r.saves,r.saves+r.goals)+'</td><td>'+pct506(r.saves+r.angles,r.records)+'</td></tr>').join('')+'</table></div>'}
-function heatLegend506(){return '<div class="heatMapLegend" data-v506-legend="1"><div class="heatMapLegendTitle">Heat Map Legend</div><div class="heatLegendGrid"><span class="legendItem"><span class="legendDot legendSave"></span>Save</span><span class="legendItem"><span class="legendDot legendGoal"></span>Goal</span><span class="legendItem"><span class="legendDot legendAngle"></span>Angle Closed Off</span><span class="legendItem"><span class="legendDot legendNormal"></span>Normal Game Play</span><span class="legendItem"><span class="legendDot legendPC"></span>Penalty Corner outline</span><span class="legendItem"><span class="legendDot legendPS"></span>Penalty Stroke outline</span><span class="legendItem"><span class="legendDot legend1v1"></span>8 Second 1v1 outline</span><span class="legendItem"><span class="legendDot legendSave legendNumber">1</span>Dot number = shot number</span></div></div>'}
+function heatLegend506(){return '<div class="heatMapLegend" data-v506-legend="1"><div class="heatMapLegendTitle">Heat Map Legend</div><div class="heatLegendGrid"><span class="legendItem"><span class="legendDot legendSave"></span>Save</span><span class="legendItem"><span class="legendDot legendGoal"></span>Goal</span><span class="legendItem"><span class="legendDot legendAngle"></span>Angle Closed Off</span><span class="legendItem"><span class="legendDot legendNormal"></span>Normal Game Play</span><span class="legendItem"><span class="legendDot legendPC"></span>Penalty Corner outline</span><span class="legendItem"><span class="legendDot legendPS"></span>Penalty Stroke outline</span><span class="legendItem"><span class="legendDot legend1v1"></span>6 Second Shoot-out outline</span><span class="legendItem"><span class="legendDot legendSave legendNumber">1</span>Dot number = shot number</span></div></div>'}
 function stripLegend506(html){return String(html||'').replace(/<div class="heatMapLegend"[\s\S]*?<\/div>\s*<\/div>/g,'').replace(/<div class="heatMapLegend"[\s\S]*?<\/div>/g,'')}
 function installHeatMapLegends506(){if(!oldBasePitch506&&typeof window.basePitch==='function')oldBasePitch506=window.basePitch;if(!oldBaseGoal506&&typeof window.baseGoal==='function')oldBaseGoal506=window.baseGoal;if(oldBasePitch506&&!oldBasePitch506.v506Legend){const old=oldBasePitch506;const fn=function(points,cb,sel){return stripLegend506(old.apply(this,arguments))+heatLegend506()};fn.v506Legend=true;window.basePitch=fn;try{basePitch=fn}catch(e){}}if(oldBaseGoal506&&!oldBaseGoal506.v506Legend){const old=oldBaseGoal506;const fn=function(points,cb,sel){return stripLegend506(old.apply(this,arguments))+heatLegend506()};fn.v506Legend=true;window.baseGoal=fn;try{baseGoal=fn}catch(e){}}}
 function ensureDomHeatLegends506(){document.querySelectorAll('svg[aria-label*="Heat Map"],svg[aria-label*="Goal Box"],.reportHeatMapPage svg').forEach(svg=>{let n=svg.nextElementSibling;if(!(n&&n.dataset&&n.dataset.v506Legend==='1'))svg.insertAdjacentHTML('afterend',heatLegend506())})}
@@ -5285,9 +5318,9 @@ function trainingFocus506(ms){
 }
 function timelineItems506(m){let shots=(Array.isArray(m&&m.shots)?m.shots:[]).map((s,i)=>Object.assign({},s,{_num:i+1,outcome:normOutcome506(s.outcome),shotSituation:normSit506(s.shotSituation||s.situation),type:normType506(s.type||s.shotType),outnumbered:normOut506(s.outnumbered),rebound:normReb506(s.rebound)})),byId=new Map(shots.map(s=>[s.id,s])),items=[],p=1;if(Array.isArray(m&&m.orderItems)&&m.orderItems.length){m.orderItems.forEach(it=>{if(it.kind==='shot'&&byId.has(it.id)){let s=byId.get(it.id);s._period=p;items.push({kind:'shot',period:p,shot:s});}else if(it.kind==='period'){items.push({kind:'period',period:p});p++;}});shots.forEach(s=>{if(!items.some(x=>x.shot&&x.shot.id===s.id)){s._period=1;items.push({kind:'shot',period:1,shot:s})}});return items}shots.forEach(s=>{s._period=1;items.push({kind:'shot',period:1,shot:s})});return items}
 function timelineDetail506(s){return [s.type,s.shotSituation,s.outnumbered,s.rebound==='No rebound'?'':s.rebound,s.note].filter(Boolean).join(' • ')}
-function sitClass517(s){let v=String(s&&s.shotSituation||s&&s.situation||'Normal Game Play');if(v==='Penalty Corner')return 'v517SitPC';if(v==='Penalty Stroke')return 'v517SitPS';if(/8 Second 1v1/i.test(v))return 'v517Sit1v1';return 'v517SitNormal'}
+function sitClass517(s){let v=String(s&&s.shotSituation||s&&s.situation||'Normal Game Play');if(v==='Penalty Corner')return 'v517SitPC';if(v==='Penalty Stroke')return 'v517SitPS';if(/6 Second Shoot-out/i.test(v))return 'v517Sit1v1';return 'v517SitNormal'}
 function timelineLetter517(s){return s.outcome==='Goal'?'G':(s.outcome==='Angle Closed Off'?'A':'S')}
-function timelineStroke517(s){let v=String(s&&s.shotSituation||s&&s.situation||'Normal Game Play');if(v==='Penalty Corner')return {c:'#111111',w:3};if(v==='Penalty Stroke')return {c:'#2478ff',w:3};if(/8 Second 1v1/i.test(v))return {c:'#8e44ff',w:3};return {c:'#ffffff',w:1}}
+function timelineStroke517(s){let v=String(s&&s.shotSituation||s&&s.situation||'Normal Game Play');if(v==='Penalty Corner')return {c:'#111111',w:3};if(v==='Penalty Stroke')return {c:'#2478ff',w:3};if(/6 Second Shoot-out/i.test(v))return {c:'#8e44ff',w:3};return {c:'#ffffff',w:1}}
 function timelineSvg517(s){let col=s.outcome==='Goal'?'#ef5350':s.outcome==='Angle Closed Off'?'#ffca28':'#2fd17c',st=timelineStroke517(s),letter=timelineLetter517(s);return '<svg class="v519TimelineSvg" viewBox="0 0 34 34" width="34" height="34" aria-label="'+esc506(letter)+'"><circle cx="17" cy="17" r="13.5" fill="'+col+'" stroke="'+st.c+'" stroke-width="'+st.w+'"></circle><text x="17" y="21" text-anchor="middle" font-size="14" font-weight="900" font-family="Arial, Helvetica, sans-serif" fill="#071014">'+esc506(letter)+'</text></svg>'}
 function timelineBadge517(s,label){return '<span class="v520TimelineIcon" data-v520-timeline-icon="1">'+timelineSvg517(s).replace('v519TimelineSvg','v519TimelineSvg v520TimelineSvg')+'</span>'}
 function timelineAddendum506(ms){let reportN=0,multi=(ms||[]).length>1;return '<div class="v472Addendum reportPageBreakBefore"><h1>Addendum: Match Timelines</h1><p class="muted">Full timelines for every match included in this Data Driven Development Report. In multi-match reports, the first number is the shot number in the full report and the number in brackets is the shot number inside that match.</p>'+(ms||[]).map(m=>{let rows=timelineItems506(m),shotN=0;return '<div class="v472TimelineMatch v517TimelineMatch"><h2>'+esc506((date506(m)||'')+' - '+(m.homeTeam||'')+' VS '+(m.opponentTeam||m.opponent||''))+'</h2>'+rows.map(ev=>{if(ev.kind==='period')return '<div class="v506TimelineRow v517TimelineRow"><span class="v506TimelineBadge v506Triangle v517TimelinePeriod">▲</span><div class="v517TimelineDetail"><b>End of Period '+esc506(ev.period)+'</b></div></div>';let s=ev.shot;shotN++;reportN++;let display=multi?(reportN+' ('+shotN+')'):String(shotN);return '<div class="v506TimelineRow v517TimelineRow" data-outcome="'+esc506(normOutcome506(s.outcome))+'" data-situation="'+esc506(s.shotSituation||s.situation||'Normal Game Play')+'"><span data-v517-timeline-shot="1">'+timelineBadge517(s,display)+'</span><div class="v517TimelineDetail"><b>Shot '+esc506(display)+' — '+esc506(s.outcome)+'</b><br><span class="muted v517TimelineMuted">'+esc506(halfLabel506(m,ev.period))+' • '+esc506(timelineDetail506(s))+'</span></div></div>'}).join('')+'</div>'}).join('')+'</div>'}
@@ -5296,7 +5329,7 @@ function shootoutCellDef506(c){return ['Save','Miss / Wide / Out','Time Expired'
 function shootoutCellTaken506(c){return !!(c&&c.result&&c.result!=='Not Taken')}
 function shootoutSummary506(ms){let rounds=0,saves=0,goals=0,onTarget=0,methods={};(ms||[]).forEach(m=>{let so=m&&m.shootout;if(!so||!so.enabled)return;if(!Array.isArray(so.rounds)&&Array.isArray(so.attempts)){so={enabled:true,rounds:[]};m.shootout.attempts.forEach(a=>{let i=Math.max(0,Number(a.round||a.attemptNumber||1)-1);if(!so.rounds[i])so.rounds[i]={home:{result:'Not Taken'},opponent:{result:'Not Taken'}};let side=a.team==='Home'?'home':'opponent';so.rounds[i][side]={result:a.result||'Not Taken',saveMethod:a.saveMethod||'',note:a.note||''}})};(so.rounds||[]).forEach(r=>{let c=r&&r.opponent;if(shootoutCellTaken506(c)){rounds++;if(c.result==='Save'){saves++;onTarget++;let meth=(c.saveMethod||'Unspecified').trim()||'Unspecified';methods[meth]=(methods[meth]||0)+1}else if(shootoutCellGoal506(c)){goals++;onTarget++}}})});if(rounds===0&&saves===0&&goals===0)return '';let common=Object.entries(methods).sort((a,b)=>b[1]-a[1])[0];let commonText=common?common[0]+' ('+common[1]+')':'N/C';return '<div class="v470Camera Run v506ShootoutSummary"><h2>Shootout Summary</h2><table><tr><th>Metric</th><th>Value</th></tr><tr><td>Shootout Rounds Faced</td><td>'+rounds+'</td></tr><tr><td>Shootout Goals Conceded</td><td>'+goals+'</td></tr><tr><td>Shootout Saves</td><td>'+saves+'</td></tr><tr><td>Shootout Save Rate</td><td>'+pct506(saves,onTarget)+'</td></tr><tr><td>Most Common Defensive Save Method</td><td>'+esc506(commonText)+'</td></tr></table></div>'}
 function heatmaps506(ms){installHeatMapLegends506();let a=shotList506(ms);try{return '<div class="reportPageBreakBefore reportHeatMapPage"><h2>D Heat Map</h2>'+basePitch(a)+'<h2>Goal Box Heat Map</h2>'+baseGoal(a)+'</div>'}catch(e){return ''}}
-function reportShell506(title,g,ms,body){let root=by506('reportOutput');if(!root)return;let subtitle=(ms||[]).length+' match(es)';let age='';try{age=(typeof ageGroup==='function'?ageGroup(g):'')||g.ageGroup||g.age||''}catch(e){age=g&&g.ageGroup||''}let header='<h1>'+esc506(title)+'</h1><p><b>'+esc506(g&&g.name||'')+'</b>'+((age||g&&g.gender)?' • '+esc506([age,g&&g.gender].filter(Boolean).join(' • ')):'')+'<br>'+esc506(subtitle)+'<br>Generated: '+esc506(new Date().toLocaleString())+'</p>';let banner='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">';root.style.display='block';root.innerHTML=banner+header+body+'</div></td></tr></tbody></table>';try{showTab('reports')}catch(e){}}
+function reportShell506(title,g,ms,body){let root=by506('reportOutput');if(!root)return;let subtitle=(ms||[]).length+' match(es)';let age='';try{age=(typeof ageGroup==='function'?ageGroup(g):'')||g.ageGroup||g.age||''}catch(e){age=g&&g.ageGroup||''}let header='<h1>'+esc506(title)+'</h1><p><b>'+esc506(g&&g.name||'')+'</b>'+((age||g&&g.gender)?' • '+esc506([age,g&&g.gender].filter(Boolean).join(' • ')):'')+'<br>'+esc506(subtitle)+'<br>Generated: '+esc506(new Date().toLocaleString())+'</p>';let banner='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">';root.style.display='block';root.innerHTML=banner+header+body+'</div></td></tr></tbody></table>';try{showTab('reports')}catch(e){}}
 function buildDDD506(){installHeatMapLegends506();let g=goalie506();if(!g){alert('Select a goalie.');return}let selected=selectedDDDRanges506(g),allM=sortedMatches506(g),st=calcStats506(selected),sh=shotList506(selected),teams=[...new Set(selected.map(m=>m.homeTeam).filter(Boolean))].sort(),rangeText=selected.length?(date506(selected[0])+' to '+date506(selected[selected.length-1])):'No matches selected';let profile='<h2>Goalie Profile</h2><div class="v471ProfileGrid"><div><b>Name</b><br>'+esc506(g.name||'')+'</div><div><b>Selected Match Range</b><br>'+esc506(rangeText)+'</div><div><b>Age Group</b><br>'+esc506((typeof ageGroup==='function'?ageGroup(g):'')||g.ageGroup||g.age||'')+'</div><div><b>Gender</b><br>'+esc506(g.gender||'')+'</div><div><b>Teams Played For In This Report</b><br>'+(teams.length?teams.map(esc506).join(', '):'No teams recorded')+'</div><div><b>Matches Included</b><br>'+selected.length+'</div></div>';let body=profile+matchesIncluded506(selected)+'<h2>Summary Stats</h2>'+statCards506({'Save Rate':st.saveRate,'Defence Rate':st.defenceRate,'Matches Included':selected.length,'Total Shot Records':st.records,'Saves':st.saves,'Goals Conceded':st.goals,'Angles Closed Off':st.angles,'Dangerous Rebounds':st.dangerous,'Outnumbered Attempts':st.outnumberedAttempts})+graph506('All Recorded Matches: Save Rate and Defence Rate',rateRows506(allM))+statsTable506('Shot Situation Stats',groupFixed506(sh,SIT_ORDER_506,s=>s.shotSituation))+statsTable506('Shot Type Stats',groupFixed506(sh,TYPE_ORDER_506,s=>s.type))+statsTable506('Period / Half Summary',periodSummary506(selected))+heatmaps506(selected)+shootoutSummary506(selected)+trainingFocus506(selected)+timelineAddendum506(selected);reportShell506('Data Driven Development Report',g,selected,body);[100,500,1200].forEach(ms=>setTimeout(ensureDomHeatLegends506,ms));}
 function selectedMatch506(){let g=goalie506();if(!g)return null;let ids=['editMatchSelect','matchEditorSelect','matchSelect','reportMatch','v471_reportMatch','editMatch'];for(let id of ids){let v=by506(id)?.value;if(v){let m=allMatches506(g).find(x=>x.id===v);if(m)return m}}let root=by506('v459MatchEditorRoot')||by506('matchEditorRoot')||by506('matchEditorShell')||by506('matchEditor')||document;for(let s of root.querySelectorAll('select')){let m=allMatches506(g).find(x=>x.id===s.value);if(m)return m}return null}
 function hasShootout506(m){return !!(m&&m.shootout&&m.shootout.enabled)}
@@ -5314,7 +5347,7 @@ window.v506BuildDataDrivenDevelopmentReport=buildDDD506;window.v506DeleteShootou
 
 
 <script>
-/* Hockey Goalie Stats v5.23: simplified shootout data collection */
+/* Indoor Hockey Goalie Stats v5.23: simplified shootout data collection */
 (function(){
 function isGoal507(c){return ['Goal','Penalty Stroke Scored'].includes(String(c&&c.result||''))}
 function taken507(c){return !!(c&&c.result&&c.result!=='Not Taken')}
@@ -5431,7 +5464,7 @@ window.v507StripLegacyShootoutFields=stripLegacyShootoutFields507;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: clean report controller, no legacy shootout injectors */
+/* Indoor Hockey Goalie Stats v5.23: clean report controller, no legacy shootout injectors */
 (function(){
 function by510(id){return document.getElementById(id)}
 function cleanReport510(){
@@ -5501,7 +5534,7 @@ window.v510CleanReportController=cleanReport510;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: shootout-aware report score and result display */
+/* Indoor Hockey Goalie Stats v5.23: shootout-aware report score and result display */
 (function(){
 function num511(v){v=Number(v);return Number.isFinite(v)?v:0}
 function baseHome511(m){return num511(m&&((m.homeGoals??m.ourGoals??m.goalsFor??m.homeScore)))}
@@ -5651,14 +5684,14 @@ window.v511PatchReportShootoutScores=patchReportDom511;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: direct DDD source fix verifier */
+/* Indoor Hockey Goalie Stats v5.23: direct DDD source fix verifier */
 (function(){
 function fix513(){
   var root=document.getElementById('reportOutput');
   if(!root||!/Data Driven Development Report/i.test(root.textContent||''))return;
   if(!root.querySelector('.reportHeaderLogo')){
     var current=root.innerHTML;
-    root.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+current+'</div></td></tr></tbody></table>';
+    root.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+current+'</div></td></tr></tbody></table>';
   }
 }
 [100,500,1200].forEach(function(ms){setTimeout(fix513,ms)});
@@ -5673,7 +5706,7 @@ window.v513VerifyDDDHeader=function(){fix513();};
 
 
 <script>
-/* Hockey Goalie Stats v5.23: report Summary Stats show Save Rate and Defence Rate first */
+/* Indoor Hockey Goalie Stats v5.23: report Summary Stats show Save Rate and Defence Rate first */
 (function(){
 function label514(card){
   var span=card&&card.querySelector&&card.querySelector('span');
@@ -5801,18 +5834,18 @@ window.v514FixReportSummaryStats=fixReportSummaryStats514;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: DDD Training Focus hides zero-score / insufficient-data rows */
+/* Indoor Hockey Goalie Stats v5.23: DDD Training Focus hides zero-score / insufficient-data rows */
 window.v516TrainingFocusRule = "DDD Training Focus only shows rows with score greater than zero and events greater than zero.";
 </script>
 
 
 <script>
-/* Hockey Goalie Stats v5.23: selected-report heat map labels and multi-match timeline numbers */
+/* Indoor Hockey Goalie Stats v5.23: selected-report heat map labels and multi-match timeline numbers */
 (function(){
 function by517(id){return document.getElementById(id)}
 function esc517(v){return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function normOutcome517(o){o=String(o||'Save');return /^goal$/i.test(o)?'Goal':(/^angle/i.test(o)?'Angle Closed Off':'Save')}
-function normSit517(v){v=String(v||'Normal Game Play');if(/^penalty corner$/i.test(v))return 'Penalty Corner';if(/^penalty stroke$/i.test(v))return 'Penalty Stroke';if(/8.*1v1/i.test(v))return '8 Second 1v1';return 'Normal Game Play'}
+function normSit517(v){v=String(v||'Normal Game Play');if(/^penalty corner$/i.test(v))return 'Penalty Corner';if(/^penalty stroke$/i.test(v))return 'Penalty Stroke';if(/8.*1v1/i.test(v))return '6 Second Shoot-out';return 'Normal Game Play'}
 function date517(m){return String(m&&m.date||'')}
 function matchName517(m){return String(m&&m.name?m.name:((m&&m.date||'')+' - '+(m&&m.homeTeam||'')+' VS '+(m&&(m.opponentTeam||m.opponent)||'')))}
 function getGoalie517(){try{return goalie506()}catch(e){}try{return goalieSafe()}catch(e){}try{return goalie()}catch(e){}let id=by517('reportGoalie')?.value||by517('goalieSelect')?.value||by517('matchGoalie')?.value;let list=[];try{list=db.goalies||[]}catch(e){}try{if(!list.length)list=state.goalies||[]}catch(e){}return list.find(g=>g.id===id)||list[0]||null}
@@ -5894,7 +5927,7 @@ function timelineItems517(m){
 }
 function numberedShots517(ms){let out=[],report=1;(ms||[]).forEach(m=>{let matchN=0;timelineItems517(m).forEach(ev=>{if(ev.kind!=='shot'||ev.owner==='other')return;matchN++;let s=Object.assign({},ev.shot);s._reportNumber=report++;s._matchNumber=matchN;s._displayNumber=(ms||[]).length>1?(s._reportNumber+' ('+s._matchNumber+')'):String(s._matchNumber);out.push(s);});});return out;}
 function hasCoord517(v){return v!==undefined&&v!==null&&v!==''&&!Number.isNaN(Number(v))}
-function situationClass517(s){let v=normSit517(s.shotSituation||s.situation);if(v==='Penalty Corner')return 'v517SitPC';if(v==='Penalty Stroke')return 'v517SitPS';if(v==='8 Second 1v1')return 'v517Sit1v1';return 'v517SitNormal'}
+function situationClass517(s){let v=normSit517(s.shotSituation||s.situation);if(v==='Penalty Corner')return 'v517SitPC';if(v==='Penalty Stroke')return 'v517SitPS';if(v==='6 Second Shoot-out')return 'v517Sit1v1';return 'v517SitNormal'}
 function outcomeColor517(o){o=normOutcome517(o);return o==='Goal'?'#ef5350':(o==='Angle Closed Off'?'#ffca28':'#2fd17c')}
 function outcomeLetter518(s){let o=normOutcome517(s&&s.outcome);return o==='Goal'?'G':(o==='Angle Closed Off'?'A':'S')}
 function stroke519(s){let c=situationClass517(s);if(c==='v517SitPC')return {c:'#111111',w:3};if(c==='v517SitPS')return {c:'#2478ff',w:3};if(c==='v517Sit1v1')return {c:'#8e44ff',w:3};return {c:'#ffffff',w:1}}
@@ -5993,7 +6026,7 @@ window.v517SelectedReportMatches=selectedMatches517;window.v517FixHeatMapNumbers
 
 
 <script>
-/* Hockey Goalie Stats v5.23: timeline dots are S/G/A, numbers stay in timeline text */
+/* Indoor Hockey Goalie Stats v5.23: timeline dots are S/G/A, numbers stay in timeline text */
 (function(){
 function outcomeLetter518FromRow(row){
   const txt=(row&&row.textContent)||'';
@@ -6032,7 +6065,7 @@ window.v518FixTimelineDots=fixTimelineDots518;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: printed timeline dots keep colour using SVG fills */
+/* Indoor Hockey Goalie Stats v5.23: printed timeline dots keep colour using SVG fills */
 (function(){
 function normOutcome519FromRow(row){
   const txt=(row&&row.textContent)||'';
@@ -6097,7 +6130,7 @@ window.v519FixTimelineSvgDots=fixTimelineSvgDots519;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: remove square containers around timeline dots */
+/* Indoor Hockey Goalie Stats v5.23: remove square containers around timeline dots */
 (function(){
 function outcomeFromRow520(row){
   const stored=(row&&row.getAttribute('data-outcome'))||'';
@@ -6121,7 +6154,7 @@ function situationFromRow520(row){
   const txt=(row&&row.textContent)||'';
   if(/Penalty Corner/i.test(txt))return 'Penalty Corner';
   if(/Penalty Stroke/i.test(txt))return 'Penalty Stroke';
-  if(/8\s*Second\s*1v1/i.test(txt))return '8 Second 1v1';
+  if(/8\s*Second\s*1v1/i.test(txt))return '6 Second Shoot-out';
   return 'Normal Game Play';
 }
 function letter520(outcome){return outcome==='Goal'?'G':(outcome==='Angle Closed Off'?'A':'S')}
@@ -6129,7 +6162,7 @@ function fill520(outcome){return outcome==='Goal'?'#ef5350':(outcome==='Angle Cl
 function stroke520(sit){
   if(sit==='Penalty Corner')return {c:'#111111',w:3};
   if(sit==='Penalty Stroke')return {c:'#2478ff',w:3};
-  if(sit==='8 Second 1v1')return {c:'#8e44ff',w:3};
+  if(sit==='6 Second Shoot-out')return {c:'#8e44ff',w:3};
   return {c:'#ffffff',w:1};
 }
 function svg520(outcome,sit){
@@ -6189,7 +6222,7 @@ window.v520FixTimelineIconSquares=fixTimelineIconSquares520;
 
 
 <script>
-/* Hockey Goalie Stats v5.23: Integrated Video Stats Review */
+/* Indoor Hockey Goalie Stats v5.23: Integrated Video Stats Review */
 (function(){
 const VR_VERSION=APP_VERSION_566;
 let vrMatchId='', vrDraft=null, vrClipIn=null, vrClipOut=null, vrExporting=false, vrCancelExport=false, vrMoreTargetId='', vrPlaybackRate=1, vrSelectedShotId='', vrLastVideoEl=null, vrNoCoverage=false, vrVirtualPlaying=false, vrVirtualLast=0, vrWaveformsVisible=false, vrAutoSuggestions=[];
@@ -6253,15 +6286,15 @@ function mapPoint(ev,svg){let r=svg.getBoundingClientRect();return {x:Math.round
 function drawMap(kind){let box=$(kind==='d'?'v521DMap':'v521GMap'),m=currentMatchV();if(!box||!m)return;let sel=kind==='d'?vrDraft?.d:vrDraft?.g;let cb=p=>{if(!vrDraft)resetDraft();if(kind==='d')vrDraft.d=p;else vrDraft.g=p;renderRecordMaps()};if(kind==='d')box.innerHTML=basePitch([],cb,sel);else box.innerHTML=baseGoal([],cb,sel)}
 function renderRecordMaps(){drawMap('d');drawMap('g');}
 function resetDraft(){vrDraft={outcome:'Save',shotSituation:'Normal Game Play',type:'1st Shot',outnumbered:'Not Out Numbered',rebound:'No rebound',note:'',d:null,g:null};}
-function setDraft(k,v){if(!vrDraft)resetDraft();vrDraft[k]=v;if(k==='shotSituation'&&v==='Penalty Stroke')vrDraft.d={x:50,y:36.7};if(k==='outcome'&&v==='Angle Closed Off')vrDraft.g=null;renderRecordPanel();}
+function setDraft(k,v){if(!vrDraft)resetDraft();vrDraft[k]=v;if(k==='shotSituation'&&v==='Penalty Stroke')vrDraft.d={x:50,y:26};if(k==='outcome'&&v==='Angle Closed Off')vrDraft.g=null;renderRecordPanel();}
 function chips(list,key){return '<div class="v521ChipRow">'+(list||[]).map(x=>'<button type="button" class="v521Chip '+(vrDraft&&vrDraft[key]===x?'on':'')+'" data-v521-draft="'+key+'|'+escV(x)+'">'+escV(x)+'</button>').join('')+'</div>'}
 function renderRecordPanel(){let root=$('v521RecordPanel'),m=currentMatchV();if(!root||!m)return;if(!vrDraft)resetDraft();let shoot=ensureReview(m).shootoutMode;if(shoot){renderShootoutPanel();return}root.innerHTML='<h3>Record Shot</h3><label>Shot Outcome</label>'+chips(outcomes,'outcome')+'<label>Shot Situation</label>'+chips(shotSituations,'shotSituation')+'<label>Shot Type</label>'+chips(shotTypes,'type')+'<label>Out Numbered</label>'+chips(outnumberedOptions,'outnumbered')+'<label>Rebound Result</label>'+chips(rebounds,'rebound')+'<label>Notes</label><textarea id="v521ShotNote" placeholder="Optional note">'+escV(vrDraft.note||'')+'</textarea><div class="v521Small">Heat map placement is required. Save/Goal require D and Goal Box. Angle Closed Off requires D only. Penalty Stroke uses the fixed P spot.</div><button type="button" class="btn good" data-v521-save-shot>Save Video-Linked Shot</button><button type="button" class="btn secondary" data-v521-clear-shot>Clear Shot</button><div id="v521ShotStatus" class="v521Status"></div>';renderRecordMaps();}
 function shotLetter(o){return o==='Goal'?'G':(o==='Angle Closed Off'?'A':'S')}
 function shotFill(o){return o==='Goal'?'#ef5350':(o==='Angle Closed Off'?'#ffca28':'#2fd17c')}
-function sitStroke(s){if(s==='Penalty Corner')return {c:'#111',w:3};if(s==='Penalty Stroke')return {c:'#2478ff',w:3};if(/8 Second 1v1/i.test(s))return {c:'#8e44ff',w:3};return {c:'#fff',w:1}}
+function sitStroke(s){if(s==='Penalty Corner')return {c:'#111',w:3};if(s==='Penalty Stroke')return {c:'#2478ff',w:3};if(/6 Second Shoot-out/i.test(s))return {c:'#8e44ff',w:3};return {c:'#fff',w:1}}
 function timelineSvg(shot){let st=sitStroke(shot.shotSituation||shot.situation||'Normal Game Play'),l=shotLetter(shot.outcome),f=shotFill(shot.outcome);return '<svg viewBox="0 0 34 34" width="34" height="34"><circle cx="17" cy="17" r="13.5" fill="'+f+'" stroke="'+st.c+'" stroke-width="'+st.w+'"></circle><text x="17" y="21" text-anchor="middle" font-size="14" font-weight="900" font-family="Arial,Helvetica,sans-serif" fill="#071014">'+l+'</text></svg>'}
 function videoMetaForShot(){let m=currentMatchV(),vr=ensureReview(m),a=activeAngle(m),v=videoEl(),playlist=currentPlaylistTime(),clip=a&&a.clips[a.activeClipIndex]||null,matchTime=vrNoCoverage?Number(vr.masterTime)||0:masterAtCurrent(a);return {version:VR_VERSION,matchTime:matchTime,periodTime:matchTime,period:vr.currentPeriod||1,angleId:a?.id||'',angleName:a?.name||'',clipId:clip?.id||'',clipName:clip?.name||'',clipIndex:a?.activeClipIndex||0,sourceVideoTimestamp:Number(v?.currentTime)||0,playlistTime:playlist,zoom:a?.view?.zoom||1,panX:a?.view?.x||0,panY:a?.view?.y||0,playbackRate:vrPlaybackRate}}
-function saveVideoShot(){let m=currentMatchV();if(!m){alert('Open a match first.');return}if(!vrDraft)resetDraft();let note=$('v521ShotNote')?.value||'';if(vrDraft.shotSituation==='Penalty Stroke')vrDraft.d={x:50,y:36.7};if(!vrDraft.d){$('v521ShotStatus').textContent='Tap the D heat map before saving.';return}if(vrDraft.outcome!=='Angle Closed Off'&&!vrDraft.g){$('v521ShotStatus').textContent='Tap the Goal Box heat map before saving this Save/Goal.';return}let sh={id:uidV(),outcome:vrDraft.outcome,shotSituation:vrDraft.shotSituation,situation:vrDraft.shotSituation,type:vrDraft.type,shotType:vrDraft.type,shotCategory:vrDraft.type,outnumbered:vrDraft.outnumbered,rebound:vrDraft.rebound==='No rebound'?'':vrDraft.rebound,note:note,dX:vrDraft.d.x,dY:vrDraft.d.y,time:new Date().toISOString(),period:ensureReview(m).currentPeriod||1,videoReview:videoMetaForShot()};if(vrDraft.outcome!=='Angle Closed Off'){sh.gX=vrDraft.g.x;sh.gY=vrDraft.g.y}(m.shots||(m.shots=[])).push(sh);ensureOrderV(m).push({kind:'shot',id:sh.id});m.timeline=m.timeline||[];m.timeline.push({eventType:'shot',shotId:sh.id,outcome:sh.outcome,type:sh.type,shotSituation:sh.shotSituation,outnumbered:sh.outnumbered,rebound:sh.rebound,time:sh.time,videoReview:sh.videoReview});m.oppGoals=(m.shots||[]).filter(s=>s.outcome==='Goal').length;saveV();resetDraft();renderV();renderRecordPanel();renderVideoTimeline();renderLongVideoTimeline522();updateVideoUI();}
+function saveVideoShot(){let m=currentMatchV();if(!m){alert('Open a match first.');return}if(m.indoorKeeperActive===false){alert('The goalkeeper is marked off court. Mark the goalkeeper on court before recording a shot.');return}if(!vrDraft)resetDraft();let note=$('v521ShotNote')?.value||'';if(vrDraft.shotSituation==='Penalty Stroke')vrDraft.d={x:50,y:26};if(!vrDraft.d){$('v521ShotStatus').textContent='Tap the D heat map before saving.';return}if(vrDraft.outcome!=='Angle Closed Off'&&!vrDraft.g){$('v521ShotStatus').textContent='Tap the Goal Box heat map before saving this Save/Goal.';return}let sh={id:uidV(),outcome:vrDraft.outcome,shotSituation:vrDraft.shotSituation,situation:vrDraft.shotSituation,type:vrDraft.type,shotType:vrDraft.type,shotCategory:vrDraft.type,outnumbered:vrDraft.outnumbered,rebound:vrDraft.rebound==='No rebound'?'':vrDraft.rebound,note:note,dX:vrDraft.d.x,dY:vrDraft.d.y,time:new Date().toISOString(),period:ensureReview(m).currentPeriod||1,videoReview:videoMetaForShot()};if(vrDraft.outcome!=='Angle Closed Off'){sh.gX=vrDraft.g.x;sh.gY=vrDraft.g.y}(m.shots||(m.shots=[])).push(sh);ensureOrderV(m).push({kind:'shot',id:sh.id});m.timeline=m.timeline||[];m.timeline.push({eventType:'shot',shotId:sh.id,outcome:sh.outcome,type:sh.type,shotSituation:sh.shotSituation,outnumbered:sh.outnumbered,rebound:sh.rebound,time:sh.time,videoReview:sh.videoReview});m.oppGoals=(m.shots||[]).filter(s=>s.outcome==='Goal').length;saveV();resetDraft();renderV();renderRecordPanel();renderVideoTimeline();renderLongVideoTimeline522();updateVideoUI();}
 function timelineEvents(m){let order=ensureOrderV(m),shots=new Map((m.shots||[]).map(s=>[s.id,s])),markers=new Map((m.periodMarkers||[]).map(p=>[p.id,p]));let p=1,events=[];order.forEach(it=>{if(it.kind==='shot'&&shots.has(it.id))events.push({kind:'shot',period:p,shot:shots.get(it.id)});if(it.kind==='period'){events.push({kind:'period',period:p,marker:markers.get(it.id)});p++}});return events}
 function outcomeTickClass522(s){let o=s&&s.outcome||'Save';return o==='Goal'?'Goal':(o==='Angle Closed Off'?'Angle':'Save')}
 function videoLinkedShots522(m,a){return (m?.shots||[]).filter(s=>s.videoReview&&Number.isFinite(Number(s.videoReview.playlistTime))&&(!a||!s.videoReview.angleId||s.videoReview.angleId===a.id)).sort((x,y)=>Number(x.videoReview.playlistTime)-Number(y.videoReview.playlistTime))}
@@ -6294,7 +6327,7 @@ function stepFrame(dir){let v=videoEl();if(!v)return;let fps=Math.max(1,Number($
 function setSpeed(s){vrPlaybackRate=s;let v=videoEl();if(v)v.playbackRate=s;updateVideoUI();}
 function shotOptions(vals,selected){return vals.map(v=>'<option '+(v===selected?'selected':'')+'>'+escV(v)+'</option>').join('')}
 function ensureShootout(m){if(!m.shootout)m.shootout={enabled:true,rounds:[]};m.shootout.enabled=true;if(!Array.isArray(m.shootout.rounds))m.shootout.rounds=[];while(m.shootout.rounds.length<5)m.shootout.rounds.push({home:{result:'Not Taken'},opponent:{result:'Not Taken',saveMethod:'',note:''}});m.shootout.rounds.forEach(r=>{if(!r.home)r.home={result:'Not Taken'};if(!r.opponent)r.opponent={result:'Not Taken',saveMethod:'',note:''};delete r.home.shooter;delete r.opponent.shooter;});return m.shootout}
-function renderShootoutPanel(){let m=currentMatchV(),root=$('v521RecordPanel');if(!root||!m)return;let so=ensureShootout(m);root.innerHTML='<div class="v521ShootoutPanel"><h3>Shootout Mode</h3><p class="v521Small">Normal Record Shot controls are hidden while Shootout Mode is active. Shooter names are not recorded.</p><table class="v521ShootoutTable"><tr><th>Round</th><th>'+escV(m.homeTeam||'Home')+'</th><th>'+escV(m.opponentTeam||m.opponent||'Opponent')+'</th></tr>'+so.rounds.map((r,i)=>'<tr><td><b>'+(i<5?'Round '+(i+1):'Sudden Death '+(i-4))+'</b></td><td><select data-v521-so="'+i+'|home|result">'+shotOptions(['Not Taken','Goal','Save'],r.home.result||'Not Taken')+'</select></td><td><label>Result</label><select data-v521-so="'+i+'|opponent|result">'+shotOptions(['Not Taken','Goal','Save','Miss / Wide / Out','Time Expired','Forced Wide','Retake','Penalty Stroke Awarded','Penalty Stroke Scored','Penalty Stroke Saved / Missed'],r.opponent.result||'Not Taken')+'</select><label>Save Method</label><select data-v521-so="'+i+'|opponent|saveMethod">'+shotOptions(['','Block','Stick save','Foot save','Smother','Forced wide','Stayed up / delayed'],r.opponent.saveMethod||'')+'</select><label>Note</label><input data-v521-so="'+i+'|opponent|note" value="'+escV(r.opponent.note||'')+'"></td></tr>').join('')+'</table><div class="v521VRTools"><button type="button" class="primary" data-v521-save-so>Save Shootout</button><button type="button" data-v521-add-sd>Add Sudden Death Round</button><button type="button" data-v521-close-so>Close Shootout Mode</button><button type="button" class="v521Danger" data-v521-delete-so>Delete Shootout</button></div><div class="v521Status">Shootout results save to the normal match shootout data used by reports.</div></div>';}
+function renderShootoutPanel(){let m=currentMatchV(),root=$('v521RecordPanel');if(!root||!m)return;let so=ensureShootout(m);root.innerHTML='<div class="v521ShootoutPanel"><h3>Shootout Mode</h3><p class="v521Small">Normal Record Shot controls are hidden while Shootout Mode is active. Shooter names are not recorded.</p><table class="v521ShootoutTable"><tr><th>Round</th><th>'+escV(m.homeTeam||'Home')+'</th><th>'+escV(m.opponentTeam||m.opponent||'Opponent')+'</th></tr>'+so.rounds.map((r,i)=>'<tr><td><b>'+(i<3?'Round '+(i+1):'Sudden Death '+(i-2))+'</b></td><td><select data-v521-so="'+i+'|home|result">'+shotOptions(['Not Taken','Goal','Save'],r.home.result||'Not Taken')+'</select></td><td><label>Result</label><select data-v521-so="'+i+'|opponent|result">'+shotOptions(['Not Taken','Goal','Save','Miss / Wide / Out','Time Expired','Forced Wide','Retake','Penalty Stroke Awarded','Penalty Stroke Scored','Penalty Stroke Saved / Missed'],r.opponent.result||'Not Taken')+'</select><label>Save Method</label><select data-v521-so="'+i+'|opponent|saveMethod">'+shotOptions(['','Block','Stick save','Foot save','Smother','Forced wide','Stayed up / delayed'],r.opponent.saveMethod||'')+'</select><label>Note</label><input data-v521-so="'+i+'|opponent|note" value="'+escV(r.opponent.note||'')+'"></td></tr>').join('')+'</table><div class="v521VRTools"><button type="button" class="primary" data-v521-save-so>Save Shootout</button><button type="button" data-v521-add-sd>Add Sudden Death Round</button><button type="button" data-v521-close-so>Close Shootout Mode</button><button type="button" class="v521Danger" data-v521-delete-so>Delete Shootout</button></div><div class="v521Status">Shootout results save to the normal match shootout data used by reports.</div></div>';}
 function syncShootoutControls(){let m=currentMatchV();if(!m?.shootout)return;document.querySelectorAll('[data-v521-so]').forEach(el=>{let [i,side,field]=el.dataset.v521So.split('|');i=Number(i);if(!m.shootout.rounds[i])return;m.shootout.rounds[i][side][field]=el.value});let h=0,o=0,has=false;m.shootout.rounds.forEach(r=>{if(r.home?.result&&r.home.result!=='Not Taken'){has=true;if(['Goal','Penalty Stroke Scored'].includes(r.home.result))h++}if(r.opponent?.result&&r.opponent.result!=='Not Taken'){has=true;if(['Goal','Penalty Stroke Scored'].includes(r.opponent.result))o++}});m.shootout.ourScore=h;m.shootout.opponentScore=o;m.shootout.result=h>o?'Won':o>h?'Lost':'Drawn';if(has)m.shootout.enabled=true;saveV();}
 function saveOutcome(){let m=currentMatchV();if(!m)return;let h=Number($('v521HomeGoals')?.value||m.homeGoals||0);m.homeGoals=h;m.oppGoals=(m.shots||[]).filter(s=>s.outcome==='Goal').length;m.result=h>m.oppGoals?'Win':h<m.oppGoals?'Loss':'Draw';saveV();renderV();renderVideoReview();}
 function renderVideoReview(){pauseAllVideoAudio522(null,true);let root=$('v521VideoReviewRoot');if(!root)return;let m=currentMatchV();if(!m){root.innerHTML='<div class="card"><h2>Video Stats Review</h2><p>Select or start a match from the Match tab, then open Video Stats Review.</p><button class="btn secondary" onclick="showTab(\'match\')">Return to Match Setup</button></div>';return}vrMatchId=m.id;let vr=ensureReview(m),a=activeAngle(m);root.innerHTML='<div class="card"><div class="v521VRHeader"><img class="v521VRBanner" src="assets/video-stats-review-banner.png" alt="Video Stats Review"><div><button type="button" class="btn secondary" data-v521-return-match>Return to Match</button></div></div><div class="v521VRMatchInfo"><b>'+escV(m.name||((m.date||'')+' - '+(m.homeTeam||'')+' VS '+(m.opponentTeam||m.opponent||'')))+'</b><br>Goalie: '+escV(activeG()?.name||'')+' - '+escV(m.homeTeam||'Home')+' vs '+escV(m.opponentTeam||m.opponent||'Opponent')+'<div class="v521VRGrid3"><div><label>Home Goals</label><input id="v521HomeGoals" type="number" min="0" value="'+escV(m.homeGoals??0)+'"></div><div><label>Opponent Goals</label><input readonly value="'+escV((m.shots||[]).filter(s=>s.outcome==='Goal').length)+'"></div><div><label>Status</label><input readonly value="'+escV(m.result||'In progress')+'"></div></div><button type="button" class="btn good" data-v521-save-outcome>Save Match Outcome</button> '+(((Number(m.homeGoals||0)===(m.shots||[]).filter(s=>s.outcome==='Goal').length)&&m.result==='Draw')?'<button type="button" class="btn secondary" data-v521-open-so>Record Shootout</button>':'')+'</div><div class="v521VRLayout"><div><div class="v521VRStage" id="v521Stage"><div id="v521Empty" class="v521VREmpty"><strong>No video loaded</strong><br>Add a video angle on the right.</div><video id="v521Video" playsinline></video><div class="v521VRBadge" id="v521Badge">'+escV(sourceBadge(a))+'</div></div><div class="v523ControlSection"><div class="v523ControlRow"><button type="button" id="v521Play" class="primary">Play</button><button type="button" data-v521-back5>-5s</button><button type="button" data-v521-frame-back>Frame -</button><button type="button" data-v521-frame-forward>Frame +</button><span class="v523SpeedGroup"><button type="button" data-v521-speed="0.25">0.25x</button><button type="button" data-v521-speed="0.5">0.5x</button><button type="button" data-v521-speed="2">2x</button><button type="button" data-v521-speed="5">5x</button><button type="button" data-v521-speed="10">10x</button></span></div><div class="v523TimelineWrap"><input id="v521Seek" type="range" min="0" step="0.01" value="0"><span class="v523TimeReadout"><span id="v521Now">00:00</span>/<span id="v521Total">00:00</span></span></div><div class="v522VideoTimeline"><div class="v522VideoTimelineHead"><b>Video Timeline</b><span>Save / Goal / Angle markers show when shots were taken. Tap a marker to jump to that moment.</span></div><div class="v522VideoTrack" id="v522VideoTrack"><div class="v522ClipBands" id="v522ClipBands"></div><div class="v522VideoPlayhead" id="v522VideoPlayhead"></div><div id="v522VideoTimelineMarkers"></div></div></div><div class="v523ControlRow"><span class="v523ZoomGroup"><button type="button" data-v521-zoom-out>Zoom -</button><span id="v521ZoomLabel" class="v521Small">100%</span><button type="button" data-v521-zoom-in>Zoom +</button><button type="button" data-v521-reset-view>Reset Framing</button><button type="button" data-v521-fullscreen>Full Screen</button><label>FPS <input id="v521Fps" type="number" value="25" min="1" max="120"></label></span></div><div class="v523ControlRow"><span id="v521PeriodLabel"></span><span class="v523SyncGroup"><button type="button" data-v521-end-period>End Period</button><button type="button" data-v521-sync>Set Sync</button><button type="button" data-v521-clear-sync>Clear Sync</button><span id="v521SyncStatus" class="v521Small"></span></span></div></div></div><aside class="v521VRSide"><h3>Video Angles</h3><div class="v521AddAngle"><input id="v521AngleName" placeholder="Angle name"><input id="v521Files" type="file" accept="video/*,.mp4,.mov,.m4v" multiple class="v521Hidden"><button type="button" class="primary" data-v521-add-angle>Add Angle Videos</button><button type="button" data-v521-reconnect>Reconnect Videos</button><input id="v521MoreFiles" type="file" accept="video/*,.mp4,.mov,.m4v" multiple class="v521Hidden"><div class="v522AddHint">Add Angle Videos opens the file picker, creates the angle, and appends selected videos in order. Use ＋ Videos on an angle to append more videos.</div></div><div id="v521Angles" class="v521Angles"></div><p class="v521Small">Only one angle plays at a time. Each angle remembers zoom, pan, sync point, playlist and position. Local video files may need to be reselected after a browser refresh.</p></aside></div><div id="v521RecordPanel" class="v521RecordPanel"></div><div class="v521MapPanel"><h3>Heat Maps</h3><div class="v521VRGrid2"><div><h4>D Heat Map</h4><div class="v521MapHint">Tap the exact D location.</div><div id="v521DMap" class="v521MapBox"></div></div><div><h4>Goal Box Heat Map</h4><div class="v521MapHint">Required for Saves and Goals. Not used for Angle Closed Off.</div><div id="v521GMap" class="v521MapBox"></div></div></div></div><div class="v521TimelinePanel"><h3>Match Timeline</h3><div id="v521MatchTimeline"></div></div><div class="v521ExportPanel"><h3>Export Clips</h3><div class="v521VRClipTools"><button type="button" data-v521-clip-in>Set Clip In</button><span id="v521ClipInLabel">In: '+fmt(vr.clipIn||0)+'</span><button type="button" data-v521-clip-out>Set Clip Out</button><span id="v521ClipOutLabel">Out: '+fmt(vr.clipOut||0)+'</span><label>Before shot <input id="v521BeforeShot" type="number" value="5" min="0" style="width:62px"></label><label>After shot <input id="v521AfterShot" type="number" value="8" min="0" style="width:62px"></label><button type="button" class="primary" data-v521-export-active>Export Selected Clip</button><button type="button" data-v521-export-shot>Export Current Shot Clip</button><button type="button" data-v521-export-all-current>Export Every Shot - Current Angle</button><button type="button" data-v521-export-all-angles>Export Every Shot - Every Angle</button><button type="button" class="v521Danger" data-v521-cancel-export>Cancel Batch</button></div><div class="v523DownloadNotice">Batch exports download each shot as a separate MP4. Your browser may show a pop-up asking whether to allow multiple downloads - choose Allow.</div><div id="v521ExportStatus" class="v521Status">MP4 export uses the browser MediaRecorder engine and stays local on this device.</div></div></div>';renderAngles();renderRecordPanel();renderVideoTimeline();renderLongVideoTimeline522();if(a&&a.clips.length)loadClip(a,a.activeClipIndex||0,a.position||0,false);updateVideoUI();}
@@ -6625,7 +6658,7 @@ renderWaveforms530=async function(){
 const v547VideoExtensions=/\.(mp4|mov|m4v|webm)$/i;
 const v547FolderDB='HGSMatchVideoFolders';
 let v547ExportShot=null;
-const v547OverlayLogo=new Image();v547OverlayLogo.src='assets/field-hockey-app-icon-v5-104.png';
+const v547OverlayLogo=new Image();v547OverlayLogo.src='assets/indoor-hockey-app-icon-v1-0.png';
 function folderDB547(){return new Promise((ok,bad)=>{let q=indexedDB.open(v547FolderDB,1);q.onupgradeneeded=()=>q.result.createObjectStore('folders');q.onsuccess=()=>ok(q.result);q.onerror=()=>bad(q.error)})}
 async function saveFolderHandle547(matchId,handle){let dbx=await folderDB547();return new Promise((ok,bad)=>{let tx=dbx.transaction('folders','readwrite');tx.objectStore('folders').put(handle,String(matchId));tx.oncomplete=()=>{dbx.close();ok()};tx.onerror=()=>{dbx.close();bad(tx.error)}})}
 async function loadFolderHandle547(matchId){let dbx=await folderDB547();return new Promise((ok,bad)=>{let q=dbx.transaction('folders').objectStore('folders').get(String(matchId));q.onsuccess=()=>{dbx.close();ok(q.result||null)};q.onerror=()=>{dbx.close();bad(q.error)}})}
@@ -6792,7 +6825,7 @@ document.addEventListener('click',function(e){let header=e.target?.closest?.('[d
 document.addEventListener('click',function(e){let button=e.target?.closest?.('[data-v558-switch]');if(!button)return;e.preventDefault();e.stopImmediatePropagation();switchAngle(button.dataset.v558Switch)},true);
 /* v5.62 synchronized second-screen playback window */
 let v559SecondWindow=null,v559SecondSyncTimer=0,v559SecondDrawing=false;
-function secondScreenHtml559(){return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hockey Goalie Stats — Second Screen</title><style>'+
+function secondScreenHtml559(){return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Indoor Hockey Goalie Stats — Second Screen</title><style>'+
 '*{box-sizing:border-box}[hidden]{display:none!important}html,body{width:100%;height:100%;margin:0;background:#07090a;color:#f4f7f8;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;padding:10px;overflow:hidden}header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 12px;border:1px solid #40515a;border-radius:14px;background:#101a20}header b{font-size:1.05rem}header small{display:block;color:#aebbc1;font-weight:700}.connected{color:#8ff0b9;font-size:.78rem;font-weight:900}.stage{position:relative;display:grid;place-items:center;min-height:0;overflow:hidden;border:1px solid #40515a;border-radius:16px;background:#000}.stage canvas{display:block;max-width:100%;max-height:100%;touch-action:none}.empty{display:grid;place-items:center;position:absolute;inset:0;padding:24px;color:#aebbc1;text-align:center;font-weight:800}.badge{position:absolute;left:14px;top:14px;max-width:calc(100% - 28px);overflow:hidden;padding:7px 10px;border-radius:8px;background:rgba(5,15,20,.78);font-weight:900;text-overflow:ellipsis;white-space:nowrap}.controls{display:grid;gap:8px;padding:10px;border:1px solid #40515a;border-radius:14px;background:#101417}.row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.row button,.run{appearance:none;min-height:38px;border:1px solid #52616a;border-radius:999px;background:#2b2f32;color:#f4f4f4;padding:8px 13px;font:inherit;font-weight:800}.row button:hover{border-color:#5de4f4}.row button.on,.row button.primary{border-color:#5de4f4;background:#143942;color:#d8fbff}.run{display:inline-flex;align-items:center;gap:7px;padding:4px 9px}.run select{border:0;border-radius:999px;background:#151a1d;color:#fff;padding:7px 25px 7px 9px;font:inherit;font-weight:800}.timeline{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:9px}.timeline input{width:100%;accent-color:#40d7ee}.time{min-width:116px;text-align:right;color:#d3dde1;font-variant-numeric:tabular-nums;font-weight:800}.angles{display:flex;gap:7px;flex:1;flex-wrap:wrap}.angles button{flex:1 1 130px}.volume{display:inline-flex;align-items:center;gap:7px}.volume input{width:110px;accent-color:#40d7ee}.volume span{min-width:38px;color:#d3dde1;font-weight:800}.hint{color:#9eabb1;font-size:.75rem;font-weight:700}@media(max-width:720px){body{padding:6px;gap:6px}.controls{padding:7px}.row button{padding:7px 10px}.timeline{grid-template-columns:1fr}.time{text-align:left}.badge{font-size:.78rem}}'+
 '</style></head><body><header><div><b>Video Stats Review — Second Screen</b><small id="v559SecondTitle">Waiting for Video Stats Review…</small></div><span class="connected" id="v559SecondConnection">Connected</span></header><main class="stage" id="v559SecondStage"><canvas id="v559SecondCanvas" hidden></canvas><div class="empty" id="v559SecondEmpty">Open a match in Video Stats Review.</div><div class="badge" id="v559SecondBadge">No video loaded</div></main><section class="controls"><div class="row"><label class="run">Camera Run <select id="v559SecondRun" aria-label="Camera Run"></select></label><button type="button" class="primary" data-v559-command="play" id="v559SecondPlay">Play</button><button type="button" data-v559-command="back5">−5s</button><button type="button" data-v559-command="frameBack">Frame −</button><button type="button" data-v559-command="frameForward">Frame +</button><button type="button" data-v559-speed=".25">0.25x</button><button type="button" data-v559-speed=".5">0.5x</button><button type="button" data-v559-speed="1">1x</button><button type="button" data-v559-speed="2">2x</button><button type="button" data-v559-speed="5">5x</button><button type="button" data-v559-speed="10">10x</button><span class="volume"><button type="button" data-v559-command="mute" id="v559SecondMute">🔊</button><input id="v559SecondVolume" type="range" min="0" max="100" step="1" aria-label="Playback volume"><span id="v559SecondVolumeValue">100%</span></span></div><div class="timeline"><input id="v559SecondSeek" type="range" min="0" max="1" step=".01" value="0" aria-label="Unified video timeline"><span class="time"><span id="v559SecondNow">00:00</span> / <span id="v559SecondTotal">00:00</span></span></div><div class="row"><div class="angles" id="v559SecondAngles"></div><button type="button" data-v559-command="zoomOut">Zoom −</button><button type="button" data-v559-command="zoomIn">Zoom +</button><button type="button" data-v559-command="resetFraming">Reset Framing</button><button type="button" data-v559-command="fullscreen">Full Screen</button><button type="button" data-v559-command="close">Close Player</button></div></section></body></html>'}
 function secondScreenOpen559(){return !!(v559SecondWindow&&!v559SecondWindow.closed)}
@@ -7011,12 +7044,12 @@ bindEvents();[0,300,1000,2500].forEach(ms=>setTimeout(()=>{installButtons();if($
 
 
 <script>
-/* Hockey Goalie Stats v5.23: Video Review standalone-style video add workflow, ghost-audio fix, and long video timeline bar */
+/* Indoor Hockey Goalie Stats v5.23: Video Review standalone-style video add workflow, ghost-audio fix, and long video timeline bar */
 window.v522VideoReviewFixes = "Standalone-style Add Angle Videos / plus Videos workflow, all-video pause on manual pause and angle switch, and long timeline shot markers.";
 </script>
 
 <script>
-/* Hockey Goalie Stats v5.23: Video Review controls grouped, edit-videos manager, no Reports/Prev/Next, duplicate match names */
+/* Indoor Hockey Goalie Stats v5.23: Video Review controls grouped, edit-videos manager, no Reports/Prev/Next, duplicate match names */
 window.v523VideoReviewAndMatchNames='grouped playback controls, Edit Videos angle manager, multiple-download guidance, same-day duplicate opponent numbering';
 window.v524VideoReview='universal camera timestamp, full-window review workspace, dark UI controls';
 </script>
@@ -7106,7 +7139,7 @@ function generate(){
   const own=ownMetrics(ms),bm=benchmarkMetrics(data),ages=matchAgeGroups(ms,g),range=$('v569BenchmarkRange')?.value==='last5'?'Last 5 Matches':'Full Year '+($('v569BenchmarkYear')?.value||''),level=$('v569BenchmarkLevel')?.value||'all',selectedTier=$('v569BenchmarkTier')?.value||'all',goalkeepers=Number(data.goalkeepers??data.sample?.goalkeepers??0),matches=Number(data.matches??data.sample?.matches??0),records=Number(data.shots??data.sample?.shots??0),limited=data.limitedData===true||goalkeepers<5||matches<15||records<100;
   const cohort='<h2>Report Selection</h2><div class="v471ProfileGrid"><div><b>Goalkeeper Matches</b><br>'+e(range)+'</div><div><b>Age Group</b><br>'+e(ages.join(' / ')||'Not specified')+'</div><div><b>Gender</b><br>'+e(g.gender||'Not specified')+'</div><div><b>Team Level</b><br>'+e(level==='all'?'All Team Levels':level)+'</div><div><b>Team Tier</b><br>'+e(selectedTier==='all'?'All Team Tiers':selectedTier)+'</div><div><b>Benchmark Sample</b><br>'+goalkeepers+' goalkeepers · '+matches+' matches · '+records+' shots</div></div>'+(limited?'<p><span class="v569Limited">Limited Data</span> Interpret this benchmark carefully because the comparison sample is small.</p>':'');
   const body=cohort+comparisonTable(own,bm)+breakdownTable(ms,data,'shotSituation','Shot Situation Comparison')+breakdownTable(ms,data,'shotType','Shot Type Comparison')+breakdownTable(ms,data,'outnumbered','Outnumbered Comparison')+breakdownTable(ms,data,'rebound','Rebound Comparison')+heatMaps(data)+trainingFocus(ms,data,own,bm);
-  const root=$('reportOutput'),header=typeof reportHeader==='function'?reportHeader('Benchmark Report',g,ms.length+' match(es)'):'<h1>Benchmark Report</h1><p><b>'+e(g.name||'')+'</b></p>';root.style.display='block';root.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/field-hockey-banner-v467.png" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+header+body+'</div></td></tr></tbody></table>';showTab('reports')
+  const root=$('reportOutput'),header=typeof reportHeader==='function'?reportHeader('Benchmark Report',g,ms.length+' match(es)'):'<h1>Benchmark Report</h1><p><b>'+e(g.name||'')+'</b></p>';root.style.display='block';root.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+header+body+'</div></td></tr></tbody></table>';showTab('reports')
 }
 const oldUpdate=window.updateV471ReportFields;
 window.updateV471ReportFields=function(){const type=$('v471ReportType')?.value;if(type==='benchmark')return renderFields();return typeof oldUpdate==='function'?oldUpdate.apply(this,arguments):undefined};
@@ -7165,7 +7198,7 @@ function mapping(data){const bm=data?.metrics||data?.summary||data||{},breakdown
   'Penalty Corner Save Rate':rate(breakdowns,['shotSituation','Penalty Corner','saveRate']),
   'Penalty Stroke Save Rate':rate(breakdowns,['shotSituation','Penalty Stroke','saveRate']),
   'In Game 1v1 Save Rate':rate(breakdowns,['shotSituation','In Game 1v1','saveRate']),
-  '8 Second 1v1 Save Rate':rate(breakdowns,['shotSituation','8 Second 1v1','saveRate']),
+  '6 Second Shoot-out Save Rate':rate(breakdowns,['shotSituation','6 Second Shoot-out','saveRate']),
   'Safe Rebound Rate':percent(bm.safeReboundRate),
   'Rate of Attempts at Goals Out Numbered':percent(bm.outnumberedAttemptRate)
 }}
@@ -7251,5 +7284,18 @@ setTimeout(()=>{decorateBenchmark573();const g=goalie();if(g?.benchmarkConsent==
 </script>
 <script src="single-goalie-transfer.js"></script>
 <script src="multi-goalie.js"></script>
+<script>
+/* Indoor Hockey v1.0 court-participation controls. */
+(function(){
+  function updateStatus(){const m=activeMatch(),el=document.getElementById('indoorKeeperStatus');if(el)el.textContent=m?.indoorKeeperActive===false?'Off court — field players only':'On court'}
+  window.setIndoorKeeperActive=function(active){const m=activeMatch();if(!m){alert('Start a match first.');return}m.indoorKeeperActive=!!active;m.goalkeeperEvents=m.goalkeeperEvents||[];m.goalkeeperEvents.push({id:uid(),type:active?'Goalkeeper On':'Goalkeeper Off',active:!!active,time:new Date().toISOString(),period:m.videoReview?.currentPeriod||1});saveDB();updateStatus();showStatus('shotStatus',active?'Goalkeeper marked on court.':'Goalkeeper marked off court. Empty-goal team events will not affect goalkeeper statistics.')};
+  const startBeforeIndoor=startOrUpdateMatch;startOrUpdateMatch=function(){const result=startBeforeIndoor.apply(this,arguments),m=activeMatch();if(m&&m.indoorKeeperActive===undefined){m.indoorKeeperActive=true;m.sportType='indoor_hockey';saveDB()}updateStatus();return result};window.startOrUpdateMatch=startOrUpdateMatch;
+  const renderBeforeIndoor=renderAll;renderAll=function(){const result=renderBeforeIndoor.apply(this,arguments);updateStatus();renderIndoorTagButtons();return result};window.renderAll=renderAll;
+  updateStatus();renderIndoorTagButtons();
+})();
+</script>
+<style>
+.indoorKeeperBar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:14px;margin:0 0 16px;border:1px solid #91b4c8;border-radius:14px;background:#e7f1f6}.indoorKeeperBar>div{display:flex;gap:8px;flex-wrap:wrap}.indoorKeeperBar .btn{width:auto;margin:0}
+</style>
 </body>
 </html>

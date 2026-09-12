@@ -1,0 +1,15 @@
+{
+  "name": "Indoor Hockey Goalie Stats: Data Driven Development",
+  "short_name": "Indoor Goalie Stats",
+  "description": "Indoor hockey goalkeeper statistics, reports and video review.",
+  "start_url": "./indoor-hockey.html?v=1.0",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#dceaf2",
+  "theme_color": "#dceaf2",
+  "orientation": "portrait",
+  "icons": [
+    {"src":"icons/indoor-hockey-192-v1-0.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"icons/indoor-hockey-512-v1-0.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}

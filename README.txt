@@ -1,7 +1,10 @@
-Data Driven Development Suite v1.10
-Field Hockey Goalie Stats v5.103
-Hockey Goalie Trials v1.7
-Stats Recorder v1.37
+Data Driven Development Suite v1.11
+Field Hockey Goalie Stats v5.104
+Indoor Hockey Goalie Stats v1.0
+Hockey Goalie Trials v1.8
+Stats Recorder v1.38
+
+Version 1.11 adds the complete Indoor Hockey Goalie Stats module. Indoor matches use a separate store and benchmark cohort while sharing the central goalkeeper directory. The module includes four-period indoor defaults, six-second shoot-outs with three initial attempts, goalkeeper on/off participation, indoor detail tags, shared heat maps and fixed indoor penalty-stroke D placement. The central platform now exposes Indoor reports, Indoor-only backups and the official FIH Indoor Hockey rules resource. The Recorder sport selector exports Field or Indoor matches and its menu/return control has been removed.
 
 Version 1.10 adds approved banner-logo links for Field Hockey Goalie Stats,
 Field Hockey Trials and Stats Recorder directly below Home in the platform

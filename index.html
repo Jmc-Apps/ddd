@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#d4e5ee">
   <meta name="description" content="Data Driven Development sports performance suite">
-  <title>Data Driven Development v1.10</title>
+  <title>Data Driven Development v1.11</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon-192.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -24,8 +24,9 @@
         <button class="nav-link active" data-page="home">Home</button>
         <div class="sidebar-app-links" aria-label="Applications">
           <a class="sidebar-app-link" href="field-hockey.html" aria-label="Open Field Hockey Goalie Stats"><img src="assets/field-hockey-banner-v467.png" alt="Field Hockey Goalie Stats"></a>
-          <a class="sidebar-app-link" href="trials/index.html" aria-label="Open Field Hockey Trials"><img src="trials/assets/trials-banner-v1-7.png" alt="Field Hockey Trials"></a>
-          <button class="sidebar-app-link recorder-open" type="button" aria-label="Open Stats Recorder"><img src="recorder/assets/ddd-banner-v1-37.png" alt="Data Driven Development Stats Recorder"><span>Stats Recorder</span></button>
+          <a class="sidebar-app-link" href="trials/index.html" aria-label="Open Field Hockey Trials"><img src="trials/assets/trials-banner-v1-8.png" alt="Field Hockey Trials"></a>
+          <a class="sidebar-app-link" href="indoor-hockey.html" aria-label="Open Indoor Hockey Goalie Stats"><img src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></a>
+          <button class="sidebar-app-link recorder-open" type="button" aria-label="Open Stats Recorder"><img src="recorder/assets/ddd-banner-v1-38.png" alt="Data Driven Development Stats Recorder"><span>Stats Recorder</span></button>
         </div>
         <div class="nav-heading">Shared services</div>
         <button class="nav-link" data-page="goalies">Enroll Goalie</button>
@@ -34,7 +35,7 @@
         <button class="nav-link" data-page="backup">Backup &amp; Restore</button>
         <button class="nav-link" data-page="resources">Resources</button>
       </nav>
-      <div class="suite-version">Data Driven Development<br><b>Version 1.10</b></div>
+      <div class="suite-version">Data Driven Development<br><b>Version 1.11</b></div>
     </aside>
 
     <main>
@@ -48,11 +49,9 @@
             <div class="module-card-top"><img src="assets/home-emblem-v467.png" alt="Field Hockey Goalie Stats logo" class="module-logo"><span class="status ready">Available</span></div><h2>Field Hockey Goalie Stats</h2><p>Record matches, review video, analyse performance, heat maps and reports.</p><strong>Open Field Hockey Goalie Stats →</strong>
           </a>
           <a class="module-card trials" href="trials/index.html">
-            <div class="module-card-top"><img src="trials/assets/icon-192-v1-7.png" alt="Field Hockey Trials logo" class="module-logo"><span class="status ready">Available</span></div><h2>Field Hockey Trials</h2><p>Plan fair trials, record equal drills, compare goalkeepers and create selection reports.</p><strong>Open Field Hockey Trials →</strong>
+            <div class="module-card-top"><img src="trials/assets/icon-192-v1-8.png" alt="Field Hockey Trials logo" class="module-logo"><span class="status ready">Available</span></div><h2>Field Hockey Trials</h2><p>Plan fair trials, record equal drills, compare goalkeepers and create selection reports.</p><strong>Open Field Hockey Trials →</strong>
           </a>
-          <article class="module-card indoor pending" aria-disabled="true">
-            <div class="module-card-top"><span class="module-logo future-logo"><img src="icon-192.png" alt="Data Driven Development logo"></span><span class="status">Next module</span></div><h2>Indoor Hockey Stats</h2><p>The indoor-specific recording and reporting workflow will be built next.</p><strong>Not active yet</strong>
-          </article>
+          <a class="module-card indoor" href="indoor-hockey.html"><div class="module-card-top"><img src="assets/indoor-hockey-logo-v1-0.png" alt="Indoor Hockey Goalie Stats logo" class="module-logo"><span class="status ready">Available</span></div><h2>Indoor Hockey Goalie Stats</h2><p>Record indoor matches with indoor periods, six-second shoot-outs and indoor-specific analysis.</p><strong>Open Indoor Hockey Goalie Stats →</strong></a>
         </div>
         <h2 class="section-title">Shared services</h2>
         <div class="service-grid">
@@ -98,14 +97,14 @@
 
       <section class="page" id="page-benchmarking">
         <div class="page-heading"><div><p class="eyebrow">Shared service</p><h1>Central Benchmarking</h1><p>Participation is managed here while Field and Indoor benchmark cohorts remain separate.</p></div></div>
-        <div class="notice">This structural release keeps the existing Field Hockey cloud connection. Indoor data will use the same central service after the Indoor module is added.</div>
+        <div class="notice">Field and Indoor benchmark cohorts remain separate while participation and uploads stay central.</div>
         <div id="benchmarkList" class="benchmark-list"></div>
       </section>
 
       <section class="page" id="page-backup">
         <div class="page-heading"><div><p class="eyebrow">Shared service</p><h1>Backup &amp; Restore</h1><p>One backup protects all connected Data Driven Development data on this device.</p></div></div>
         <div class="backup-grid">
-          <article class="panel"><h2>Create Backup</h2><label>Backup contents<select id="backupScope"><option value="complete">Complete Data Driven Development suite</option><option value="field">Field Hockey only</option><option value="trials">Field Hockey Trials only</option><option value="recorder">Stats Recorder only</option><option value="goalie">One goalie and all related data</option><option value="directory">Goalkeepers &amp; team profiles only</option></select></label><label id="backupGoalieWrap" class="hidden">Goalie<select id="backupGoalie"></select></label><button class="primary" id="downloadBackup" type="button">Download Backup</button><p class="form-note">Backups include permanent record IDs and update times for safe merging.</p></article>
+          <article class="panel"><h2>Create Backup</h2><label>Backup contents<select id="backupScope"><option value="complete">Complete Data Driven Development suite</option><option value="field">Field Hockey only</option><option value="indoor">Indoor Hockey only</option><option value="trials">Field Hockey Trials only</option><option value="recorder">Stats Recorder only</option><option value="goalie">One goalie and all related data</option><option value="directory">Goalkeepers &amp; team profiles only</option></select></label><label id="backupGoalieWrap" class="hidden">Goalie<select id="backupGoalie"></select></label><button class="primary" id="downloadBackup" type="button">Download Backup</button><p class="form-note">Backups include permanent record IDs and update times for safe merging.</p></article>
           <article class="panel"><h2>Restore or Import</h2><label>Backup file<input id="restoreFile" type="file" accept=".dddbackup,.json,application/json"></label><div id="backupPreview" class="backup-preview empty">Choose a backup to preview its contents.</div><label>Restore method<select id="restoreMode"><option value="merge">Merge — keep existing data and prefer newer records</option><option value="replace">Replace included sections</option></select></label><button class="primary" id="restoreBackup" type="button" disabled>Restore Selected Backup</button><p id="backupStatus" class="form-note"></p></article>
           <article class="panel"><h2>Recorder Match Import</h2><p>Import a match export from the Data Driven Development Stats Recorder into Field Hockey Stats.</p><input id="recorderImportFile" type="file" accept=".json,application/json"><button class="primary" id="importRecorderMatch" type="button">Import Recorder Match</button><p id="recorderImportStatus" class="form-note"></p></article>
           <article class="panel danger-zone"><h2>Clear Local Data</h2><p>Clear the complete suite or one selected section. A six-digit confirmation is always required.</p><label>Data to clear<select id="clearScope"><option value="complete">Complete suite</option><option value="field">Field Hockey</option><option value="trials">Field Hockey Trials</option><option value="recorder">Stats Recorder</option></select></label><button class="danger" id="clearData" type="button">Clear Selected Data</button></article>
@@ -119,6 +118,7 @@
           <article class="resource-card"><h2>FIH Rules of Hockey 2026</h2><p>Shared official rules reference for Field Hockey workflows.</p><div><a class="primary" href="resources/FIH_Rules_of_Hockey_2026.pdf" target="_blank" rel="noopener">Open</a><a class="secondary" href="resources/FIH_Rules_of_Hockey_2026.pdf" download>Download</a></div></article>
           <article class="resource-card"><h2>Field Hockey Stats Manual</h2><p>Setup, recording, analysis, reports and maintenance guidance.</p><div><a class="primary" href="resources/Hockey_Goalie_Stats_Main_App_User_Manual.pdf" target="_blank" rel="noopener">Open</a><a class="secondary" href="resources/Hockey_Goalie_Stats_Main_App_User_Manual.pdf" download>Download</a></div></article>
           <article class="resource-card"><h2>Stats Recorder Manual</h2><p>Match setup, live recording and transfer instructions.</p><div><a class="primary" href="resources/Goalie_Stats_Recorder_User_Manual.pdf" target="_blank" rel="noopener">Open</a><a class="secondary" href="resources/Goalie_Stats_Recorder_User_Manual.pdf" download>Download</a></div></article>
+          <article class="resource-card"><h2>FIH Rules of Indoor Hockey 2023</h2><p>Official indoor hockey rules reference used by the Indoor Hockey Goalie Stats workflow.</p><div><a class="primary" href="https://www.fih.hockey/static-assets/pdf/fih-rules-of-indoor-hockey-2023.pdf" target="_blank" rel="noopener">Open Official Rules</a></div></article>
         </div>
       </section>
     </main>

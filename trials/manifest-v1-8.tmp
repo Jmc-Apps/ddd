@@ -2,7 +2,7 @@
   "name": "Hockey Goalie Trials: Data Driven Selection",
   "short_name": "Goalie Trials",
   "description": "Run fair, evidence-led hockey goalkeeper trials.",
-  "start_url": "./index.html?v=1.8",
+  "start_url": "./index.html?v=1.7",
   "scope": "./",
   "display": "standalone",
   "background_color": "#dceaf2",

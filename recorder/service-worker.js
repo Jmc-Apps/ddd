@@ -1,16 +1,16 @@
-const CACHE_NAME='ddd-stats-recorder-v1-37-sidebar-app-links';
+const CACHE_NAME='ddd-stats-recorder-v1-38-sidebar-app-links';
 const FILES=[
  './',
  './index.html',
  './manifest.webmanifest',
- './manifest.webmanifest?v=1.37',
+ './manifest.webmanifest?v=1.38',
  './assets/d_heat_map.png',
  './assets/goal_box_heat_map.png',
- './assets/ddd-banner-v1-37.png',
- './icon-192-v1-37.png',
- './icon-512-v1-37.png',
- './apple-touch-icon-v1-37.png',
- './favicon-32-v1-37.png'
+ './assets/ddd-banner-v1-38.png',
+ './icon-192-v1-38.png',
+ './icon-512-v1-38.png',
+ './apple-touch-icon-v1-38.png',
+ './favicon-32-v1-38.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(FILES)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
