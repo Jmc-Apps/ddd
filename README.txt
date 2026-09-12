@@ -1,7 +1,13 @@
-Data Driven Development Suite v1.9
-Field Hockey Goalie Stats v5.102
-Hockey Goalie Trials v1.6
-Stats Recorder v1.36
+Data Driven Development Suite v1.10
+Field Hockey Goalie Stats v5.103
+Hockey Goalie Trials v1.7
+Stats Recorder v1.37
+
+Version 1.10 adds approved banner-logo links for Field Hockey Goalie Stats,
+Field Hockey Trials and Stats Recorder directly below Home in the platform
+sidebar. The Recorder link retains its Yes/No confirmation. Shared services
+remain grouped below the app links, and the optimized package structure is
+preserved without historical or duplicate artwork.
 
 Version 1.9 is a clean-package release.
 

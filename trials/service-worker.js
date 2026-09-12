@@ -1,5 +1,5 @@
-const CACHE = 'hockey-goalie-trials-v1-6-clean-package';
-const ASSETS = ['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./assets/trials-banner-v1-6.png','./assets/icon-192-v1-6.png','./assets/icon-512-v1-6.png','./assets/ddd-banner-v1-6.png'];
+const CACHE = 'hockey-goalie-trials-v1-7-sidebar-app-links';
+const ASSETS = ['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./assets/trials-banner-v1-7.png','./assets/icon-192-v1-7.png','./assets/icon-512-v1-7.png','./assets/ddd-banner-v1-7.png'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', event => {
