@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Indoor Hockey Goalie Stats: Data Driven Development v1.0</title>
+<title>Indoor Hockey Goalie Stats: Data Driven Development v1.1</title>
 <link rel="manifest" href="indoor-hockey.webmanifest">
 <meta name="theme-color" content="#d4e5ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1979,6 +1979,22 @@ body .v539Break button{background:#d7e8f1!important;color:#17374e!important;bord
 body .v521Danger,body .v523ControlSection .v521Danger,body .v521RecordPanel .v521Danger,
 body .v523EditVideosPanel .v521Danger{background:#c6404d!important;color:#fff!important;border-color:#c6404d!important}
 
+/* v1.1 approved Home artwork and Match-tab form palette in Match Editor. */
+.homeLogoTab{display:flex!important;align-items:center;justify-content:center;padding:6px 9px!important;min-height:64px!important}
+.homeLogoTab img{display:block;width:100%;height:48px;object-fit:contain}
+body.v570SidebarCollapsed .homeLogoTab img{display:none}
+#matchEditor input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+#matchEditor select,#matchEditor textarea{
+  background:#fbfdfe!important;color:#17374e!important;border:1px solid #8eb2c5!important;opacity:1!important
+}
+#matchEditor label,#matchEditor .v430Field label,#matchEditor .v428Field label{color:#35566c!important}
+#matchEditor input:focus,#matchEditor select:focus,#matchEditor textarea:focus{
+  border-color:#087fa4!important;outline:3px solid rgba(8,127,164,.18)!important
+}
+#matchEditor input:disabled,#matchEditor input[readonly],#matchEditor select:disabled,#matchEditor textarea:disabled{
+  background:#e7f1f6!important;color:#35566c!important;-webkit-text-fill-color:#35566c!important
+}
+
 @media print{
   body .stat,body .statCard,body .sliderBox,body .v590ShootoutCard{box-shadow:none!important;background:#fff!important}
 }
@@ -1995,8 +2011,8 @@ body .v523EditVideosPanel .v521Danger{background:#c6404d!important;color:#fff!im
 <main>
 <nav id="v570Sidebar" class="tabs noPrint" aria-label="Main navigation">
 <button type="button" id="v570SidebarToggle" class="v570SidebarToggle" aria-expanded="true"><span class="v570Wide">Collapse Menu</span><span class="v570Narrow" aria-hidden="true">›</span></button>
-<button class="tab active" data-tab="home" data-short="H"><span>Home</span></button><button class="tab" data-tab="goalies" data-short="G"><span>Goalies</span></button><button class="tab" data-tab="match" data-short="M"><span>Match</span></button><button class="tab" data-tab="matchEditor" data-short="ME"><span>Match Editor</span></button><button class="tab" data-tab="stats" data-short="S"><span>Stats</span></button><button class="tab" data-tab="heat" data-short="HM"><span>Heat Maps</span></button><button class="tab" data-tab="reports" data-short="R"><span>Reports</span></button><a class="tab v570ExternalTab" href="./index.html#resources" data-short="?"><span>Shared Resources</span></a><a class="dddSidebarReturn" href="./index.html" aria-label="Return to Data Driven Development Home"><img src="assets/ddd-banner-v1-10.png" alt="Data Driven Development Home"></a>
-<div class="v573SidebarMeta"><span class="v573Full">Indoor Hockey Goalie Stats<br>Data Driven Development · Version 1.0</span><span class="v573Compact">v1.0</span></div>
+<button class="tab homeLogoTab active" data-tab="home" data-short="H" aria-label="Home"><span><img src="assets/home-banner-v1-0.png" alt="Home"></span></button><button class="tab" data-tab="goalies" data-short="G"><span>Goalies</span></button><button class="tab" data-tab="match" data-short="M"><span>Match</span></button><button class="tab" data-tab="matchEditor" data-short="ME"><span>Match Editor</span></button><button class="tab" data-tab="stats" data-short="S"><span>Stats</span></button><button class="tab" data-tab="heat" data-short="HM"><span>Heat Maps</span></button><button class="tab" data-tab="reports" data-short="R"><span>Reports</span></button><a class="tab v570ExternalTab" href="./index.html#resources" data-short="?"><span>Shared Resources</span></a><a class="dddSidebarReturn" href="./index.html" aria-label="Return to Data Driven Development Home"><img src="assets/ddd-banner-v1-10.png" alt="Data Driven Development Home"></a>
+<div class="v573SidebarMeta"><span class="v573Full">Indoor Hockey Goalie Stats<br>Data Driven Development · Version 1.1</span><span class="v573Compact">v1.1</span></div>
 </nav>
 
 <section id="home" class="panel active">
@@ -2005,7 +2021,7 @@ body .v523EditVideosPanel .v521Danger{background:#c6404d!important;color:#fff!im
       <img src="assets/indoor-hockey-logo-v1-0.png" alt="Indoor Hockey Goalie Stats" class="homeLogo">
     </div>
     <div class="versionBox">
-      <b>Version 1.0</b>
+      <b>Version 1.1</b>
       <div class="small">Build Date: 2026-09-11</div>
     </div>
     <div id="homeSummary" class="hiddenHomeSummary"></div>
@@ -2124,11 +2140,11 @@ body .v523EditVideosPanel .v521Danger{background:#c6404d!important;color:#fff!im
 </main>
 
 <script>
-const APP_VERSION_566='1.0';
+const APP_VERSION_566='1.1';
 window.APP_VERSION=APP_VERSION_566;
 const STORAGE_KEY='indoorHockeyGoalieStatsV1';
 const SHARED_DIRECTORY_KEY='hockeyGoalieStatsV3';
-const ratings=['Positioning','Communication','Rebound Control','Decision Making','Low Movement and Footwork','Distribution and Board Use'];
+const ratings=['Positioning','Communication','Rebound Control','Decision Making'];
 const shotTypes=['1st Shot','Rebound','In Game 1v1','Own Goal','Other'];
 const shotSituations=['Normal Game Play','Penalty Corner','Penalty Stroke','6 Second Shoot-out'];
 const outcomes=['Save','Goal','Angle Closed Off'];

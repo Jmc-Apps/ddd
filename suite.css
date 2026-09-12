@@ -17,6 +17,8 @@ button,input,select{font:inherit}
 .sidebar nav{display:grid;gap:8px}
 .nav-link{width:100%;display:block;text-align:left;text-decoration:none;color:#d9e7f1;background:transparent;border:1px solid transparent;border-radius:12px;padding:13px 14px;cursor:pointer}
 .nav-link:hover,.nav-link.active{background:#143552;border-color:#315673;color:#fff}
+.home-logo-link{display:flex;align-items:center;justify-content:center;padding:7px 10px;min-height:64px}
+.home-logo-link img{display:block;width:100%;height:48px;object-fit:contain}
 .nav-heading{color:#7795aa;text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:800;margin:22px 14px 4px}
 .sidebar-app-links{display:grid;gap:8px;margin:10px 0 2px}
 .sidebar-app-link{width:100%;min-height:58px;display:flex;align-items:center;justify-content:center;gap:8px;padding:7px 9px;border:1px solid #5f91aa;border-radius:12px;background:transparent;color:#102d42;cursor:pointer;text-decoration:none;overflow:hidden}
