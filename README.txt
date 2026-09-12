@@ -1,7 +1,18 @@
-Data Driven Development Suite v1.8
-Field Hockey Goalie Stats v5.101
-Hockey Goalie Trials v1.5
-Stats Recorder v1.35
+Data Driven Development Suite v1.9
+Field Hockey Goalie Stats v5.102
+Hockey Goalie Trials v1.6
+Stats Recorder v1.36
+
+Version 1.9 is a clean-package release.
+
+Version 1.9 / Field Hockey v5.102 / Trials v1.6 / Recorder v1.36 changes:
+
+- Removed historical HTML builds, superseded artwork versions, unused source masters and duplicate icon aliases from the distributable package.
+- Retained only the current approved DDD, Field Hockey and Trials artwork required at runtime.
+- Corrected the Field Hockey video-export overlay to use the current Field Hockey app icon.
+- Rebuilt every service-worker cache from files that are actually included in this package.
+- Preserved the central Reports service, Recorder confirmation and standard child-app return controls from v1.8.
+- Preserved all database names, storage keys, backup compatibility and application features.
 
 Version 1.8 adds platform-wide report access and consistent platform navigation.
 
