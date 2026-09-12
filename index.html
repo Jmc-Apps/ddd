@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#d4e5ee">
   <meta name="description" content="Data Driven Development sports performance suite">
-  <title>Data Driven Development v1.7</title>
+  <title>Data Driven Development v1.8</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -14,7 +14,7 @@
 <body>
   <header class="topbar">
     <button class="menu-button" id="menuButton" type="button" aria-label="Open menu">Menu</button>
-    <span class="brand-panel"><img class="brand-logo" src="assets/ddd-banner-v1-7.png" alt="Data Driven Development"></span>
+    <span class="brand-panel"><img class="brand-logo" src="assets/ddd-banner-v1-8.png" alt="Data Driven Development"></span>
     <button class="install-button hidden" id="installButton" type="button">Install App</button>
   </header>
 
@@ -24,18 +24,19 @@
         <button class="nav-link active" data-page="home">Home</button>
         <div class="nav-heading">Shared services</div>
         <button class="nav-link" data-page="goalies">Enroll Goalie</button>
+        <button class="nav-link" data-page="reports">Reports</button>
         <button class="nav-link" data-page="benchmarking">Benchmarking</button>
         <button class="nav-link" data-page="backup">Backup &amp; Restore</button>
         <button class="nav-link" data-page="resources">Resources</button>
-        <a class="nav-link anchor" href="recorder/index.html">Stats Recorder</a>
+        <button class="nav-link recorder-open" type="button">Stats Recorder</button>
       </nav>
-      <div class="suite-version">Data Driven Development<br><b>Version 1.7</b></div>
+      <div class="suite-version">Data Driven Development<br><b>Version 1.8</b></div>
     </aside>
 
     <main>
       <section class="page active" id="page-home">
         <div class="hero">
-          <span class="hero-logo-panel"><img src="assets/ddd-logo-v1-7.png" alt="Data Driven Development" class="hero-emblem"></span>
+          <span class="hero-logo-panel"><img src="assets/ddd-logo-v1-8.png" alt="Data Driven Development" class="hero-emblem"></span>
           <div><p class="eyebrow">One connected development suite</p><h1>Choose where you want to work</h1><p>Shared goalkeepers and central services, with each performance area kept in its own focused module.</p></div>
         </div>
         <div class="module-grid">
@@ -52,11 +53,21 @@
         <h2 class="section-title">Shared services</h2>
         <div class="service-grid">
           <button class="service-card" data-go="goalies"><span>01</span><b>Enroll Goalie</b><small>Manage the shared goalkeeper directory.</small></button>
-          <a class="service-card" href="recorder/index.html"><span>02</span><b>Stats Recorder</b><small>Open the companion match recorder.</small></a>
-          <button class="service-card" data-go="benchmarking"><span>03</span><b>Benchmarking</b><small>Central participation and upload status.</small></button>
-          <button class="service-card" data-go="backup"><span>04</span><b>Backup &amp; Restore</b><small>Protect the complete connected suite.</small></button>
-          <button class="service-card" data-go="resources"><span>05</span><b>Resources</b><small>Open shared manuals, rules and development material.</small></button>
+          <button class="service-card recorder-open" type="button"><span>02</span><b>Stats Recorder</b><small>Open the companion match recorder.</small></button>
+          <button class="service-card" data-go="reports"><span>03</span><b>Reports</b><small>Open reporting options across every sport for one goalie.</small></button>
+          <button class="service-card" data-go="benchmarking"><span>04</span><b>Benchmarking</b><small>Central participation and upload status.</small></button>
+          <button class="service-card" data-go="backup"><span>05</span><b>Backup &amp; Restore</b><small>Protect the complete connected suite.</small></button>
+          <button class="service-card" data-go="resources"><span>06</span><b>Resources</b><small>Open shared manuals, rules and development material.</small></button>
         </div>
+      </section>
+
+      <section class="page" id="page-reports">
+        <div class="page-heading"><div><p class="eyebrow">Shared service</p><h1>Reports</h1><p>Select a shared goalie to access their reporting options across the platform.</p></div></div>
+        <article class="panel report-goalie-picker">
+          <label>Goalie<select id="platformReportGoalie"></select></label>
+          <div id="platformReportSummary" class="report-goalie-summary"></div>
+        </article>
+        <div id="platformReportOptions" class="platform-report-options"></div>
       </section>
 
       <section class="page" id="page-goalies">
@@ -108,6 +119,14 @@
       </section>
     </main>
   </div>
+  <dialog id="recorderConfirm" class="confirm-dialog">
+    <form method="dialog">
+      <img src="assets/ddd-banner-v1-8.png" alt="Data Driven Development">
+      <h2>Open Stats Recorder?</h2>
+      <p>Do you want to open the Stats Recorder?</p>
+      <div class="confirm-actions"><button value="no" class="secondary" type="submit">No</button><button value="yes" class="primary" type="submit">Yes</button></div>
+    </form>
+  </dialog>
   <div id="toast" class="toast" role="status"></div>
   <script src="suite.js"></script>
 </body>

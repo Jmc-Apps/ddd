@@ -1,23 +1,23 @@
-const CACHE_NAME='ddd-stats-recorder-v1-34-light-suite-theme';
+const CACHE_NAME='ddd-stats-recorder-v1-35-platform-sidebar';
 const FILES=[
  './',
  './index.html',
- './goalie_stats_recorder_v1_34.html',
+ './goalie_stats_recorder_v1_35.html',
  './manifest.webmanifest',
- './manifest.webmanifest?v=1.34',
+ './manifest.webmanifest?v=1.35',
  './assets/d_heat_map.png',
  './assets/goal_box_heat_map.png',
- './assets/ddd-banner-v1-34.png',
- './assets/ddd-logo-v1-34.png',
- './assets/ddd-app-icon-master-v1-34.png',
+ './assets/ddd-banner-v1-35.png',
+ './assets/ddd-logo-v1-35.png',
+ './assets/ddd-app-icon-master-v1-35.png',
  './icon-192.png',
  './icon-512.png',
  './apple-touch-icon.png',
  './favicon-32.png',
- './icon-192-v1-34.png',
- './icon-512-v1-34.png',
- './apple-touch-icon-v1-34.png',
- './favicon-32-v1-34.png'
+ './icon-192-v1-35.png',
+ './icon-512-v1-35.png',
+ './apple-touch-icon-v1-35.png',
+ './favicon-32-v1-35.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(FILES)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

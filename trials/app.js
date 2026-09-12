@@ -359,7 +359,7 @@
   }
 
   function reportResults(){return state.goalies.map(goalie=>{const stats=goalieStats(goalie.id);return{goalie,stats,score:goalieScore(stats)}}).sort((a,b)=>b.score-a.score)}
-  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-4.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
+  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-5.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
 
   function renderReport(){
     const results=reportResults();const selected=$('reportGoalie').value||results[0]?.goalie.id||'';$('reportGoalie').innerHTML=optionList(state.goalies,selected);$('reportNotes').value=state.reportNotes;$('finalDecision').value=state.finalDecision;$('reportGoalieWrap').classList.toggle('hidden',$('reportType').value==='selection');
@@ -398,7 +398,14 @@
   }
 
   function init(){
-    refreshLinkedGoalies();bindEvents(); renderDashboard();
+    refreshLinkedGoalies();bindEvents();renderDashboard();
+    const params=new URLSearchParams(location.search),requestedPage=params.get('page'),requestedGoalie=params.get('goalie');
+    if(requestedPage==='reports'){
+      switchPage('reports');
+      if(requestedGoalie&&state.goalies.some(g=>String(g.sharedGoalieId||g.id)===String(requestedGoalie))){
+        $('reportType').value='feedback';renderReport();$('reportGoalie').value=state.goalies.find(g=>String(g.sharedGoalieId||g.id)===String(requestedGoalie)).id;renderReport();
+      }
+    }
     if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
   }
   init();

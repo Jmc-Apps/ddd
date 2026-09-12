@@ -1,6 +1,21 @@
-Data Driven Development Suite v1.7
-Field Hockey Goalie Stats v5.100
-Stats Recorder v1.34
+Data Driven Development Suite v1.8
+Field Hockey Goalie Stats v5.101
+Hockey Goalie Trials v1.5
+Stats Recorder v1.35
+
+Version 1.8 adds platform-wide report access and consistent platform navigation.
+
+Version 1.8 / Field Hockey v5.101 / Trials v1.5 / Recorder v1.35 changes:
+
+- Added a central Reports service that begins with the shared goalkeeper directory.
+- Shows Field Hockey report types for the selected goalie and opens the existing app Reports tab with that goalie and report type selected.
+- Shows Trials reporting only when the selected shared goalie is linked to Trials.
+- Keeps Indoor Hockey reporting visible but unavailable until the Indoor module is built.
+- Preserved the existing Reports tabs inside Field Hockey Goalie Stats and Hockey Goalie Trials.
+- Added a Yes/No confirmation before leaving the platform to open Stats Recorder.
+- Standardised the return-to-platform control in every child app using the approved DDD banner immediately above version information.
+- Added a responsive Recorder navigation sidebar while preserving its mobile recording workflow.
+- Refreshed all PWA caches and versioned files without changing existing storage keys.
 
 Version 1.7 restores the approved Field Hockey Goalie Stats artwork.
 
