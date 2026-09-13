@@ -1,8 +1,18 @@
-Data Driven Development Suite v1.21
+Data Driven Development Suite v1.22
 Field Hockey Goalie Stats v5.105
 Indoor Hockey Goalie Stats v1.1
-Hockey Goalie Trials v1.16
+Hockey Goalie Trials v1.17
 Stats Recorder v1.42
+
+Version 1.22 / Trials v1.17 corrects the incomplete Trials Video Stats Review release.
+
+- Gives Angle A and Angle B independent multi-video playlists with ordered clip lists, reordering and removal.
+- Synchronizes the two playlists at user-aligned frames and keeps them on one shared master timeline.
+- Replaces independent native playback controls with one Play Both / Pause Both control.
+- Adds 0.25x, 0.5x, 1x, 1.5x and 2x speeds plus previous-frame and next-frame progression.
+- Keeps both angles playing together across playlist clips and corrects timing drift from the shared clock.
+- Adds a visual shot timeline at the bottom of Video Review; shots recorded there are linked to the current video time and can be clicked to seek both angles.
+- Makes the Trial Recording rotation overview explicitly show every eligible goalkeeper, including those waiting, with whole-day shots faced and whole-day time in goal plus current-section progress.
 
 Version 1.21 / Trials v1.16 builds on the complete v1.20 trial workflow release.
 

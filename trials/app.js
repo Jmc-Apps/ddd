@@ -45,6 +45,11 @@
   let editingEventContext = '';
   let pendingLateEntry = null;
   let toastTimer = null;
+  const videoReviewSessions = new Map();
+  let videoAnimationFrame = 0;
+  let videoClockStarted = 0;
+  let videoClockMaster = 0;
+  let videoControllerBusy = false;
 
   const $ = id => document.getElementById(id);
   const uid = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`);
@@ -134,6 +139,7 @@
 
   function switchPage(page){
     stopAllRunningTimers();
+    if(currentPage==='video'&&page!=='video')pauseAllVideoPlayback();
     const opening=page!==currentPage;
     if(opening&&page==='roster')$('rosterDayFilter').value=preferredWorkingDayId();
     if(opening&&page==='recording')$('recordingDay').value=preferredWorkingDayId();
@@ -453,7 +459,12 @@
 
   function renderRotationOverview(dayId,drillId){
     const drill=state.drills.find(item=>item.id===drillId),goalies=dayId?eligibleGoaliesForDay(dayId):[],assignments=new Map();[0,1].forEach(lane=>{const id=state.stationSelections[stationKey(dayId,drillId,lane)];if(id)assignments.set(id,lane?'Goal B':'Goal A')});
-    $('recordingRotationOverview').innerHTML=goalies.length?goalies.map(goalie=>{const stats=goalieStats(goalie.id,{dayId,drillId}),time=liveTimeFor(goalie.id,dayId,drillId),position=assignments.get(goalie.id),targetMet=Boolean(drill&&stats.attempts>=drill.target);return `<article class="rotation-card ${position?'in-goal':''} ${targetMet?'target-met':''}"><div class="rotation-name">${goalieKitIcon(goalie,dayId)}<div><strong>${esc(goalie.name)}</strong><span>${position||'Waiting'}</span></div></div><div class="rotation-metrics"><span><strong>${stats.attempts}${drill?` / ${drill.target}`:''}</strong>Shots faced</span><span><strong data-rotation-time="${goalie.id}" data-day="${dayId}" data-drill="${drillId||''}">${formatTime(time)}</strong>Time in goal</span></div></article>`}).join(''):'<div class="empty-state">Add eligible goalkeepers to see the rotation overview.</div>';
+    $('recordingRotationOverview').innerHTML=goalies.length?goalies.map(goalie=>{const sectionStats=goalieStats(goalie.id,{dayId,drillId}),dayStats=goalieStats(goalie.id,{dayId}),time=dayTimeFor(goalie.id,dayId),position=assignments.get(goalie.id),targetMet=Boolean(drill&&sectionStats.attempts>=drill.target);return `<article class="rotation-card ${position?'in-goal':''} ${targetMet?'target-met':''}"><div class="rotation-name">${goalieKitIcon(goalie,dayId)}<div><strong>${esc(goalie.name)}</strong><span>${position||'Waiting'}</span></div></div><div class="rotation-metrics"><span><strong>${dayStats.attempts}</strong>Shots faced today${drill?` · ${sectionStats.attempts} / ${drill.target} this section`:''}</span><span><strong data-rotation-day-time="${goalie.id}" data-day="${dayId}">${formatTime(time)}</strong>Time in goal today</span></div></article>`}).join(''):'<div class="empty-state">Add eligible goalkeepers to see the rotation overview.</div>';
+  }
+
+  function dayTimeFor(goalieId,dayId){
+    const suffix=`|${goalieId}`,prefix=`${dayId}|`;let total=Object.entries(state.timers).filter(([key])=>key.startsWith(prefix)&&key.endsWith(suffix)).reduce((sum,[,value])=>sum+Number(value||0),0);
+    Object.values(activeTimers).forEach(timer=>{if(timer.key.startsWith(prefix)&&timer.key.endsWith(suffix))total+=Date.now()-timer.startedAt;});return total;
   }
 
   function liveTimeFor(goalieId,dayId,drillId){const saved=filteredTimeFor(goalieId,{dayId,drillId}),key=timerKey(dayId,drillId,goalieId),timer=Object.values(activeTimers).find(item=>item.key===key);return saved+(timer?Date.now()-timer.startedAt:0)}
@@ -506,7 +517,7 @@
     const goalieId=card.querySelector('.station-goalie').value; if(!goalieId){showToast('Add and select a goalkeeper first.');return;}
     if(live){const key=timerKey(dayId,drillId,goalieId);if(!activeTimers[lane]&&!Number(state.timers[key]||0)){cancelPendingGoalieStart(lane);startTimer(lane,dayId,drillId,goalieId);}}
     const selection=shotSelection(dayId,drillId,lane),drill=state.drills.find(d=>d.id===drillId),locked=sectionSituation(drill);if(locked)selection.situation=locked;const rebound=selection.rebound==='No rebound'?'':selection.rebound;
-    const event={id:uid(),createdAt:new Date().toISOString(),dayId,drillId,goalieId,lane,outcome:selection.outcome,shotType:selection.shotType,situation:selection.situation,outnumbered:selection.outnumbered,rebound,dangerousRebound:rebound==='Dangerous',note:selection.note||'',source:live?'live':'video'};
+    const event={id:uid(),createdAt:new Date().toISOString(),dayId,drillId,goalieId,lane,outcome:selection.outcome,shotType:selection.shotType,situation:selection.situation,outnumbered:selection.outnumbered,rebound,dangerousRebound:rebound==='Dangerous',note:selection.note||'',source:live?'live':'video',...(live?{}:{videoReview:{masterTime:currentVideoSession().masterTime,syncOffset:currentVideoSession().syncOffset}})};
     state.events.push(event);selection.note='';saveState('Event saved');live?renderRecording():renderVideoReview();showToast(`${selection.outcome} recorded.`);
   }
 
@@ -525,12 +536,13 @@
   function scheduleGoalieStart(lane,dayId,drillId,goalieId){cancelPendingGoalieStart(lane);pendingGoalieStarts[lane]={goalieId,timeout:setTimeout(()=>{delete pendingGoalieStarts[lane];if(currentPage!=='recording'||activeTimers[lane]||selectedGoalie(dayId,drillId,lane)!==goalieId)return;if(startTimer(lane,dayId,drillId,goalieId)){renderRecording();showToast('Goalkeeper timer started automatically after 30 seconds.');}},30000)};}
   function stopTimer(lane){const timer=activeTimers[lane];if(!timer)return;state.timers[timer.key]=(state.timers[timer.key]||0)+(Date.now()-timer.startedAt);delete activeTimers[lane];saveState();if(!Object.keys(activeTimers).length){clearInterval(timerTicker);timerTicker=null;}}
   function stopAllRunningTimers(){Object.keys(pendingGoalieStarts).forEach(lane=>cancelPendingGoalieStart(Number(lane)));Object.keys(activeTimers).forEach(lane=>stopTimer(Number(lane)));}
-  function startTicker(){if(timerTicker)return;timerTicker=setInterval(()=>{document.querySelectorAll('[data-timer-lane]').forEach(el=>{const lane=Number(el.dataset.timerLane);const timer=activeTimers[lane];if(timer)el.textContent=formatTime((state.timers[timer.key]||0)+(Date.now()-timer.startedAt));});document.querySelectorAll('[data-rotation-time]').forEach(el=>{el.textContent=formatTime(liveTimeFor(el.dataset.rotationTime,el.dataset.day,el.dataset.drill));});},500)}
+  function startTicker(){if(timerTicker)return;timerTicker=setInterval(()=>{document.querySelectorAll('[data-timer-lane]').forEach(el=>{const lane=Number(el.dataset.timerLane);const timer=activeTimers[lane];if(timer)el.textContent=formatTime((state.timers[timer.key]||0)+(Date.now()-timer.startedAt));});document.querySelectorAll('[data-rotation-day-time]').forEach(el=>{el.textContent=formatTime(dayTimeFor(el.dataset.rotationDayTime,el.dataset.day));});},500)}
 
   function renderEventTimeline(targetId,dayId,drillId,context){
     const events=getEvents({dayId,drillId}).slice().reverse();
-    $(targetId).innerHTML=events.length?events.map(event=>{const goalie=state.goalies.find(g=>g.id===event.goalieId);return `<div class="timeline-event editable"><span>${new Date(event.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div><strong class="timeline-goalie-name">${goalie?goalieKitIcon(goalie,event.dayId):''}<span>${esc(goalie?.name||'Unknown goalkeeper')}</span></strong><br><span class="muted">${esc(event.shotType)} · ${esc(event.situation)}${event.rebound?` · ${esc(event.rebound)} rebound`:''}</span></div><span class="event-outcome ${event.outcome.split(' ')[0]}">${esc(event.outcome)}</span><button type="button" class="mini-button" data-edit-shot="${event.id}" ${completedDay(event.dayId)?'disabled':''}>Edit</button></div>`}).join(''):'<div class="empty-state">Recorded events will appear here.</div>';
+    $(targetId).innerHTML=events.length?events.map(event=>{const goalie=state.goalies.find(g=>g.id===event.goalieId),videoAction=context==='video'?`<button type="button" class="mini-button" data-link-video-shot="${event.id}" ${completedDay(event.dayId)?'disabled':''}>${Number.isFinite(Number(event.videoReview?.masterTime))?'Move time':'Set time'}</button>`:'';return `<div class="timeline-event editable ${context==='video'?'video-linked-actions':''}"><span>${new Date(event.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div><strong class="timeline-goalie-name">${goalie?goalieKitIcon(goalie,event.dayId):''}<span>${esc(goalie?.name||'Unknown goalkeeper')}</span></strong><br><span class="muted">${esc(event.shotType)} · ${esc(event.situation)}${event.rebound?` · ${esc(event.rebound)} rebound`:''}${Number.isFinite(Number(event.videoReview?.masterTime))?` · Video ${formatTime(Number(event.videoReview.masterTime)*1000)}`:''}</span></div><span class="event-outcome ${event.outcome.split(' ')[0]}">${esc(event.outcome)}</span>${videoAction}<button type="button" class="mini-button" data-edit-shot="${event.id}" ${completedDay(event.dayId)?'disabled':''}>Edit</button></div>`}).join(''):'<div class="empty-state">Recorded events will appear here.</div>';
     $(targetId).querySelectorAll('[data-edit-shot]').forEach(button=>button.addEventListener('click',()=>openShotEditor(button.dataset.editShot,context)));
+    $(targetId).querySelectorAll('[data-link-video-shot]').forEach(button=>button.addEventListener('click',()=>{const event=state.events.find(item=>item.id===button.dataset.linkVideoShot);if(!event||completedDay(event.dayId))return;event.videoReview={masterTime:currentVideoSession().masterTime,syncOffset:currentVideoSession().syncOffset};saveState('Shot linked to video time');renderVideoReview();showToast('Shot placed on the video timeline.');}));
   }
 
   function openShotEditor(eventId,context){
@@ -562,14 +574,76 @@
     persistModalRating();$('ratingDialog').close();showToast('Station review saved.');if(currentPage==='recording')renderRecording();
   }
 
+  function videoSessionKey(){return `${$('videoDay').value}|${$('videoDrill').value}`;}
+  function newVideoAngle(){return {clips:[],activeClipIndex:0};}
+  function currentVideoSession(){
+    const key=videoSessionKey();if(!videoReviewSessions.has(key))videoReviewSessions.set(key,{angles:[newVideoAngle(),newVideoAngle()],masterTime:0,syncOffset:0,speed:1,playing:false});return videoReviewSessions.get(key);
+  }
+  function playlistDuration(angle){return angle.clips.reduce((sum,clip)=>sum+Number(clip.duration||0),0);}
+  function clipStart(angle,index){return angle.clips.slice(0,index).reduce((sum,clip)=>sum+Number(clip.duration||0),0);}
+  function locateVideoTime(angle,time){
+    if(!angle.clips.length)return null;let remaining=Math.max(0,Number(time)||0);for(let index=0;index<angle.clips.length;index++){const duration=Number(angle.clips[index].duration||0);if(remaining<=duration||index===angle.clips.length-1)return {index,time:Math.min(remaining,Math.max(0,duration-.001))};remaining-=duration;}return null;
+  }
+  function masterDuration(session){
+    const a=playlistDuration(session.angles[0]),b=playlistDuration(session.angles[1]);if(a&&b)return Math.max(0,Math.min(a,b-session.syncOffset));return a||Math.max(0,b-session.syncOffset)||0;
+  }
+  function currentAnglePlaylistTime(index){
+    const session=currentVideoSession(),angle=session.angles[index],video=$(index?'videoB':'videoA');if(!angle.clips.length)return 0;return clipStart(angle,angle.activeClipIndex)+(Number(video.currentTime)||0);
+  }
+  function angleTargetTime(session,index){return Math.max(0,session.masterTime+(index?session.syncOffset:0));}
+  function stopVideoPlayback(){
+    const session=currentVideoSession();session.playing=false;cancelAnimationFrame(videoAnimationFrame);videoAnimationFrame=0;['videoA','videoB'].forEach(id=>$(id).pause());updateVideoTransport();
+  }
+  function pauseAllVideoPlayback(){videoReviewSessions.forEach(session=>session.playing=false);cancelAnimationFrame(videoAnimationFrame);videoAnimationFrame=0;['videoA','videoB'].forEach(id=>$(id)?.pause());}
+  function loadVideoAngle(index,targetTime,shouldPlay){
+    const session=currentVideoSession(),angle=session.angles[index],video=$(index?'videoB':'videoA'),located=locateVideoTime(angle,targetTime);if(!located){video.pause();video.removeAttribute('src');video.dataset.clipId='';return;}
+    angle.activeClipIndex=located.index;const clip=angle.clips[located.index],apply=()=>{const safe=Math.min(located.time,Math.max(0,(Number(video.duration)||Number(clip.duration)||0)-.001));if(Math.abs((Number(video.currentTime)||0)-safe)>.045)video.currentTime=safe;video.playbackRate=session.speed;if(shouldPlay)video.play().catch(()=>{});};
+    if(video.dataset.clipId!==clip.id){video.pause();video.dataset.clipId=clip.id;video.src=clip.url;video.load();video.addEventListener('loadedmetadata',()=>{clip.duration=Number(video.duration)||clip.duration||0;apply();renderVideoPlaylists();updateVideoTransport();renderVideoShotTimeline();},{once:true});}else apply();
+  }
+  function syncBothVideos(force=false){
+    if(videoControllerBusy)return;videoControllerBusy=true;const session=currentVideoSession();[0,1].forEach(index=>{const video=$(index?'videoB':'videoA'),target=angleTargetTime(session,index),actual=currentAnglePlaylistTime(index);if(force||Math.abs(actual-target)>.12)loadVideoAngle(index,target,session.playing);else{video.playbackRate=session.speed;if(session.playing&&video.paused)video.play().catch(()=>{});}});videoControllerBusy=false;
+  }
+  function setVideoMasterTime(value,force=true){const session=currentVideoSession(),duration=masterDuration(session);session.masterTime=Math.max(0,Math.min(Number(value)||0,duration));syncBothVideos(force);updateVideoTransport();renderVideoShotTimeline();}
+  function tickVideoPlayback(now){
+    const session=currentVideoSession();if(!session.playing)return;session.masterTime=videoClockMaster+((now-videoClockStarted)/1000)*session.speed;const duration=masterDuration(session);if(session.masterTime>=duration){session.masterTime=duration;stopVideoPlayback();syncBothVideos(true);return;}syncBothVideos(false);updateVideoTransport();updateVideoShotPlayhead();videoAnimationFrame=requestAnimationFrame(tickVideoPlayback);
+  }
+  function toggleVideoPlayback(){
+    const session=currentVideoSession();if(session.playing){stopVideoPlayback();return;}if(!masterDuration(session)){showToast('Add videos to an angle first.');return;}session.playing=true;videoClockStarted=performance.now();videoClockMaster=session.masterTime;syncBothVideos(true);videoAnimationFrame=requestAnimationFrame(tickVideoPlayback);updateVideoTransport();
+  }
+  function stepVideoFrame(direction){stopVideoPlayback();setVideoMasterTime(currentVideoSession().masterTime+direction/30,true);}
+  function updateVideoTransport(){
+    const session=currentVideoSession(),duration=masterDuration(session),seek=$('videoSeek');seek.max=String(duration);seek.value=String(Math.min(session.masterTime,duration));$('videoPlayPause').textContent=session.playing?'❚❚ Pause both':'▶ Play both';$('videoSpeed').value=String(session.speed);$('videoPlayPause').disabled=!duration;$('videoFrameBack').disabled=!duration;$('videoFrameForward').disabled=!duration;$('videoTimeLabel').textContent=`${formatTime(session.masterTime*1000)} / ${formatTime(duration*1000)}`;
+  }
+  function updateVideoShotPlayhead(){const duration=masterDuration(currentVideoSession()),left=duration?currentVideoSession().masterTime/duration*100:0;$('videoShotPlayhead').style.left=`${Math.max(0,Math.min(100,left))}%`;}
+  function renderVideoPlaylists(){
+    const session=currentVideoSession();session.angles.forEach((angle,index)=>{const root=$(index?'videoPlaylistB':'videoPlaylistA');root.innerHTML=angle.clips.length?angle.clips.map((clip,clipIndex)=>`<div class="video-clip ${clipIndex===angle.activeClipIndex?'active':''}"><span class="video-clip-index">${clipIndex+1}</span><span class="video-clip-name" title="${esc(clip.name)}">${esc(clip.name)}</span><span class="video-clip-duration">${clip.duration?formatTime(clip.duration*1000):'Loading…'}</span><span class="video-clip-actions"><button type="button" data-video-move="${index}|${clipIndex}|-1" ${clipIndex?'':'disabled'} aria-label="Move earlier">↑</button><button type="button" data-video-move="${index}|${clipIndex}|1" ${clipIndex<angle.clips.length-1?'':'disabled'} aria-label="Move later">↓</button><button type="button" class="danger" data-video-remove="${index}|${clip.id}" aria-label="Remove video">×</button></span></div>`).join(''):'<div class="empty-state">No videos in this playlist.</div>';});
+  }
+  function probeVideoClip(clip){return new Promise(resolve=>{const probe=document.createElement('video');let finished=false;const done=()=>{if(finished)return;finished=true;clip.duration=Number(probe.duration)||0;probe.removeAttribute('src');resolve();};probe.preload='metadata';probe.src=clip.url;probe.onloadedmetadata=done;probe.onerror=done;});}
+  async function addVideoFiles(index,files){
+    const session=currentVideoSession(),angle=session.angles[index],clips=Array.from(files||[]).map(file=>({id:uid(),name:file.name,url:URL.createObjectURL(file),duration:0}));if(!clips.length)return;angle.clips.push(...clips);renderVideoPlaylists();await Promise.all(clips.map(probeVideoClip));if(angle.clips.length===clips.length)loadVideoAngle(index,angleTargetTime(session,index),false);renderVideoPlaylists();updateVideoTransport();renderVideoShotTimeline();
+  }
+  function moveVideoClip(index,clipIndex,direction){
+    stopVideoPlayback();const session=currentVideoSession(),angle=session.angles[index],target=clipIndex+direction;if(target<0||target>=angle.clips.length)return;[angle.clips[clipIndex],angle.clips[target]]=[angle.clips[target],angle.clips[clipIndex]];angle.activeClipIndex=0;setVideoMasterTime(session.masterTime,true);renderVideoPlaylists();
+  }
+  function removeVideoClip(index,clipId){
+    stopVideoPlayback();const session=currentVideoSession(),angle=session.angles[index],clip=angle.clips.find(item=>item.id===clipId);if(!clip)return;URL.revokeObjectURL(clip.url);angle.clips=angle.clips.filter(item=>item.id!==clipId);angle.activeClipIndex=0;setVideoMasterTime(session.masterTime,true);renderVideoPlaylists();updateVideoTransport();renderVideoShotTimeline();
+  }
+  function syncCurrentVideoFrames(){
+    const session=currentVideoSession();if(!session.angles.every(angle=>angle.clips.length)){showToast('Add videos to both angles before syncing.');return;}stopVideoPlayback();const a=currentAnglePlaylistTime(0),b=currentAnglePlaylistTime(1);session.syncOffset=b-a;session.masterTime=a;$('videoSyncStatus').textContent=`Angles synced at A ${formatTime(a*1000)} and B ${formatTime(b*1000)} · offset ${session.syncOffset>=0?'+':''}${session.syncOffset.toFixed(2)}s`;setVideoMasterTime(a,true);showToast('Both video angles are synced.');
+  }
+  function clearVideoSync(){const session=currentVideoSession();stopVideoPlayback();session.syncOffset=0;$('videoSyncStatus').textContent='Angles start together. Set both to the same visible moment and choose Sync current frames for a precise offset.';setVideoMasterTime(session.masterTime,true);}
+  function nudgeVideoAngleB(seconds){const session=currentVideoSession(),angle=session.angles[1];if(!angle.clips.length){showToast('Add videos to Angle B first.');return;}stopVideoPlayback();loadVideoAngle(1,currentAnglePlaylistTime(1)+Number(seconds||0),false);}
+  function renderVideoShotTimeline(){
+    const dayId=$('videoDay').value,drillId=$('videoDrill').value,duration=masterDuration(currentVideoSession()),events=getEvents({dayId,drillId}),linked=events.filter(event=>Number.isFinite(Number(event.videoReview?.masterTime))),unlinked=events.length-linked.length;$('videoShotMarkers').innerHTML=duration?linked.map((event,index)=>{const left=Math.max(0,Math.min(100,Number(event.videoReview.masterTime)/duration*100));return `<button type="button" class="video-shot-marker ${esc(event.outcome.split(' ')[0])}" style="left:${left}%" data-video-shot-time="${Number(event.videoReview.masterTime)}" title="Shot ${index+1} · ${esc(event.outcome)} · ${formatTime(Number(event.videoReview.masterTime)*1000)}">${index+1}</button>`}).join(''):'';$('videoUnlinkedShots').textContent=unlinked?`${unlinked} earlier shot${unlinked===1?' is':'s are'} not linked to a video time.`:'';updateVideoShotPlayhead();
+  }
+
   function renderVideoReview(){
     const daySel=$('videoDay');ensureSelect(daySel,state.days.map((d,i)=>({id:d.id,name:`Day ${i+1} · ${dayLabel(d.date)}`})),'Add a trial day first',daySel.value||preferredWorkingDayId());const drills=drillOptionsForDay(daySel.value);ensureSelect($('videoDrill'),drills,'Schedule a section first');const drill=state.drills.find(d=>d.id===$('videoDrill').value),lanes=drill?.name==='Match Situation'?2:1,readOnly=completedDay(daySel.value);$('videoReadOnlyNotice').classList.toggle('hidden',!readOnly);
     ['A','B'].forEach((name,i)=>{const wrap=$(`videoStation${name}`);wrap.innerHTML=drill&&i<lanes?stationMarkup(i,daySel.value,drill.id,false):'';if(drill&&i<lanes){if(readOnly)wrap.querySelectorAll('button,input,textarea,select').forEach(control=>control.disabled=true);else bindStationControls(wrap,daySel.value,drill.id,false);}});
-    $('videoB').closest('.video-lane').classList.toggle('hidden',lanes<2);
     renderEventTimeline('videoEventTimeline',daySel.value,drill?.id,'video');
+    const videoSession=currentVideoSession();$('videoSyncStatus').textContent=videoSession.syncOffset?`Angles synced · offset ${videoSession.syncOffset>=0?'+':''}${videoSession.syncOffset.toFixed(2)}s`:'Angles start together. Use the Angle B alignment buttons, then sync the current frames.';
+    renderVideoPlaylists();updateVideoTransport();renderVideoShotTimeline();syncBothVideos(true);
   }
-
-  function setVideo(input,video){input.addEventListener('change',()=>{if(video.src)URL.revokeObjectURL(video.src);const file=input.files[0];if(file){video.src=URL.createObjectURL(file);video.load();}})}
 
   function compareFilters(){return {dayId:$('compareDay').value,drillId:$('compareDrill').value,shotType:$('compareShot').value,situation:$('compareSituation').value}}
   function comparableCategories(stats){
@@ -661,7 +735,7 @@
   function eligibilityLabel(goalie){const check=eligibility(goalie);return check.eligible?'Eligible':`Ineligible for ${state.trial.ageGroup}`}
   function finalStatusMap(progress){const statuses={...(progress?.finalStatuses||{})};if(progress?.confirmed&&!Object.keys(statuses).length)state.goalies.forEach(goalie=>{statuses[goalie.id]=(progress.goalieIds||[]).includes(goalie.id)?'selected':'not_selected'});return statuses}
   function reportResults(){const finalDay=state.days.at(-1),progress=finalDay&&state.progressions[finalDay.id],finalConfirmed=Boolean(progress?.final&&progress?.confirmed);if(!finalConfirmed)return allReportResults();const statuses=finalStatusMap(progress);return allReportResults().filter(item=>['selected','reserve','non_travelling_reserve','excused'].includes(statuses[item.goalie.id]))}
-  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-16.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
+  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-17.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
 
   function renderReport(){
     const results=reportResults(),allResults=allReportResults(),selected=$('reportGoalie').value||allResults[0]?.goalie.id||'',individual=$('reportType').value==='feedback';$('reportGoalie').innerHTML=optionList(state.goalies,selected);$('reportGoalieWrap').classList.toggle('hidden',!individual);$('reportNotesLabel').textContent=individual?'Selectors’ feedback':'Selector notes and decision evidence';$('reportNotes').placeholder=individual?'Add feedback for this goalkeeper...':'Add the selectors’ observations, context and final reasoning...';$('reportNotes').value=individual?(state.feedbackNotes?.[$('reportGoalie').value]||''):state.reportNotes;
@@ -670,12 +744,11 @@
 
   function selectionReport(results){
     const allResults=allReportResults(),finalDay=state.days.at(-1),finalProgress=finalDay&&state.progressions[finalDay.id],finalConfirmed=Boolean(finalProgress?.final&&finalProgress?.confirmed),statuses=finalStatusMap(finalProgress),otherResults=finalConfirmed?allResults.filter(item=>!['selected','reserve','non_travelling_reserve','excused'].includes(statuses[item.goalie.id])):[];
-    const weights=CATEGORIES.map(cat=>`${cat} ${Number(state.ratingWeights[cat]||0)}%`).join(' · ');
     const days=state.days.map((day,index)=>`<section class="report-section report-day"><h3>Trial Day ${index+1} · ${esc(dayLabel(day.date))}</h3>${statsTable(state.goalies.map(goalie=>{const stats=goalieStats(goalie.id,{dayId:day.id});return{goalie,stats,score:goalieScore(stats)}}),{dayId:day.id})}${state.drills.filter(d=>d.dayId===day.id).map(drill=>`<h4>${esc(drill.name)} · Target ${drill.target} per goalkeeper</h4>${statsTable(state.goalies.map(goalie=>{const stats=goalieStats(goalie.id,{dayId:day.id,drillId:drill.id});return{goalie,stats,score:goalieScore(stats)}}),{dayId:day.id,drillId:drill.id})}`).join('')}</section>`).join('');
     const outcomeCell=r=>{const check=eligibility(r.goalie);return `<td><strong>${esc(outcomeLabel(statuses[r.goalie.id]))}</strong>${check.eligible?'':`<span class="report-ineligible">Ineligible for ${esc(state.trial.ageGroup)}</span>`}</td>`};
     const primaryTable=results.length?`<table class="report-table"><thead><tr><th>Rank</th><th>Goalkeeper</th>${finalConfirmed?'<th>Selection status</th>':''}<th>Defence</th><th>Ratings score</th><th>Overall score</th></tr></thead><tbody>${results.map((r,i)=>`<tr><td>${i+1}</td><td><strong>${esc(r.goalie.name)}</strong></td>${finalConfirmed?outcomeCell(r):''}<td>${pct(r.stats.defenceRate)}</td><td>${pct(ratingsScore(r.stats))}</td><td>${r.score.toFixed(1)}</td></tr>`).join('')}</tbody></table>`:'<p>No roster data available.</p>';
     const otherTable=otherResults.length?`<section class="report-section report-secondary-results"><h3>Other trial participants</h3><p>These goalkeepers trialled but were not selected for the final travelling group.</p><table class="report-table"><thead><tr><th>Rank</th><th>Goalkeeper</th><th>Selection status</th><th>Defence</th><th>Overall score</th></tr></thead><tbody>${otherResults.map((r,i)=>`<tr><td>${i+1}</td><td><strong>${esc(r.goalie.name)}</strong></td>${outcomeCell(r)}<td>${pct(r.stats.defenceRate)}</td><td>${r.score.toFixed(1)}</td></tr>`).join('')}</tbody></table></section>`:'';
-    return `${reportHeader('Goalkeeper Selection Report')}<section class="report-section"><h3>${finalConfirmed?'Selected, reserve, non-travelling reserve and excused':'Provisional ranking'}</h3><p>Defence Rate is the actual-statistics component. Ratings influence is <strong>${state.ratingsInfluence}%</strong>; at 100% ratings equal, but never exceed, Defence Rate influence. Rating mix: ${esc(weights)}.</p>${primaryTable}</section>${otherTable}<section class="report-section"><h3>All goalkeepers · All trial days</h3>${statsTable(allResults)}</section>${days}<section class="report-section report-day"><h3>Shot-type and situation breakdown</h3>${breakdownTable()}</section><section class="report-section report-day"><h3>Every trial-section rating and note</h3>${ratingAuditTable()}</section>${state.reportNotes?`<section class="report-section"><h3>Selector notes</h3><div class="report-notes">${esc(state.reportNotes)}</div></section>`:''}`;
+    return `${reportHeader('Goalkeeper Selection Report')}<section class="report-section"><h3>${finalConfirmed?'Selected, reserve, non-travelling reserve and excused':'Provisional ranking'}</h3>${primaryTable}</section>${otherTable}<section class="report-section"><h3>All goalkeepers · All trial days</h3>${statsTable(allResults)}</section>${days}<section class="report-section report-day"><h3>Shot-type and situation breakdown</h3>${breakdownTable()}</section><section class="report-section report-day"><h3>Every trial-section rating and note</h3>${ratingAuditTable()}</section>${state.reportNotes?`<section class="report-section"><h3>Selector notes</h3><div class="report-notes">${esc(state.reportNotes)}</div></section>`:''}`;
   }
 
   function filteredTimeFor(goalieId,filters={}){return Object.entries(state.timers).filter(([key])=>{const [dayId,drillId,id]=key.split('|');return id===goalieId&&(!filters.dayId||filters.dayId==='all'||dayId===filters.dayId)&&(!filters.drillId||filters.drillId==='all'||drillId===filters.drillId)}).reduce((sum,[,value])=>sum+Number(value||0),0)}
@@ -712,9 +785,13 @@
     $('rosterDayFilter').addEventListener('change',renderRoster);
     $('recordingDay').addEventListener('change',()=>{stopAllRunningTimers();renderRecording();});$('recordingDrill').addEventListener('change',()=>{stopAllRunningTimers();renderRecording();});
     $('swapGoalies').addEventListener('click',swapGoalkeepers);
-    $('videoDay').addEventListener('change',renderVideoReview);$('videoDrill').addEventListener('change',renderVideoReview);
+    $('videoDay').addEventListener('change',()=>{pauseAllVideoPlayback();renderVideoReview();});$('videoDrill').addEventListener('change',()=>{pauseAllVideoPlayback();renderVideoReview();});
     $('promotionDay').addEventListener('change',renderPromotion);$('markDayComplete').addEventListener('click',markPromotionDayComplete);$('reopenDay').addEventListener('click',reopenPromotionDay);$('confirmPromotion').addEventListener('click',confirmPromotion);$('addExistingLateEntry').addEventListener('click',addExistingLateEntry);$('addLateTrialGoalie').addEventListener('click',()=>beginLateEntry('trial'));$('addLateSharedGoalie').addEventListener('click',()=>beginLateEntry('shared'));
-    setVideo($('videoFileA'),$('videoA'));setVideo($('videoFileB'),$('videoB'));
+    $('videoFileA').addEventListener('change',event=>{addVideoFiles(0,event.target.files);event.target.value='';});$('videoFileB').addEventListener('change',event=>{addVideoFiles(1,event.target.files);event.target.value='';});
+    $('videoPlayPause').addEventListener('click',toggleVideoPlayback);$('videoFrameBack').addEventListener('click',()=>stepVideoFrame(-1));$('videoFrameForward').addEventListener('click',()=>stepVideoFrame(1));$('videoSetSync').addEventListener('click',syncCurrentVideoFrames);$('videoClearSync').addEventListener('click',clearVideoSync);
+    $('videoSpeed').addEventListener('change',event=>{const session=currentVideoSession();session.speed=Number(event.target.value)||1;['videoA','videoB'].forEach(id=>$(id).playbackRate=session.speed);if(session.playing){videoClockMaster=session.masterTime;videoClockStarted=performance.now();}updateVideoTransport();});
+    $('videoSeek').addEventListener('input',event=>{stopVideoPlayback();setVideoMasterTime(event.target.value,true);});
+    $('page-video').addEventListener('click',event=>{const move=event.target.closest('[data-video-move]'),remove=event.target.closest('[data-video-remove]'),shot=event.target.closest('[data-video-shot-time]'),nudge=event.target.closest('[data-video-nudge]');if(move){const [angle,index,direction]=move.dataset.videoMove.split('|').map(Number);moveVideoClip(angle,index,direction);}else if(remove){const [angle,id]=remove.dataset.videoRemove.split('|');removeVideoClip(Number(angle),id);}else if(shot){stopVideoPlayback();setVideoMasterTime(Number(shot.dataset.videoShotTime),true);}else if(nudge)nudgeVideoAngleB(Number(nudge.dataset.videoNudge));});
     $('undoLastEvent').addEventListener('click',()=>{const dayId=$('recordingDay').value,drillId=$('recordingDrill').value;if(completedDay(dayId)){showToast('Reopen this trial day before changing its recordings.');return;}const index=state.events.map(e=>e.dayId===dayId&&e.drillId===drillId).lastIndexOf(true);if(index<0){showToast('There is no event to undo.');return;}state.events.splice(index,1);saveState();renderRecording();showToast('Last event removed.');});
     ['compareDay','compareDrill','compareShot','compareSituation'].forEach(id=>$(id).addEventListener('change',renderComparison));
     $('reportType').addEventListener('change',renderReport);$('reportGoalie').addEventListener('change',renderReport);
@@ -737,8 +814,8 @@
     }
     if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
   }
-  window.__trialsV116Test={
-    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,feedbackReport,reportResults,outcomeLabel,eligibilityLabel,finalStatusMap,validDob,sectionSituation,goalieKitIcon,ensureSectionRating,persistInlineRating,deleteTrialEvent,rankingRound,eventTemplateFromState,addDateDays,preferredWorkingDayId,completedDay,selectionOutcomeNeedsEligibilityWarning,reopenPromotionDay,renderRotationOverview,openShotEditor,saveShotEdit,
+  window.__trialsV117Test={
+    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,feedbackReport,reportResults,outcomeLabel,eligibilityLabel,finalStatusMap,validDob,sectionSituation,goalieKitIcon,ensureSectionRating,persistInlineRating,deleteTrialEvent,rankingRound,eventTemplateFromState,addDateDays,preferredWorkingDayId,completedDay,selectionOutcomeNeedsEligibilityWarning,reopenPromotionDay,renderRotationOverview,openShotEditor,saveShotEdit,dayTimeFor,playlistDuration,locateVideoTime,masterDuration,
     setState(patch){Object.assign(state,defaultState(),patch);state.shotSelections=state.shotSelections||{};state.progressions=state.progressions||{};},
     getState(){return state;}
   };
