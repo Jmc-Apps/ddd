@@ -1,8 +1,18 @@
-Data Driven Development Suite v1.16
+Data Driven Development Suite v1.17
 Field Hockey Goalie Stats v5.105
 Indoor Hockey Goalie Stats v1.1
-Hockey Goalie Trials v1.11
+Hockey Goalie Trials v1.12
 Stats Recorder v1.42
+
+Version 1.17 / Trials v1.12 builds on the complete v1.16 fairness, timers and ratings release.
+
+- Adds six-digit-confirmed deletion of an entire trial event and all of its trial-specific data while leaving shared goalkeeper profiles untouched.
+- Adds Male, Female and Mixed team gender to trial creation, setup, event cards, comparisons and reports.
+- Adds a compact goalkeeper kit icon beside names in Trials rosters and recording stations. The torso follows the smock colour and all pads follow the leg-guard colour.
+- Enforces a valid four-digit DOB year throughout the shared platform, Field Hockey, Indoor Hockey and trial-only roster forms.
+- Automatically locks Penalty Corners, Penalty Strokes and 8Sec 1v1 recording to their matching shot situations in live and video capture.
+- Starts every trial-section rating at 3 / 5, saves it immediately, and automatically overwrites the single saved review as ratings or notes change.
+- Orders the Trials sidebar as Home, Trial Events, Trial Setup, Trials Roster, Trial Recording, Video Review, Comparison, Promotion / Selection and Selection Report.
 
 Version 1.16 / Trials v1.11 builds on the complete v1.15 multiday and promotion release.
 

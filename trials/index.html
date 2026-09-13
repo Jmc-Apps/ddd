@@ -7,13 +7,13 @@
   <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
   <title>Hockey Goalie Trials: Data Driven Selection</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192-v1-11.png">
-  <link rel="apple-touch-icon" href="assets/icon-192-v1-11.png">
+  <link rel="icon" href="assets/icon-192-v1-12.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-12.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <img src="assets/trials-banner-v1-11.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <img src="assets/trials-banner-v1-12.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
     <div class="header-actions">
       <span id="saveStatus" class="save-status">Saved locally</span>
       <button id="installButton" class="button ghost hidden" type="button">Install App</button>
@@ -29,12 +29,12 @@
         <button class="nav-button" data-page="roster"><span>◉</span>Trials Roster</button>
         <button class="nav-button" data-page="recording"><span>●</span>Trial Recording</button>
         <button class="nav-button" data-page="video"><span>▶</span>Video Review</button>
-        <button class="nav-button" data-page="promotion"><span>✓</span>Promotion / Selection</button>
         <button class="nav-button" data-page="comparison"><span>⇄</span>Comparison</button>
+        <button class="nav-button" data-page="promotion"><span>✓</span>Promotion / Selection</button>
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
-      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-16.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.11<br><span>Data Driven Development</span></div>
+      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-17.png" alt="Data Driven Development Home"></a>
+      <div class="sidebar-footer">Version 1.12<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -74,6 +74,7 @@
             <form id="setupForm" class="form-grid">
               <label class="field span-2"><span>Trial name</span><input id="trialName" required placeholder="e.g. U16 Girls First Team Trials"></label>
               <label class="field"><span>Team</span><input id="teamName" required placeholder="Team name"></label>
+              <label class="field"><span>Team gender</span><select id="teamGender"><option>Male</option><option>Female</option><option>Mixed</option></select></label>
               <label class="field"><span>Age group</span><select id="ageGroup"><option>U13</option><option>U14</option><option>U16</option><option>U18</option><option>U21</option><option>Senior</option><option>Masters</option></select></label>
               <label class="field"><span>Level</span><select id="teamLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
               <label class="field"><span>Tier</span><select id="teamTier"><option>A/1st</option><option>B/2nd</option><option>C/3rd</option><option>D/4th</option><option>Other</option></select></label>
@@ -207,7 +208,7 @@
       <div class="modal-header"><div><p class="eyebrow">Roster profile</p><h2>Add goalkeeper</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
       <div class="form-grid">
         <label class="field span-2"><span>Name</span><input id="goalieName" required></label>
-        <label class="field"><span>Date of birth</span><input id="goalieDob" type="date" required></label>
+        <label class="field"><span>Date of birth</span><input id="goalieDob" type="date" min="1900-01-01" max="9999-12-31" required></label>
         <label class="field"><span>Gender</span><select id="goalieGender"><option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></label>
         <label class="field span-2"><span>Playing experience</span><textarea id="goalieExperience" rows="3" placeholder="Teams, years played and relevant experience"></textarea></label>
         <label class="field"><span>Preferred level</span><select id="goaliePreferredLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
@@ -232,6 +233,7 @@
       <div class="form-grid">
         <label class="field span-2"><span>Trial name</span><input id="newTrialName" required placeholder="e.g. U16 Girls First Team Trials"></label>
         <label class="field span-2"><span>Team</span><input id="newTrialTeam" required placeholder="Team name"></label>
+        <label class="field"><span>Team gender</span><select id="newTrialGender"><option>Male</option><option>Female</option><option>Mixed</option></select></label>
         <label class="field"><span>Age group</span><select id="newTrialAge"><option>U13</option><option>U14</option><option>U16</option><option>U18</option><option>U21</option><option>Senior</option><option>Masters</option></select></label>
         <label class="field"><span>Level</span><select id="newTrialLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
       </div>
@@ -245,7 +247,8 @@
       <input id="ratingGoalieId" type="hidden">
       <div class="rating-grid" id="ratingInputs"></div>
       <label class="field"><span>Coach notes</span><textarea id="ratingNotes" rows="5" placeholder="Positioning, decisions, movement, communication and development points..."></textarea></label>
-      <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Save station review</button></div>
+      <p class="muted">Ratings and notes save automatically.</p>
+      <div class="modal-actions"><button type="button" class="button primary" data-close-dialog>Close</button></div>
     </form>
   </dialog>
 

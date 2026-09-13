@@ -13,7 +13,7 @@
   const SESSION_FIELDS = ['trial','days','drills','goalies','events','ratings','timers','stationSelections','shotSelections','ratingsInfluence','ratingWeights','reportNotes','finalDecision','progressions'];
 
   const defaultState = () => ({
-    trial: {name:'', team:'', ageGroup:'U16', level:'School', tier:'A/1st'},
+    trial: {name:'', team:'', gender:'Male', ageGroup:'U16', level:'School', tier:'A/1st'},
     days: [],
     drills: [],
     goalies: [],
@@ -50,6 +50,12 @@
   const pct = value => Number.isFinite(value) ? `${value.toFixed(1)}%` : 'N/C';
   const average = values => values.length ? values.reduce((a,b)=>a+b,0)/values.length : 0;
 
+  function validDob(value){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(value||''))return false;
+    const date=new Date(`${value}T12:00:00`),year=Number(value.slice(0,4));
+    return year>=1900&&year<=new Date().getFullYear()&&!Number.isNaN(date.getTime())&&date.toISOString().slice(0,10)===value;
+  }
+
   function captureSession(source){
     return Object.fromEntries(SESSION_FIELDS.map(key=>[key,structuredClone(source[key] ?? defaultState()[key])]));
   }
@@ -57,11 +63,11 @@
   function loadState(){
     try {
       const parsed={...defaultState(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')};
-      parsed.shotSelections=parsed.shotSelections||{};parsed.progressions=parsed.progressions||{};parsed.trialSessions=parsed.trialSessions||{};
+      parsed.trial={...defaultState().trial,...(parsed.trial||{})};parsed.shotSelections=parsed.shotSelections||{};parsed.progressions=parsed.progressions||{};parsed.trialSessions=parsed.trialSessions||{};
       const legacyWeights=parsed.weights||{};
       parsed.ratingsInfluence=Number.isFinite(Number(parsed.ratingsInfluence))?Math.min(100,Math.max(0,Number(parsed.ratingsInfluence))):50;
       parsed.ratingWeights={...defaultState().ratingWeights,...Object.fromEntries(CATEGORIES.map(cat=>[cat,Number(parsed.ratingWeights?.[cat]??legacyWeights[cat]??20)]))};
-      Object.values(parsed.trialSessions).forEach(session=>{const old=session.weights||{};session.ratingsInfluence=Number.isFinite(Number(session.ratingsInfluence))?Math.min(100,Math.max(0,Number(session.ratingsInfluence))):50;session.ratingWeights={...defaultState().ratingWeights,...Object.fromEntries(CATEGORIES.map(cat=>[cat,Number(session.ratingWeights?.[cat]??old[cat]??20)]))};});
+      Object.values(parsed.trialSessions).forEach(session=>{const old=session.weights||{};session.trial={...defaultState().trial,...(session.trial||{})};session.ratingsInfluence=Number.isFinite(Number(session.ratingsInfluence))?Math.min(100,Math.max(0,Number(session.ratingsInfluence))):50;session.ratingWeights={...defaultState().ratingWeights,...Object.fromEntries(CATEGORIES.map(cat=>[cat,Number(session.ratingWeights?.[cat]??old[cat]??20)]))};});
       if(!parsed.activeTrialId){parsed.activeTrialId=`trial-${Date.now()}-${Math.random().toString(16).slice(2)}`;parsed.trialSessions[parsed.activeTrialId]=captureSession(parsed);}
       if(!parsed.trialSessions[parsed.activeTrialId]) parsed.trialSessions[parsed.activeTrialId]=captureSession(parsed);
       return parsed;
@@ -157,9 +163,10 @@
     const entries=trialSessionEntries();
     $('trialEventGrid').innerHTML=entries.length?entries.map(({id,session,trial})=>{
       const all=session.events||[],days=session.days||[];
-      return `<article class="event-card ${id===state.activeTrialId?'active':''}"><div><span class="pill ${id===state.activeTrialId?'success':''}">${id===state.activeTrialId?'Active trial':'Available'}</span><h2>${esc(trial.name||'Unnamed trial')}</h2><p>${esc(trial.team||'Team not set')} · ${esc(trial.ageGroup||'')} · ${esc(trial.level||'')}</p></div><div class="event-summary"><span><strong>${days.length}</strong> days</span><span><strong>${(session.goalies||[]).length}</strong> goalies</span><span><strong>${all.length}</strong> attempts</span></div><button class="button ${id===state.activeTrialId?'ghost':'primary'}" data-open-trial="${id}" ${id===state.activeTrialId?'disabled':''}>${id===state.activeTrialId?'Currently open':'Open Trial'}</button></article>`;
+      return `<article class="event-card ${id===state.activeTrialId?'active':''}"><div><span class="pill ${id===state.activeTrialId?'success':''}">${id===state.activeTrialId?'Active trial':'Available'}</span><h2>${esc(trial.name||'Unnamed trial')}</h2><p>${esc(trial.team||'Team not set')} · ${esc(trial.gender||'Male')} · ${esc(trial.ageGroup||'')} · ${esc(trial.level||'')}</p></div><div class="event-summary"><span><strong>${days.length}</strong> days</span><span><strong>${(session.goalies||[]).length}</strong> goalies</span><span><strong>${all.length}</strong> attempts</span></div><div class="event-actions"><button class="button ${id===state.activeTrialId?'ghost':'primary'}" data-open-trial="${id}" ${id===state.activeTrialId?'disabled':''}>${id===state.activeTrialId?'Currently open':'Open Trial'}</button><button class="button danger" data-delete-trial="${id}">Delete Trial</button></div></article>`;
     }).join(''):'<div class="empty-state">Create a trial event to begin.</div>';
     document.querySelectorAll('[data-open-trial]').forEach(button=>button.addEventListener('click',()=>activateTrial(button.dataset.openTrial)));
+    document.querySelectorAll('[data-delete-trial]').forEach(button=>button.addEventListener('click',()=>deleteTrialEvent(button.dataset.deleteTrial)));
   }
 
   function activateTrial(id){
@@ -170,8 +177,21 @@
   function createTrialEvent(event){
     event.preventDefault();syncActiveSession();
     const blank=defaultState(),id=uid();
-    blank.trial={name:$('newTrialName').value.trim(),team:$('newTrialTeam').value.trim(),ageGroup:$('newTrialAge').value,level:$('newTrialLevel').value,tier:'A/1st'};
+    blank.trial={name:$('newTrialName').value.trim(),team:$('newTrialTeam').value.trim(),gender:$('newTrialGender').value,ageGroup:$('newTrialAge').value,level:$('newTrialLevel').value,tier:'A/1st'};
     state.activeTrialId=id;applySession(blank);state.trialSessions[id]=captureSession(state);saveState();$('trialEventDialog').close();$('trialEventForm').reset();switchPage('setup');showToast('New trial event created.');
+  }
+
+  function deleteTrialEvent(id){
+    syncActiveSession();const session=state.trialSessions[id];if(!session)return;
+    const name=session.trial?.name||'Unnamed trial';
+    if(!confirmationCode(`Delete ${name} and its days, roster, recordings, ratings, timers, selections and reports?`))return;
+    stopAllRunningTimers();delete state.trialSessions[id];
+    if(id===state.activeTrialId){
+      const nextId=Object.keys(state.trialSessions)[0];
+      if(nextId){state.activeTrialId=nextId;applySession(state.trialSessions[nextId]);}
+      else {const blank=defaultState(),freshId=uid();state.activeTrialId=freshId;applySession(blank);state.trialSessions[freshId]=captureSession(state);}
+    }
+    saveState();renderTrialEvents();showToast(`${name} deleted.`);
   }
 
   function trialReady(){ return Boolean(state.trial.name && state.trial.team && state.days.length && state.drills.length); }
@@ -236,7 +256,7 @@
     $('trialStatePill').textContent = trialReady() ? 'Ready' : 'Setup required';
     $('trialStatePill').className = `pill ${trialReady()?'success':'warning'}`;
     $('dashboardTrialDetails').innerHTML = [
-      ['Team',state.trial.team||'—'],['Classification',`${state.trial.ageGroup} · ${state.trial.level} · ${state.trial.tier}`],['Trial days',state.days.length],['Total goalkeeper time',formatTime(state.goalies.reduce((sum,g)=>sum+totalTimeFor(g.id),0))]
+      ['Team',state.trial.team||'—'],['Classification',`${state.trial.gender} · ${state.trial.ageGroup} · ${state.trial.level} · ${state.trial.tier}`],['Trial days',state.days.length],['Total goalkeeper time',formatTime(state.goalies.reduce((sum,g)=>sum+totalTimeFor(g.id),0))]
     ].map(([label,value])=>`<div class="detail-item"><strong>${esc(value)}</strong><span>${esc(label)}</span></div>`).join('');
     $('dashboardDrills').innerHTML = state.drills.length ? state.drills.map(drill=>{
       const day=state.days.find(d=>d.id===drill.dayId); const count=state.events.filter(e=>e.drillId===drill.id).length; const total=drill.target*Math.max(1,state.goalies.length); const progress=Math.min(100,total?count/total*100:0);
@@ -246,7 +266,7 @@
   }
 
   function renderSetup(preferredDayId){
-    $('trialName').value=state.trial.name; $('teamName').value=state.trial.team; $('ageGroup').value=state.trial.ageGroup; $('teamLevel').value=state.trial.level; $('teamTier').value=state.trial.tier;
+    $('trialName').value=state.trial.name; $('teamName').value=state.trial.team; $('teamGender').value=state.trial.gender||'Male'; $('ageGroup').value=state.trial.ageGroup; $('teamLevel').value=state.trial.level; $('teamTier').value=state.trial.tier;
     const retainedDay=preferredDayId||$('drillDay').value||state.days[0]?.id||'';
     const dayOptions = optionList(state.days.map((d,i)=>({id:d.id,name:`Day ${i+1} · ${dayLabel(d.date)}`})),retainedDay);
     $('drillDay').innerHTML = dayOptions || '<option value="">Add a trial day first</option>';
@@ -259,7 +279,7 @@
   }
 
   function saveSetup(){
-    state.trial={name:$('trialName').value.trim(),team:$('teamName').value.trim(),ageGroup:$('ageGroup').value,level:$('teamLevel').value,tier:$('teamTier').value};
+    state.trial={name:$('trialName').value.trim(),team:$('teamName').value.trim(),gender:$('teamGender').value,ageGroup:$('ageGroup').value,level:$('teamLevel').value,tier:$('teamTier').value};
     saveState(); renderSetup(); showToast('Trial setup saved.');
   }
 
@@ -306,6 +326,7 @@
   async function addGoalie(event){
     event.preventDefault();
     const name=$('goalieName').value.trim(); if(!name) return;
+    const dob=$('goalieDob').value;if(!validDob(dob)){$('goalieDob').setCustomValidity('Enter a valid date with a four-digit year (1900 to the current year).');$('goalieDob').reportValidity();return;}$('goalieDob').setCustomValidity('');
     const photo=await photoData($('goaliePhoto').files[0]);
     const late=pendingLateEntry,goalie={id:uid(),source:'trial_only',name,dob:$('goalieDob').value,gender:$('goalieGender').value,experience:$('goalieExperience').value.trim(),preferredLevel:$('goaliePreferredLevel').value,photo,smocks:{},legGuards:{},entryDayId:late?.dayId||'',lateEntryReason:late?.reason||''};
     if(!confirmAgeEligibility(goalie))return;
@@ -315,9 +336,13 @@
   }
 
   function initials(name){return name.split(/\s+/).slice(0,2).map(part=>part[0]||'').join('').toUpperCase()||'GK';}
+  function goalieKitIcon(goalie,dayId){
+    const smock=SMOCK_COLOURS[goalie?.smocks?.[dayId]||'White'],pads=SMOCK_COLOURS[goalie?.legGuards?.[dayId]||'White'];
+    return `<svg class="goalie-kit-icon" viewBox="0 0 48 58" role="img" aria-label="${esc(goalie?.name||'Goalkeeper')} kit colours"><circle cx="24" cy="8" r="6" fill="#dce4ea" stroke="#15384f" stroke-width="2"/><path d="M18 6h12v5H18z" fill="#18384f"/><path d="M15 16l9-4 9 4 3 17H12z" fill="${smock}" stroke="#15384f" stroke-width="2"/><path d="M12 20L6 32l6 3 7-12M36 20l6 12-6 3-7-12" fill="${pads}" stroke="#15384f" stroke-width="2" stroke-linejoin="round"/><rect x="9" y="31" width="8" height="7" rx="2" fill="${pads}" stroke="#15384f" stroke-width="2"/><rect x="31" y="31" width="8" height="7" rx="2" fill="${pads}" stroke="#15384f" stroke-width="2"/><path d="M14 32h20l-2 10H16z" fill="${pads}" stroke="#15384f" stroke-width="2"/><rect x="13" y="40" width="9" height="15" rx="3" fill="${pads}" stroke="#15384f" stroke-width="2"/><rect x="26" y="40" width="9" height="15" rx="3" fill="${pads}" stroke="#15384f" stroke-width="2"/><path d="M12 54h11v3H11zM25 54h11l1 3H25z" fill="${pads}" stroke="#15384f" stroke-width="1.5"/></svg>`;
+  }
   function goalieCard(goalie,editable=true){
     const dayId=$('rosterDayFilter')?.value||state.days[0]?.id||'',smock=goalie.smocks?.[dayId]||'White',guards=goalie.legGuards?.[dayId]||'White',check=eligibility(goalie);
-    return `<article class="goalie-card"><div class="goalie-card-head">${goalie.photo?`<img class="goalie-photo" src="${goalie.photo}" alt="">`:`<div class="goalie-initials">${esc(initials(goalie.name))}</div>`}<div><h3>${esc(goalie.name)}</h3><p>${esc(goalie.gender)} · ${esc(goalie.preferredLevel)} · ${goalie.sharedGoalieId?'Shared goalie':'Trial only'}</p></div></div><div class="goalie-card-body"><p><strong>DOB:</strong> ${esc(dayLabel(goalie.dob))}</p><p><strong>Experience:</strong> ${esc(goalie.experience||'Not recorded')}</p>${!check.eligible?`<div class="ineligible-warning"><strong>Ineligible for ${esc(state.trial.ageGroup)}</strong><span>Age ${check.age} on 1 January ${check.year}</span></div>`:''}${editable?`<div class="kit-colour-grid"><label class="field"><span>Smock colour this day</span><div class="smock-control"><i class="smock-dot" style="background:${SMOCK_COLOURS[smock]}"></i><select data-smock-goalie="${goalie.id}" data-day="${dayId}">${optionList(SMOCKS.map(x=>({value:x,label:x})),smock)}</select></div></label><label class="field"><span>Leg-guards colour this day</span><div class="smock-control"><i class="smock-dot" style="background:${SMOCK_COLOURS[guards]}"></i><select data-guards-goalie="${goalie.id}" data-day="${dayId}">${optionList(SMOCKS.map(x=>({value:x,label:x})),guards)}</select></div></label></div>`:''}</div>${editable?`<div class="goalie-actions"><button class="button ghost" data-open-rating="${goalie.id}">Add review</button><button class="button danger" data-delete-goalie="${goalie.id}">Remove</button></div>`:''}</article>`;
+    return `<article class="goalie-card"><div class="goalie-card-head">${goalie.photo?`<img class="goalie-photo" src="${goalie.photo}" alt="">`:`<div class="goalie-initials">${esc(initials(goalie.name))}</div>`}<div><h3 class="goalie-name-with-kit">${goalieKitIcon(goalie,dayId)}<span>${esc(goalie.name)}</span></h3><p>${esc(goalie.gender)} · ${esc(goalie.preferredLevel)} · ${goalie.sharedGoalieId?'Shared goalie':'Trial only'}</p></div></div><div class="goalie-card-body"><p><strong>DOB:</strong> ${esc(dayLabel(goalie.dob))}</p><p><strong>Experience:</strong> ${esc(goalie.experience||'Not recorded')}</p>${!check.eligible?`<div class="ineligible-warning"><strong>Ineligible for ${esc(state.trial.ageGroup)}</strong><span>Age ${check.age} on 1 January ${check.year}</span></div>`:''}${editable?`<div class="kit-colour-grid"><label class="field"><span>Smock colour this day</span><div class="smock-control"><i class="smock-dot" style="background:${SMOCK_COLOURS[smock]}"></i><select data-smock-goalie="${goalie.id}" data-day="${dayId}">${optionList(SMOCKS.map(x=>({value:x,label:x})),smock)}</select></div></label><label class="field"><span>Leg-guards colour this day</span><div class="smock-control"><i class="smock-dot" style="background:${SMOCK_COLOURS[guards]}"></i><select data-guards-goalie="${goalie.id}" data-day="${dayId}">${optionList(SMOCKS.map(x=>({value:x,label:x})),guards)}</select></div></label></div>`:''}</div>${editable?`<div class="goalie-actions"><button class="button ghost" data-open-rating="${goalie.id}">Add review</button><button class="button danger" data-delete-goalie="${goalie.id}">Remove</button></div>`:''}</article>`;
   }
 
   function renderRoster(){
@@ -372,19 +397,24 @@
   }
 
   function choiceButtons(group,values,selected){return `<div class="choice-row" data-choice-group="${group}">${values.map(value=>`<button type="button" class="choice-button ${value===selected?'selected':''}" data-choice-value="${esc(value)}">${esc(value)}</button>`).join('')}</div>`}
+  function sectionSituation(drill){return ({'Penalty Corners':'Penalty Corner','Penalty Strokes':'Penalty Stroke','8Sec 1v1':'8 Second 1v1'})[drill?.name]||''}
   function shotSelection(dayId,drillId,lane){
-    const key=stationKey(dayId,drillId,lane);state.shotSelections[key]=state.shotSelections[key]||{outcome:'Save',situation:'Normal Game Play',shotType:'1st Shot',outnumbered:'Not Out Numbered',rebound:'No rebound',note:''};return state.shotSelections[key];
+    const key=stationKey(dayId,drillId,lane),drill=state.drills.find(d=>d.id===drillId);state.shotSelections[key]=state.shotSelections[key]||{outcome:'Save',situation:'Normal Game Play',shotType:'1st Shot',outnumbered:'Not Out Numbered',rebound:'No rebound',note:''};const locked=sectionSituation(drill);if(locked)state.shotSelections[key].situation=locked;return state.shotSelections[key];
   }
   function ratingCategories(drill){return drill?.name==='Match Situation'?CATEGORIES:CATEGORIES.filter(cat=>cat!=='Communication')}
   function latestRating(goalieId,dayId,drillId){return [...state.ratings].reverse().find(r=>r.goalieId===goalieId&&r.dayId===dayId&&r.drillId===drillId)}
+  function ensureSectionRating(goalieId,dayId,drill){
+    let existing=latestRating(goalieId,dayId,drill.id);if(existing)return existing;
+    existing={id:uid(),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),goalieId,dayId,drillId:drill.id,values:Object.fromEntries(ratingCategories(drill).map(cat=>[cat,3])),notes:''};state.ratings.push(existing);saveState('Standard rating saved');return existing;
+  }
   function inlineRatingMarkup(goalieId,dayId,drill){
-    const existing=latestRating(goalieId,dayId,drill.id),categories=ratingCategories(drill);
-    return `<div class="inline-review"><h3>Trial section rating</h3><p class="muted">Saved once for this goalkeeper and trial section; recording another shot does not create a new rating.</p><div class="inline-rating-grid">${categories.map(cat=>{const selected=Number(existing?.values?.[cat]||3);return `<div class="inline-rating"><span>${cat}</span><div>${[1,2,3,4,5].map(n=>`<button type="button" class="rating-choice ${n===selected?'selected':''}" data-rating-cat="${cat}" data-rating-value="${n}">${n}</button>`).join('')}</div></div>`}).join('')}</div><label class="field"><span>Coach notes</span><textarea class="inline-rating-notes" rows="3" placeholder="Observations and development points">${esc(existing?.notes||'')}</textarea></label><button type="button" class="button ghost save-inline-rating">Save Trial Section Review</button></div>`;
+    const existing=ensureSectionRating(goalieId,dayId,drill),categories=ratingCategories(drill);
+    return `<div class="inline-review"><h3>Trial section rating</h3><p class="muted">Starts at 3 / 5 and saves automatically. Changes overwrite this goalkeeper’s single rating for the section.</p><div class="inline-rating-grid">${categories.map(cat=>{const selected=Number(existing?.values?.[cat]||3);return `<div class="inline-rating"><span>${cat}</span><div>${[1,2,3,4,5].map(n=>`<button type="button" class="rating-choice ${n===selected?'selected':''}" data-rating-cat="${cat}" data-rating-value="${n}">${n}</button>`).join('')}</div></div>`}).join('')}</div><label class="field"><span>Coach notes</span><textarea class="inline-rating-notes" rows="3" placeholder="Observations and development points">${esc(existing?.notes||'')}</textarea></label><span class="auto-save-note" aria-live="polite">Saved automatically</span></div>`;
   }
 
   function stationMarkup(lane,dayId,drillId,live){
-    const goalieId=selectedGoalie(dayId,drillId,lane),goalies=eligibleGoaliesForDay(dayId).filter(g=>g.id===goalieId||g.id!==state.stationSelections[stationKey(dayId,drillId,lane?0:1)]),goalie=state.goalies.find(g=>g.id===goalieId),stats=goalie?goalieStats(goalieId,{dayId,drillId}):goalieStats('',{dayId,drillId}),key=timerKey(dayId,drillId,goalieId),elapsed=(state.timers[key]||0)+(activeTimers[lane]?.key===key?Date.now()-activeTimers[lane].startedAt:0),smock=goalie?.smocks?.[dayId]||'White',guards=goalie?.legGuards?.[dayId]||'White',selection=shotSelection(dayId,drillId,lane),drill=state.drills.find(d=>d.id===drillId),targetMet=Boolean(drill&&stats.attempts>=drill.target);
-    return `<article class="station-card ${targetMet?'target-met':''}" data-lane="${lane}"><div class="station-top"><span class="eyebrow">${live?'Recording':'Video recording'} · ${lane?'Goal B':'Goal A'}${targetMet?' · Target reached':''}</span><select class="station-goalie" aria-label="Goalkeeper for ${lane?'Goal B':'Goal A'}">${goalies.length?optionList(goalies,goalieId):'<option value="">No eligible goalkeeper</option>'}</select>${goalie?`<div class="station-smock"><span><i class="smock-dot" style="background:${SMOCK_COLOURS[smock]}"></i>${esc(smock)} smock</span><span><i class="smock-dot" style="background:${SMOCK_COLOURS[guards]}"></i>${esc(guards)} leg guards</span></div>`:''}</div><div class="station-summary"><div><strong>${stats.attempts}</strong><span>Attempts</span></div><div><strong>${stats.saves}</strong><span>Saves</span></div><div><strong>${stats.goals}</strong><span>Goals</span></div><div><strong>${pct(stats.defenceRate)}</strong><span>Defence</span></div></div>${live?`<div class="timer-panel"><div><span class="metric-label">Time in goal</span><strong class="timer-value" data-timer-lane="${lane}">${formatTime(elapsed)}</strong></div><button class="timer-button ${activeTimers[lane]?'running':''}" data-toggle-timer="${lane}" ${goalie?'':'disabled'}>${activeTimers[lane]?'Pause':'Start'}</button></div>`:''}<div class="shot-form"><label>Shot Outcome</label>${choiceButtons('outcome',['Save','Goal','Angle Closed Off'],selection.outcome)}<label>Shot Situation</label>${choiceButtons('situation',SITUATIONS,selection.situation)}<label>Shot Type</label>${choiceButtons('shotType',SHOT_TYPES,selection.shotType)}<label>Out Numbered</label>${choiceButtons('outnumbered',OUTNUMBERED,selection.outnumbered)}<label>Rebound Result</label>${choiceButtons('rebound',REBOUND_RESULTS,selection.rebound)}<label class="field"><span>Notes</span><input class="shot-note" value="${esc(selection.note||'')}"></label><button type="button" class="button primary save-trial-shot">Save Trial Shot</button></div>${goalie&&drill?inlineRatingMarkup(goalieId,dayId,drill):''}</article>`;
+    const goalieId=selectedGoalie(dayId,drillId,lane),goalies=eligibleGoaliesForDay(dayId).filter(g=>g.id===goalieId||g.id!==state.stationSelections[stationKey(dayId,drillId,lane?0:1)]),goalie=state.goalies.find(g=>g.id===goalieId),stats=goalie?goalieStats(goalieId,{dayId,drillId}):goalieStats('',{dayId,drillId}),key=timerKey(dayId,drillId,goalieId),elapsed=(state.timers[key]||0)+(activeTimers[lane]?.key===key?Date.now()-activeTimers[lane].startedAt:0),smock=goalie?.smocks?.[dayId]||'White',guards=goalie?.legGuards?.[dayId]||'White',drill=state.drills.find(d=>d.id===drillId),selection=shotSelection(dayId,drillId,lane),locked=sectionSituation(drill),targetMet=Boolean(drill&&stats.attempts>=drill.target);
+    return `<article class="station-card ${targetMet?'target-met':''}" data-lane="${lane}"><div class="station-top"><span class="eyebrow">${live?'Recording':'Video recording'} · ${lane?'Goal B':'Goal A'}${targetMet?' · Target reached':''}</span><select class="station-goalie" aria-label="Goalkeeper for ${lane?'Goal B':'Goal A'}">${goalies.length?optionList(goalies,goalieId):'<option value="">No eligible goalkeeper</option>'}</select>${goalie?`<div class="station-goalie-name">${goalieKitIcon(goalie,dayId)}<strong>${esc(goalie.name)}</strong></div><div class="station-smock"><span><i class="smock-dot" style="background:${SMOCK_COLOURS[smock]}"></i>${esc(smock)} smock</span><span><i class="smock-dot" style="background:${SMOCK_COLOURS[guards]}"></i>${esc(guards)} pads</span></div>`:''}</div><div class="station-summary"><div><strong>${stats.attempts}</strong><span>Attempts</span></div><div><strong>${stats.saves}</strong><span>Saves</span></div><div><strong>${stats.goals}</strong><span>Goals</span></div><div><strong>${pct(stats.defenceRate)}</strong><span>Defence</span></div></div>${live?`<div class="timer-panel"><div><span class="metric-label">Time in goal</span><strong class="timer-value" data-timer-lane="${lane}">${formatTime(elapsed)}</strong></div><button class="timer-button ${activeTimers[lane]?'running':''}" data-toggle-timer="${lane}" ${goalie?'':'disabled'}>${activeTimers[lane]?'Pause':'Start'}</button></div>`:''}<div class="shot-form"><label>Shot Outcome</label>${choiceButtons('outcome',['Save','Goal','Angle Closed Off'],selection.outcome)}<label>Shot Situation</label>${locked?`<div class="locked-situation" aria-label="Locked shot situation">🔒 ${esc(locked)} · set by trial section</div>`:choiceButtons('situation',SITUATIONS,selection.situation)}<label>Shot Type</label>${choiceButtons('shotType',SHOT_TYPES,selection.shotType)}<label>Out Numbered</label>${choiceButtons('outnumbered',OUTNUMBERED,selection.outnumbered)}<label>Rebound Result</label>${choiceButtons('rebound',REBOUND_RESULTS,selection.rebound)}<label class="field"><span>Notes</span><input class="shot-note" value="${esc(selection.note||'')}"></label><button type="button" class="button primary save-trial-shot">Save Trial Shot</button></div>${goalie&&drill?inlineRatingMarkup(goalieId,dayId,drill):''}</article>`;
   }
 
   function bindStationControls(container,dayId,drillId,live){
@@ -395,9 +425,8 @@
       card.querySelectorAll('[data-choice-group]').forEach(group=>group.querySelectorAll('[data-choice-value]').forEach(button=>button.addEventListener('click',()=>{const selection=shotSelection(dayId,drillId,lane);selection[group.dataset.choiceGroup]=button.dataset.choiceValue;group.querySelectorAll('.choice-button').forEach(item=>item.classList.toggle('selected',item===button));saveState();})));
       card.querySelector('.shot-note')?.addEventListener('input',event=>{shotSelection(dayId,drillId,lane).note=event.target.value;});
       card.querySelector('.save-trial-shot')?.addEventListener('click',()=>recordOutcome(card,lane,dayId,drillId,live));
-      card.querySelectorAll('[data-rating-cat]').forEach(button=>button.addEventListener('click',()=>{card.querySelectorAll(`[data-rating-cat="${button.dataset.ratingCat}"]`).forEach(item=>item.classList.toggle('selected',item===button));card.dataset.ratingDirty='1';}));
-      card.querySelector('.inline-rating-notes')?.addEventListener('input',()=>{card.dataset.ratingDirty='1';});
-      card.querySelector('.save-inline-rating')?.addEventListener('click',()=>saveInlineRating(card,goalieSelect.value,dayId,drillId));
+      card.querySelectorAll('[data-rating-cat]').forEach(button=>button.addEventListener('click',()=>{card.querySelectorAll(`[data-rating-cat="${button.dataset.ratingCat}"]`).forEach(item=>item.classList.toggle('selected',item===button));persistInlineRating(card,goalieSelect.value,dayId,drillId,false);}));
+      let notesTimer;card.querySelector('.inline-rating-notes')?.addEventListener('input',()=>{clearTimeout(notesTimer);const status=card.querySelector('.auto-save-note');if(status)status.textContent='Saving…';notesTimer=setTimeout(()=>persistInlineRating(card,goalieSelect.value,dayId,drillId,false),350);});
       const timerButton=card.querySelector('[data-toggle-timer]'); if(timerButton)timerButton.addEventListener('click',()=>toggleTimer(lane,dayId,drillId,goalieSelect.value));
     });
   }
@@ -405,18 +434,14 @@
   function recordOutcome(card,lane,dayId,drillId,live){
     const goalieId=card.querySelector('.station-goalie').value; if(!goalieId){showToast('Add and select a goalkeeper first.');return;}
     if(live){const key=timerKey(dayId,drillId,goalieId);if(!activeTimers[lane]&&!Number(state.timers[key]||0)){cancelPendingGoalieStart(lane);startTimer(lane,dayId,drillId,goalieId);}}
-    if(card.dataset.ratingDirty==='1')persistInlineRating(card,goalieId,dayId,drillId,false);
-    const selection=shotSelection(dayId,drillId,lane),rebound=selection.rebound==='No rebound'?'':selection.rebound;
+    const selection=shotSelection(dayId,drillId,lane),drill=state.drills.find(d=>d.id===drillId),locked=sectionSituation(drill);if(locked)selection.situation=locked;const rebound=selection.rebound==='No rebound'?'':selection.rebound;
     const event={id:uid(),createdAt:new Date().toISOString(),dayId,drillId,goalieId,lane,outcome:selection.outcome,shotType:selection.shotType,situation:selection.situation,outnumbered:selection.outnumbered,rebound,dangerousRebound:rebound==='Dangerous',note:selection.note||'',source:live?'live':'video'};
     state.events.push(event);selection.note='';saveState('Event saved');live?renderRecording():renderVideoReview();showToast(`${selection.outcome} recorded.`);
   }
 
-  function saveInlineRating(card,goalieId,dayId,drillId){
-    persistInlineRating(card,goalieId,dayId,drillId,true);
-  }
   function persistInlineRating(card,goalieId,dayId,drillId,notify){
     if(!goalieId)return;const drill=state.drills.find(d=>d.id===drillId),values={};ratingCategories(drill).forEach(cat=>{values[cat]=Number(card.querySelector(`[data-rating-cat="${cat}"].selected`)?.dataset.ratingValue||3);});
-    state.ratings=state.ratings.filter(r=>!(r.goalieId===goalieId&&r.dayId===dayId&&r.drillId===drillId));state.ratings.push({id:uid(),createdAt:new Date().toISOString(),goalieId,dayId,drillId,values,notes:card.querySelector('.inline-rating-notes')?.value.trim()||''});card.dataset.ratingDirty='';saveState();if(notify)showToast('Trial section review saved.');
+    const previous=latestRating(goalieId,dayId,drillId),now=new Date().toISOString();state.ratings=state.ratings.filter(r=>!(r.goalieId===goalieId&&r.dayId===dayId&&r.drillId===drillId));state.ratings.push({id:previous?.id||uid(),createdAt:previous?.createdAt||now,updatedAt:now,goalieId,dayId,drillId,values,notes:card.querySelector('.inline-rating-notes')?.value.trim()||''});saveState();const status=card.querySelector('.auto-save-note');if(status)status.textContent='Saved automatically';if(notify)showToast('Trial section review saved.');
   }
 
   function toggleTimer(lane,dayId,drillId,goalieId){
@@ -433,20 +458,24 @@
 
   function renderTimeline(dayId,drillId){
     const events=getEvents({dayId,drillId}).slice(-12).reverse();
-    $('eventTimeline').innerHTML=events.length?events.map(event=>{const goalie=state.goalies.find(g=>g.id===event.goalieId);return `<div class="timeline-event"><span>${new Date(event.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div><strong>${esc(goalie?.name||'Unknown goalkeeper')}</strong><br><span class="muted">${esc(event.shotType)} · ${esc(event.situation)}${event.rebound?' · rebound':''}</span></div><span class="event-outcome ${event.outcome.split(' ')[0]}">${esc(event.outcome)}</span></div>`}).join(''):'<div class="empty-state">Recorded events will appear here.</div>';
+    $('eventTimeline').innerHTML=events.length?events.map(event=>{const goalie=state.goalies.find(g=>g.id===event.goalieId);return `<div class="timeline-event"><span>${new Date(event.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div><strong class="timeline-goalie-name">${goalie?goalieKitIcon(goalie,event.dayId):''}<span>${esc(goalie?.name||'Unknown goalkeeper')}</span></strong><br><span class="muted">${esc(event.shotType)} · ${esc(event.situation)}${event.rebound?' · rebound':''}</span></div><span class="event-outcome ${event.outcome.split(' ')[0]}">${esc(event.outcome)}</span></div>`}).join(''):'<div class="empty-state">Recorded events will appear here.</div>';
   }
 
   function openRating(goalieId,dayId,drillId){
     if(!goalieId||!dayId||!drillId){showToast('Select a trial day, section and goalkeeper first.');return;}
-    const categories=ratingCategories(state.drills.find(d=>d.id===drillId));currentRatingContext={goalieId,dayId,drillId,categories}; const existing=[...state.ratings].reverse().find(r=>r.goalieId===goalieId&&r.dayId===dayId&&r.drillId===drillId);
+    const drill=state.drills.find(d=>d.id===drillId),categories=ratingCategories(drill);currentRatingContext={goalieId,dayId,drillId,categories}; const existing=ensureSectionRating(goalieId,dayId,drill);
     $('ratingInputs').innerHTML=categories.map(cat=>`<div class="rating-field"><label for="rating${cat}">${cat}</label><select id="rating${cat}">${[1,2,3,4,5].map(n=>`<option value="${n}" ${Number(existing?.values?.[cat]||3)===n?'selected':''}>${n} / 5</option>`).join('')}</select></div>`).join('');
     $('ratingNotes').value=existing?.notes||''; $('ratingDialog').showModal();
+    categories.forEach(cat=>$(`rating${cat}`).addEventListener('change',persistModalRating));let notesTimer;$('ratingNotes').oninput=()=>{clearTimeout(notesTimer);notesTimer=setTimeout(persistModalRating,350);};
+  }
+
+  function persistModalRating(){
+    if(!currentRatingContext)return;const {categories,...context}=currentRatingContext,previous=latestRating(context.goalieId,context.dayId,context.drillId),now=new Date().toISOString();state.ratings=state.ratings.filter(r=>!(r.goalieId===context.goalieId&&r.dayId===context.dayId&&r.drillId===context.drillId));state.ratings.push({id:previous?.id||uid(),createdAt:previous?.createdAt||now,updatedAt:now,...context,values:Object.fromEntries(categories.map(cat=>[cat,Number($(`rating${cat}`).value)])),notes:$('ratingNotes').value.trim()});saveState('Rating saved automatically');
   }
 
   function saveRating(event){
     event.preventDefault(); if(!currentRatingContext)return;
-    const {categories,...context}=currentRatingContext;state.ratings=state.ratings.filter(r=>!(r.goalieId===context.goalieId&&r.dayId===context.dayId&&r.drillId===context.drillId));state.ratings.push({id:uid(),createdAt:new Date().toISOString(),...context,values:Object.fromEntries(categories.map(cat=>[cat,Number($(`rating${cat}`).value)])),notes:$('ratingNotes').value.trim()});
-    saveState(); $('ratingDialog').close(); showToast('Station review saved.'); if(currentPage==='recording')renderRecording();
+    persistModalRating();$('ratingDialog').close();showToast('Station review saved.');if(currentPage==='recording')renderRecording();
   }
 
   function renderVideoReview(){
@@ -504,7 +533,7 @@
 
   function comparisonCard(item){
     const cats={Performance:item.stats.attempts?item.stats.defenceRate:null,...item.stats.category},insight=strengthDevelopment(item.stats);
-    return `<article class="comparison-card"><div class="comparison-head"><h2>${esc(item.goalie.name)}</h2><p>Overall score ${item.score.toFixed(1)} · ${formatTime(totalTimeFor(item.goalie.id))} in goal</p></div><div class="comparison-stats"><div class="comparison-stat"><strong>${item.stats.attempts}</strong><span>Attempts</span></div><div class="comparison-stat"><strong>${pct(item.stats.saveRate)}</strong><span>Save rate</span></div><div class="comparison-stat"><strong>${pct(item.stats.defenceRate)}</strong><span>Defence rate</span></div><div class="comparison-stat"><strong>${item.stats.rebounds}</strong><span>Rebounds</span></div><div class="comparison-stat"><strong>${item.stats.dangerous}</strong><span>Dangerous</span></div><div class="comparison-stat"><strong>${item.stats.aco}</strong><span>Angles closed</span></div></div><div class="category-bars">${Object.entries(cats).map(([cat,val])=>{const hasValue=cat==='Performance'?val!==null:Boolean(item.stats.categoryCounts?.[cat]);const scaled=cat==='Performance'?(val||0):(val||0)*20;return `<div class="category-bar"><span>${cat}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,scaled)}%"></div></div><strong>${hasValue?(cat==='Performance'?val.toFixed(0):(val||0).toFixed(1)):'N/C'}</strong></div>`}).join('')}</div><div class="insight-grid"><div class="insight-box"><strong>Strength</strong><span>${esc(insight.strength)}</span></div><div class="insight-box"><strong>Development</strong><span>${esc(insight.development)}</span></div></div></article>`;
+    return `<article class="comparison-card"><div class="comparison-head"><h2>${esc(item.goalie.name)}</h2><p>${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · Overall score ${item.score.toFixed(1)} · ${formatTime(totalTimeFor(item.goalie.id))} in goal</p></div><div class="comparison-stats"><div class="comparison-stat"><strong>${item.stats.attempts}</strong><span>Attempts</span></div><div class="comparison-stat"><strong>${pct(item.stats.saveRate)}</strong><span>Save rate</span></div><div class="comparison-stat"><strong>${pct(item.stats.defenceRate)}</strong><span>Defence rate</span></div><div class="comparison-stat"><strong>${item.stats.rebounds}</strong><span>Rebounds</span></div><div class="comparison-stat"><strong>${item.stats.dangerous}</strong><span>Dangerous</span></div><div class="comparison-stat"><strong>${item.stats.aco}</strong><span>Angles closed</span></div></div><div class="category-bars">${Object.entries(cats).map(([cat,val])=>{const hasValue=cat==='Performance'?val!==null:Boolean(item.stats.categoryCounts?.[cat]);const scaled=cat==='Performance'?(val||0):(val||0)*20;return `<div class="category-bar"><span>${cat}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,scaled)}%"></div></div><strong>${hasValue?(cat==='Performance'?val.toFixed(0):(val||0).toFixed(1)):'N/C'}</strong></div>`}).join('')}</div><div class="insight-grid"><div class="insight-box"><strong>Strength</strong><span>${esc(insight.strength)}</span></div><div class="insight-box"><strong>Development</strong><span>${esc(insight.development)}</span></div></div></article>`;
   }
 
   function summaryMetrics(stats){return `${stats.attempts} attempts · ${pct(stats.saveRate)} save · ${pct(stats.defenceRate)} defence · ${stats.aco} angles closed`}
@@ -534,7 +563,7 @@
   function lateEntryReason(){const reason=$('lateEntryReason').value.trim();if(!reason)showToast('Enter the required reason for missing the previous round.');return reason;}
   function allReportResults(){return state.goalies.map(goalie=>{const stats=goalieStats(goalie.id);return{goalie,stats,score:goalieScore(stats)}}).sort((a,b)=>b.score-a.score)}
   function reportResults(){const finalDay=state.days.at(-1),finalIds=finalDay&&state.progressions[finalDay.id]?.final&&state.progressions[finalDay.id]?.confirmed?new Set(state.progressions[finalDay.id].goalieIds):null;return allReportResults().filter(item=>!finalIds||finalIds.has(item.goalie.id))}
-  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-11.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
+  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-12.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
 
   function renderReport(){
     const results=reportResults(),allResults=allReportResults(),selected=$('reportGoalie').value||allResults[0]?.goalie.id||'';$('reportGoalie').innerHTML=optionList(state.goalies,selected);$('reportNotes').value=state.reportNotes;$('finalDecision').value=state.finalDecision;$('reportGoalieWrap').classList.toggle('hidden',$('reportType').value==='selection');
@@ -606,8 +635,8 @@
     }
     if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
   }
-  window.__trialsV111Test={
-    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,
+  window.__trialsV112Test={
+    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,validDob,sectionSituation,goalieKitIcon,ensureSectionRating,persistInlineRating,deleteTrialEvent,
     setState(patch){Object.assign(state,defaultState(),patch);state.shotSelections=state.shotSelections||{};state.progressions=state.progressions||{};},
     getState(){return state;}
   };

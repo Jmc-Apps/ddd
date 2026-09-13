@@ -81,3 +81,11 @@ body{background:linear-gradient(145deg,#edf5f9 0,#dcebf3 55%,#c9dfe9 100%)}
 .influence-control{border:1px solid #9fc4d5;border-radius:12px;padding:13px;background:#edf7fb;margin-bottom:14px}.influence-control>div:first-child strong,.influence-control>div:first-child span{display:block}.influence-control>div:first-child span{font-size:.76rem;color:var(--muted);margin:4px 0 10px}.rating-weight-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 8px}.rating-weight-heading strong{font-size:.82rem}.report-table-scroll{overflow-x:auto}.full-stats{min-width:1250px}.report-day h4{margin:20px 0 8px;color:#31566f}
 @media(max-width:760px){.kit-colour-grid{grid-template-columns:1fr}}
 @media print{.report-section.report-day{break-inside:auto}.report-table-scroll{overflow:visible}.full-stats{min-width:0}.report-table{font-size:8px}.report-table tr{break-inside:avoid}}
+
+/* v1.12 trial deletion, goalkeeper kit icons, locked situations and autosave */
+.event-actions{display:flex;gap:9px;flex-wrap:wrap}.event-actions .button{flex:1}
+.goalie-name-with-kit,.station-goalie-name{display:flex;align-items:center;gap:8px}.goalie-kit-icon{width:30px;height:36px;flex:0 0 auto;filter:drop-shadow(0 2px 2px rgba(0,0,0,.15))}
+.station-goalie-name{margin-top:9px}.station-goalie-name .goalie-kit-icon{width:34px;height:41px}.station-goalie-name strong{font-size:1rem}
+.locked-situation{border:1px solid #78aabf;background:#dceff6;color:#0b536e;border-radius:10px;padding:10px 12px;font-size:.8rem;font-weight:800}
+.auto-save-note{display:block;text-align:right;color:#28765e;font-size:.74rem;font-weight:800}
+.timeline-goalie-name{display:inline-flex;align-items:center;gap:6px}.timeline-goalie-name .goalie-kit-icon{width:22px;height:27px}
