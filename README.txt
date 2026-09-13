@@ -1,10 +1,21 @@
-Data Driven Development Suite v1.17
+Data Driven Development Suite v1.19
 Field Hockey Goalie Stats v5.105
 Indoor Hockey Goalie Stats v1.1
-Hockey Goalie Trials v1.12
+Hockey Goalie Trials v1.14
 Stats Recorder v1.42
 
-Version 1.17 / Trials v1.12 builds on the complete v1.16 fairness, timers and ratings release.
+Version 1.19 / Trials v1.14 builds on the complete v1.18 trial workflow release.
+
+- Adds reusable Trial Event Templates containing team classification, relative trial-day spacing, scheduled sections and attempt targets without copying roster or performance data.
+- Adds reusable Trial Day Templates containing scheduled sections and attempt targets, with safe replacement blocked when a day already has recorded results or ratings.
+- Automatically preselects Male or Female for a new trial-only goalkeeper from the trial gender; Mixed trials require the user to select the individual goalkeeper’s gender.
+- Keeps all goalkeepers visible in Current Ranking while greying out and labelling goalkeepers who did not progress to the current round.
+- Adds Excused from this round with a required reason; excused goalkeepers automatically progress to the next round and remain eligible, but not guaranteed, for final selection.
+- Shows explicit final outcomes for Selected, Reserve, Non travelling reserve, Not selected and Excused from this round.
+- Marks age-ineligible goalkeepers on the Selection Report and leaves the Trial Events page empty after the final trial is deleted.
+- Prevents a blank “Unnamed trial” session from being created when the last Trial Event is deleted.
+
+Version 1.18 / Trials v1.13 builds on the complete v1.17 trial workflow release.
 
 - Adds six-digit-confirmed deletion of an entire trial event and all of its trial-specific data while leaving shared goalkeeper profiles untouched.
 - Adds Male, Female and Mixed team gender to trial creation, setup, event cards, comparisons and reports.

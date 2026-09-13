@@ -24,6 +24,8 @@
     shotSelections: {},
     progressions: {},
     trialSessions: {},
+    trialEventTemplates: [],
+    trialDayTemplates: [],
     activeTrialId: '',
     ratingsInfluence: 50,
     ratingWeights: {Technical:20,Physical:20,Tactical:20,Discipline:20,Communication:20},
@@ -63,7 +65,7 @@
   function loadState(){
     try {
       const parsed={...defaultState(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')};
-      parsed.trial={...defaultState().trial,...(parsed.trial||{})};parsed.shotSelections=parsed.shotSelections||{};parsed.progressions=parsed.progressions||{};parsed.trialSessions=parsed.trialSessions||{};
+      parsed.trial={...defaultState().trial,...(parsed.trial||{})};parsed.shotSelections=parsed.shotSelections||{};parsed.progressions=parsed.progressions||{};parsed.trialSessions=parsed.trialSessions||{};parsed.trialEventTemplates=Array.isArray(parsed.trialEventTemplates)?parsed.trialEventTemplates:[];parsed.trialDayTemplates=Array.isArray(parsed.trialDayTemplates)?parsed.trialDayTemplates:[];
       const legacyWeights=parsed.weights||{};
       parsed.ratingsInfluence=Number.isFinite(Number(parsed.ratingsInfluence))?Math.min(100,Math.max(0,Number(parsed.ratingsInfluence))):50;
       parsed.ratingWeights={...defaultState().ratingWeights,...Object.fromEntries(CATEGORIES.map(cat=>[cat,Number(parsed.ratingWeights?.[cat]??legacyWeights[cat]??20)]))};
@@ -130,6 +132,7 @@
 
   function switchPage(page){
     stopAllRunningTimers();
+    if(page==='promotion'&&currentPage!=='promotion')$('promotionDay').value='';
     currentPage = page;
     document.querySelectorAll('.page').forEach(el => el.classList.toggle('active', el.id === `page-${page}`));
     document.querySelectorAll('.nav-button').forEach(el => el.classList.toggle('active', el.dataset.page === page));
@@ -159,6 +162,31 @@
     return Object.entries(state.trialSessions).map(([id,session])=>({id,session,trial:session.trial||{}}));
   }
 
+  function addDateDays(date,days){const value=new Date(`${date}T12:00:00`);value.setDate(value.getDate()+days);return value.toISOString().slice(0,10)}
+  function eventTemplateFromState(name,id){
+    const dated=state.days.filter(d=>d.date).map(d=>d.date).sort(),base=dated[0]||'';
+    return {id:id||uid(),name,trial:structuredClone(state.trial),days:state.days.map((day,index)=>({offset:base&&day.date?Math.round((new Date(`${day.date}T12:00:00`)-new Date(`${base}T12:00:00`))/86400000):index})),drills:state.drills.map(drill=>({dayIndex:state.days.findIndex(day=>day.id===drill.dayId),name:drill.name,target:drill.target})),updatedAt:new Date().toISOString()};
+  }
+  function renderEventTemplates(){
+    $('eventTemplateList').innerHTML=state.trialEventTemplates.length?state.trialEventTemplates.map(template=>`<div class="template-item"><div><strong>${esc(template.name)}</strong><span>${template.days?.length||0} days · ${template.drills?.length||0} sections · ${esc(template.trial?.gender||'Male')} ${esc(template.trial?.ageGroup||'')}</span></div><div class="table-actions"><button class="mini-button" data-use-event-template="${template.id}">Use</button><button class="mini-button danger" data-delete-event-template="${template.id}">Delete</button></div></div>`).join(''):'<div class="empty-state">No event templates saved yet.</div>';
+    document.querySelectorAll('[data-use-event-template]').forEach(button=>button.addEventListener('click',()=>openTrialEventDialog(button.dataset.useEventTemplate)));
+    document.querySelectorAll('[data-delete-event-template]').forEach(button=>button.addEventListener('click',()=>deleteEventTemplate(button.dataset.deleteEventTemplate)));
+  }
+  function saveCurrentEventTemplate(){
+    const name=prompt('Name this Trial Event Template:',state.trial.name||'Trial Event Template')?.trim();if(!name)return;
+    const existing=state.trialEventTemplates.find(template=>template.name.toLowerCase()===name.toLowerCase());if(existing&&!confirm(`Replace the existing “${existing.name}” template?`))return;
+    const template=eventTemplateFromState(name,existing?.id);state.trialEventTemplates=state.trialEventTemplates.filter(item=>item.id!==template.id);state.trialEventTemplates.push(template);saveState();renderEventTemplates();showToast('Trial Event Template saved.');
+  }
+  function deleteEventTemplate(id){const template=state.trialEventTemplates.find(item=>item.id===id);if(!template||!confirm(`Delete the “${template.name}” template?`))return;state.trialEventTemplates=state.trialEventTemplates.filter(item=>item.id!==id);saveState();renderEventTemplates();showToast('Trial Event Template deleted.');}
+  function openTrialEventDialog(templateId=''){
+    $('trialEventForm').reset();$('newTrialTemplate').innerHTML='<option value="">Blank trial</option>'+optionList(state.trialEventTemplates,'');$('newTrialTemplate').value=templateId;applyNewTrialTemplate();$('trialEventDialog').showModal();
+  }
+  function applyNewTrialTemplate(){
+    const template=state.trialEventTemplates.find(item=>item.id===$('newTrialTemplate').value),hasDays=Boolean(template?.days?.length);$('newTrialStartWrap').classList.toggle('hidden',!hasDays);$('newTrialStartDate').required=hasDays;
+    if(!template){$('newTrialName').value='';$('newTrialTeam').value='';$('newTrialGender').value='Male';$('newTrialAge').value='U16';$('newTrialLevel').value='School';$('newTrialStartDate').value='';return;}
+    $('newTrialName').value=template.trial?.name||template.name;$('newTrialTeam').value=template.trial?.team||'';$('newTrialGender').value=template.trial?.gender||'Male';$('newTrialAge').value=template.trial?.ageGroup||'U16';$('newTrialLevel').value=template.trial?.level||'School';
+  }
+
   function renderTrialEvents(){
     const entries=trialSessionEntries();
     $('trialEventGrid').innerHTML=entries.length?entries.map(({id,session,trial})=>{
@@ -167,6 +195,7 @@
     }).join(''):'<div class="empty-state">Create a trial event to begin.</div>';
     document.querySelectorAll('[data-open-trial]').forEach(button=>button.addEventListener('click',()=>activateTrial(button.dataset.openTrial)));
     document.querySelectorAll('[data-delete-trial]').forEach(button=>button.addEventListener('click',()=>deleteTrialEvent(button.dataset.deleteTrial)));
+    renderEventTemplates();
   }
 
   function activateTrial(id){
@@ -176,8 +205,9 @@
 
   function createTrialEvent(event){
     event.preventDefault();syncActiveSession();
-    const blank=defaultState(),id=uid();
-    blank.trial={name:$('newTrialName').value.trim(),team:$('newTrialTeam').value.trim(),gender:$('newTrialGender').value,ageGroup:$('newTrialAge').value,level:$('newTrialLevel').value,tier:'A/1st'};
+    const blank=defaultState(),id=uid(),template=state.trialEventTemplates.find(item=>item.id===$('newTrialTemplate').value);
+    blank.trial={name:$('newTrialName').value.trim(),team:$('newTrialTeam').value.trim(),gender:$('newTrialGender').value,ageGroup:$('newTrialAge').value,level:$('newTrialLevel').value,tier:template?.trial?.tier||'A/1st'};
+    if(template?.days?.length){const start=$('newTrialStartDate').value;if(!start){showToast('Choose the first trial day date.');return;}blank.days=template.days.map(day=>({id:uid(),date:addDateDays(start,Number(day.offset)||0),status:'planned'}));blank.drills=(template.drills||[]).filter(drill=>blank.days[drill.dayIndex]).map(drill=>({id:uid(),dayId:blank.days[drill.dayIndex].id,name:drill.name,target:drill.target}));}
     state.activeTrialId=id;applySession(blank);state.trialSessions[id]=captureSession(state);saveState();$('trialEventDialog').close();$('trialEventForm').reset();switchPage('setup');showToast('New trial event created.');
   }
 
@@ -189,7 +219,7 @@
     if(id===state.activeTrialId){
       const nextId=Object.keys(state.trialSessions)[0];
       if(nextId){state.activeTrialId=nextId;applySession(state.trialSessions[nextId]);}
-      else {const blank=defaultState(),freshId=uid();state.activeTrialId=freshId;applySession(blank);state.trialSessions[freshId]=captureSession(state);}
+      else {state.activeTrialId='';applySession(defaultState());}
     }
     saveState();renderTrialEvents();showToast(`${name} deleted.`);
   }
@@ -276,7 +306,28 @@
     document.querySelectorAll('[data-delete-day]').forEach(button=>button.addEventListener('click',()=>deleteDay(button.dataset.deleteDay)));
     document.querySelectorAll('[data-delete-drill]').forEach(button=>button.addEventListener('click',()=>deleteDrill(button.dataset.deleteDrill)));
     document.querySelectorAll('[data-edit-drill]').forEach(button=>button.addEventListener('click',()=>editDrill(button.dataset.editDrill)));
+    renderDayTemplates();
   }
+
+  function renderDayTemplates(){
+    const days=state.days.map((day,index)=>({id:day.id,name:`Day ${index+1} · ${dayLabel(day.date)}`})),selectedTemplate=$('dayTemplateSelect').value;
+    $('dayTemplateSource').innerHTML=days.length?optionList(days,$('dayTemplateSource').value):'<option value="">Add a trial day first</option>';$('dayTemplateTarget').innerHTML=days.length?optionList(days,$('dayTemplateTarget').value):'<option value="">Add a trial day first</option>';
+    $('dayTemplateSelect').innerHTML=state.trialDayTemplates.length?optionList(state.trialDayTemplates,selectedTemplate):'<option value="">No saved templates</option>';
+    const template=state.trialDayTemplates.find(item=>item.id===$('dayTemplateSelect').value);$('dayTemplateSummary').innerHTML=template?`<strong>${esc(template.name)}</strong><span>${template.drills.map(drill=>`${esc(drill.name)} · ${drill.target} attempts`).join('<br>')}</span>`:'';
+    $('saveDayTemplate').disabled=!days.length;$('applyDayTemplate').disabled=!days.length||!template;$('deleteDayTemplate').disabled=!template;
+  }
+  function saveCurrentDayTemplate(){
+    const dayId=$('dayTemplateSource').value,name=$('dayTemplateName').value.trim(),drills=state.drills.filter(drill=>drill.dayId===dayId).map(drill=>({name:drill.name,target:drill.target}));if(!name){showToast('Enter a template name.');return;}if(!drills.length){showToast('The selected day has no sections to save.');return;}
+    const existing=state.trialDayTemplates.find(template=>template.name.toLowerCase()===name.toLowerCase());if(existing&&!confirm(`Replace the existing “${existing.name}” template?`))return;
+    const template={id:existing?.id||uid(),name,drills,updatedAt:new Date().toISOString()};state.trialDayTemplates=state.trialDayTemplates.filter(item=>item.id!==template.id);state.trialDayTemplates.push(template);saveState();$('dayTemplateName').value='';renderDayTemplates();$('dayTemplateSelect').value=template.id;renderDayTemplates();showToast('Trial Day Template saved.');
+  }
+  function applyDayTemplate(){
+    const template=state.trialDayTemplates.find(item=>item.id===$('dayTemplateSelect').value),dayId=$('dayTemplateTarget').value;if(!template||!dayId)return;
+    const oldIds=state.drills.filter(drill=>drill.dayId===dayId).map(drill=>drill.id),hasData=state.events.some(event=>oldIds.includes(event.drillId))||state.ratings.some(rating=>oldIds.includes(rating.drillId));if(hasData){showToast('This day already has recorded data and cannot be replaced by a template.');return;}
+    if(oldIds.length&&!confirm('Replace the existing scheduled sections on this trial day?'))return;
+    state.drills=state.drills.filter(drill=>drill.dayId!==dayId);Object.keys(state.timers).filter(key=>oldIds.some(id=>key.includes(`|${id}|`))).forEach(key=>delete state.timers[key]);template.drills.forEach(drill=>state.drills.push({id:uid(),dayId,name:drill.name,target:drill.target}));saveState();renderSetup(dayId);showToast('Trial Day Template applied.');
+  }
+  function deleteDayTemplate(){const id=$('dayTemplateSelect').value,template=state.trialDayTemplates.find(item=>item.id===id);if(!template||!confirm(`Delete the “${template.name}” template?`))return;state.trialDayTemplates=state.trialDayTemplates.filter(item=>item.id!==id);saveState();renderDayTemplates();showToast('Trial Day Template deleted.');}
 
   function saveSetup(){
     state.trial={name:$('trialName').value.trim(),team:$('teamName').value.trim(),gender:$('teamGender').value,ageGroup:$('ageGroup').value,level:$('teamLevel').value,tier:$('teamTier').value};
@@ -503,6 +554,9 @@
     const available=CATEGORIES.filter(key=>stats.categoryCounts?.[key]),total=available.reduce((sum,key)=>sum+Math.max(0,Number(state.ratingWeights[key]||0)),0)||1;
     return available.reduce((sum,key)=>sum+(stats.category[key]||0)*20*Math.max(0,Number(state.ratingWeights[key]||0)),0)/total;
   }
+  function rankingRound(dayFilter='all'){
+    const dayId=dayFilter!=='all'?dayFilter:state.days.filter(day=>dayCanStart(day.id)).at(-1)?.id,index=dayIndex(dayId),previous=index>0?state.days[index-1]:null,decided=index<=0||Boolean(previous&&state.progressions[previous.id]?.confirmed),ids=new Set(dayId?eligibleGoaliesForDay(dayId).map(goalie=>goalie.id):state.goalies.map(goalie=>goalie.id));return {dayId,index,decided,ids};
+  }
 
   function renderComparison(){
     const keep=compareFilters();
@@ -517,7 +571,8 @@
     document.querySelector('[data-ratings-influence]').addEventListener('input',event=>{state.ratingsInfluence=Number(event.target.value);saveState();renderComparison();});
     document.querySelectorAll('[data-rating-weight]').forEach(input=>input.addEventListener('input',()=>{state.ratingWeights[input.dataset.ratingWeight]=Number(input.value);saveState();renderComparison();}));
     const results=state.goalies.map(goalie=>({goalie,stats:goalieStats(goalie.id,filters)})).map(x=>({...x,score:goalieScore(x.stats)})).sort((a,b)=>b.score-a.score);
-    $('rankingList').innerHTML=results.length?results.map((item,index)=>`<div class="rank-row"><span class="rank-number">${index+1}</span><div><strong>${esc(item.goalie.name)}</strong><div class="muted">${item.stats.attempts} attempts · ${pct(item.stats.defenceRate)} defence</div></div><strong class="rank-score">${item.score.toFixed(1)}</strong></div>`).join(''):'<div class="empty-state">Add goalkeepers to create the ranking.</div>';
+    const round=rankingRound(filters.dayId);
+    $('rankingList').innerHTML=results.length?results.map((item,index)=>{const didNotProgress=round.index>0&&round.decided&&!round.ids.has(item.goalie.id);return `<div class="rank-row ${didNotProgress?'not-current-round':''}"><span class="rank-number">${index+1}</span><div><strong>${esc(item.goalie.name)}</strong><div class="muted">${item.stats.attempts} attempts · ${pct(item.stats.defenceRate)} defence${didNotProgress?' · Did not progress to current round':''}</div></div><strong class="rank-score">${item.score.toFixed(1)}</strong></div>`}).join(''):'<div class="empty-state">Add goalkeepers to create the ranking.</div>';
     $('comparisonWarnings').innerHTML=comparisonWarnings(results,filters);
     $('comparisonCards').innerHTML=results.map(item=>comparisonCard(item)).join('')||'<div class="empty-state">Comparison cards will appear after goalkeepers are added.</div>';
   }
@@ -539,17 +594,21 @@
   function summaryMetrics(stats){return `${stats.attempts} attempts · ${pct(stats.saveRate)} save · ${pct(stats.defenceRate)} defence · ${stats.aco} angles closed`}
   function promotionCard(goalie,dayId,selected){
     const round=goalieStats(goalie.id,{dayId}),all=goalieStats(goalie.id),roundInsight=strengthDevelopment(round),allInsight=strengthDevelopment(all);
-    return `<article class="promotion-card"><label class="promotion-select"><input type="checkbox" data-promote-goalie="${goalie.id}" ${selected?'checked':''}><span>${dayIndex(dayId)===state.days.length-1?'Select for final report':'Progress to next round'}</span></label><h2>${esc(goalie.name)}</h2>${goalie.entryDayId===dayId&&dayIndex(dayId)>0?`<p class="late-entry-note"><strong>Late entry:</strong> ${esc(goalie.lateEntryReason||'Reason not recorded')}</p>`:''}<div class="round-summary"><section><h3>This round</h3><p>${summaryMetrics(round)}</p><p><strong>Score:</strong> ${goalieScore(round).toFixed(1)}</p><p><strong>Strength:</strong> ${esc(roundInsight.strength)}<br><strong>Development:</strong> ${esc(roundInsight.development)}</p></section><section><h3>All rounds</h3><p>${summaryMetrics(all)}</p><p><strong>Score:</strong> ${goalieScore(all).toFixed(1)}</p><p><strong>Strength:</strong> ${esc(allInsight.strength)}<br><strong>Development:</strong> ${esc(allInsight.development)}</p></section></div></article>`;
+    const final=dayIndex(dayId)===state.days.length-1,progress=state.progressions[dayId]||{},status=final?(progress.finalStatuses?.[goalie.id]||'not_selected'):(progress.roundStatuses?.[goalie.id]||(selected?'progress':'not_progressing')),reason=progress.excusedReasons?.[goalie.id]||'';
+    const control=final?`<label class="promotion-select"><span>Final outcome</span><select data-round-status="${goalie.id}"><option value="selected" ${status==='selected'?'selected':''}>Selected</option><option value="reserve" ${status==='reserve'?'selected':''}>Reserve</option><option value="non_travelling_reserve" ${status==='non_travelling_reserve'?'selected':''}>Non travelling reserve</option><option value="not_selected" ${status==='not_selected'?'selected':''}>Not selected</option><option value="excused" ${status==='excused'?'selected':''}>Excused from this round</option></select></label>`:`<label class="promotion-select"><span>Round outcome</span><select data-round-status="${goalie.id}"><option value="progress" ${status==='progress'?'selected':''}>Progress to next round</option><option value="excused" ${status==='excused'?'selected':''}>Excused from this round</option><option value="not_progressing" ${status==='not_progressing'?'selected':''}>Do not progress</option></select></label>`;
+    const reasonField=`<label class="field excused-reason-field ${status==='excused'?'':'hidden'}"><span>Required reason</span><input data-excused-reason="${goalie.id}" value="${esc(reason)}" placeholder="Explain why this goalkeeper is excused"></label>`;
+    return `<article class="promotion-card">${control}${reasonField}<h2>${esc(goalie.name)}</h2>${goalie.entryDayId===dayId&&dayIndex(dayId)>0?`<p class="late-entry-note"><strong>Late entry:</strong> ${esc(goalie.lateEntryReason||'Reason not recorded')}</p>`:''}<div class="round-summary"><section><h3>This round</h3><p>${summaryMetrics(round)}</p><p><strong>Score:</strong> ${goalieScore(round).toFixed(1)}</p><p><strong>Strength:</strong> ${esc(roundInsight.strength)}<br><strong>Development:</strong> ${esc(roundInsight.development)}</p></section><section><h3>All rounds</h3><p>${summaryMetrics(all)}</p><p><strong>Score:</strong> ${goalieScore(all).toFixed(1)}</p><p><strong>Strength:</strong> ${esc(allInsight.strength)}<br><strong>Development:</strong> ${esc(allInsight.development)}</p></section></div></article>`;
   }
 
   function renderPromotion(){
-    const selector=$('promotionDay'),retained=selector.value||state.days.at(-1)?.id||'';ensureSelect(selector,state.days.map((d,i)=>({id:d.id,name:`Day ${i+1} · ${dayLabel(d.date)}`})),'Add a trial day first',retained);
+    const selector=$('promotionDay'),retained=selector.value||state.days.find(day=>day.status!=='completed')?.id||state.days.at(-1)?.id||'';ensureSelect(selector,state.days.map((d,i)=>({id:d.id,name:`Day ${i+1} · ${dayLabel(d.date)}`})),'Add a trial day first',retained);
     const day=state.days.find(d=>d.id===selector.value),index=dayIndex(selector.value),progress=day?(state.progressions[day.id]||{}):{},goalies=day?eligibleGoaliesForDay(day.id):[];
     $('promotionState').textContent=!day?'Select a day':day.status==='completed'?(progress.confirmed?'Decision confirmed':'Awaiting selection'):'Day in progress';$('promotionState').className=`pill ${progress.confirmed?'success':day?.status==='completed'?'warning':''}`;
     $('markDayComplete').disabled=!day||day.status==='completed';$('markDayComplete').textContent=day?.status==='completed'?'Day Completed':'Mark Day Completed';
     const finalDay=index===state.days.length-1;
     $('promotionGuidance').textContent=!day?'Add a trial day first.':day.status!=='completed'?'Complete the recording day before confirming who progresses.':finalDay?'Choose the goalkeeper or goalkeepers who must appear in the final Selection Report.':'Choose the goalkeepers progressing to the next round. The next day remains locked until this decision is confirmed.';
     $('promotionGoalies').innerHTML=goalies.length?goalies.map(g=>promotionCard(g,day.id,(progress.goalieIds||[]).includes(g.id))).join(''):'<div class="empty-state">No eligible goalkeepers are available for this round.</div>';
+    document.querySelectorAll('[data-round-status]').forEach(select=>{const reasonInput=document.querySelector(`[data-excused-reason="${select.dataset.roundStatus}"]`),toggleReason=()=>{reasonInput?.closest('.excused-reason-field')?.classList.toggle('hidden',select.value!=='excused');};toggleReason();select.addEventListener('change',()=>{const target=state.progressions[day.id]||{};state.progressions[day.id]=target;if(finalDay)target.finalStatuses={...(target.finalStatuses||{}),[select.dataset.roundStatus]:select.value};else target.roundStatuses={...(target.roundStatuses||{}),[select.dataset.roundStatus]:select.value};toggleReason();saveState();});reasonInput?.addEventListener('input',()=>{state.progressions[day.id]=state.progressions[day.id]||{};state.progressions[day.id].excusedReasons={...(state.progressions[day.id].excusedReasons||{}),[select.dataset.roundStatus]:reasonInput.value};saveState();});});
     $('confirmPromotion').disabled=!day||day.status!=='completed'||!goalies.length;$('confirmPromotion').textContent=finalDay?'Confirm Final Selection':'Confirm Progressing Goalies';
     $('lateEntryPanel').classList.toggle('hidden',!day||index<=0);
     const excluded=new Set(goalies.map(g=>g.id)),available=state.goalies.filter(g=>!excluded.has(g.id));$('lateExistingGoalie').innerHTML=available.length?optionList(available):'<option value="">No existing goalkeeper available</option>';$('addExistingLateEntry').disabled=!available.length;
@@ -557,13 +616,14 @@
 
   function markPromotionDayComplete(){const day=state.days.find(d=>d.id===$('promotionDay').value);if(!day)return;day.status='completed';saveState();renderPromotion();showToast('Trial day marked completed.');}
   function confirmPromotion(){
-    const day=state.days.find(d=>d.id===$('promotionDay').value);if(!day||day.status!=='completed')return;const goalieIds=[...document.querySelectorAll('[data-promote-goalie]:checked')].map(input=>input.dataset.promoteGoalie);if(!goalieIds.length&&!confirm('Confirm that no goalkeepers progress from this round?'))return;
-    state.progressions[day.id]={confirmed:true,goalieIds,final:dayIndex(day.id)===state.days.length-1,confirmedAt:new Date().toISOString()};saveState();renderPromotion();showToast(dayIndex(day.id)===state.days.length-1?'Final selection confirmed.':'Progressing goalkeepers confirmed.');
+    const day=state.days.find(d=>d.id===$('promotionDay').value);if(!day||day.status!=='completed')return;const final=dayIndex(day.id)===state.days.length-1,statuses=Object.fromEntries([...document.querySelectorAll('[data-round-status]')].map(select=>[select.dataset.roundStatus,select.value])),reasons=Object.fromEntries([...document.querySelectorAll('[data-excused-reason]')].map(input=>[input.dataset.excusedReason,input.value.trim()]));if(Object.entries(statuses).some(([id,status])=>status==='excused'&&!reasons[id])){showToast('A required reason must be entered for every excused goalkeeper.');return;}if(!final&&!Object.values(statuses).some(status=>status==='progress'||status==='excused')&&!confirm('Confirm that no goalkeepers progress from this round?'))return;const finalStatuses=final?statuses:undefined,stateProgress={confirmed:true,goalieIds:final?Object.entries(statuses).filter(([,status])=>status==='selected').map(([id])=>id):Object.entries(statuses).filter(([,status])=>status==='progress'||status==='excused').map(([id])=>id),excusedGoalieIds:Object.entries(statuses).filter(([,status])=>status==='excused').map(([id])=>id),excusedReasons:reasons,final,finalStatuses,roundStatuses:final?undefined:statuses,confirmedAt:new Date().toISOString()};state.progressions[day.id]=stateProgress;saveState();renderPromotion();showToast(final?'Final selection outcomes confirmed.':'Progressing goalkeepers confirmed.');
   }
   function lateEntryReason(){const reason=$('lateEntryReason').value.trim();if(!reason)showToast('Enter the required reason for missing the previous round.');return reason;}
   function allReportResults(){return state.goalies.map(goalie=>{const stats=goalieStats(goalie.id);return{goalie,stats,score:goalieScore(stats)}}).sort((a,b)=>b.score-a.score)}
-  function reportResults(){const finalDay=state.days.at(-1),finalIds=finalDay&&state.progressions[finalDay.id]?.final&&state.progressions[finalDay.id]?.confirmed?new Set(state.progressions[finalDay.id].goalieIds):null;return allReportResults().filter(item=>!finalIds||finalIds.has(item.goalie.id))}
-  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-12.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
+  function outcomeLabel(status){return ({selected:'Selected',reserve:'Reserve',non_travelling_reserve:'Non travelling reserve',not_selected:'Not selected',excused:'Excused from this round'})[status]||status||'Not selected'}
+  function eligibilityLabel(goalie){const check=eligibility(goalie);return check.eligible?'Eligible':`Ineligible for ${state.trial.ageGroup}`}
+  function reportResults(){const finalDay=state.days.at(-1),progress=finalDay&&state.progressions[finalDay.id],finalConfirmed=Boolean(progress?.final&&progress?.confirmed);if(!finalConfirmed)return allReportResults();const statuses=progress.finalStatuses||{};return allReportResults().filter(item=>['selected','reserve','non_travelling_reserve','excused'].includes(statuses[item.goalie.id]))}
+  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-14.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
 
   function renderReport(){
     const results=reportResults(),allResults=allReportResults(),selected=$('reportGoalie').value||allResults[0]?.goalie.id||'';$('reportGoalie').innerHTML=optionList(state.goalies,selected);$('reportNotes').value=state.reportNotes;$('finalDecision').value=state.finalDecision;$('reportGoalieWrap').classList.toggle('hidden',$('reportType').value==='selection');
@@ -571,16 +631,18 @@
   }
 
   function selectionReport(results){
-    const allResults=allReportResults(),finalDay=state.days.at(-1),finalConfirmed=Boolean(finalDay&&state.progressions[finalDay.id]?.final&&state.progressions[finalDay.id]?.confirmed),winner=results[0];
+    const allResults=allReportResults(),finalDay=state.days.at(-1),finalProgress=finalDay&&state.progressions[finalDay.id],finalConfirmed=Boolean(finalProgress?.final&&finalProgress?.confirmed),statuses=finalProgress?.finalStatuses||{},winner=results.find(item=>statuses[item.goalie.id]==='selected')||results[0],otherResults=finalConfirmed?allResults.filter(item=>!['selected','reserve','non_travelling_reserve','excused'].includes(statuses[item.goalie.id])):[];
     const statusTitle=finalConfirmed?'Confirmed selection':'Current data-led ranking';
-    const statusText=finalConfirmed?(winner?`${results.map(r=>esc(r.goalie.name)).join(', ')} ${results.length===1?'is':'are'} included in the final selection report.`:'The final round was confirmed with no goalkeeper selected.'):'Complete the final day and confirm the selected goalkeeper or goalkeepers in Promotion / Selection to produce the final shortlist.';
+    const statusText=finalConfirmed?(winner?`${esc(winner.goalie.name)} is selected; reserves and excused goalkeepers remain shown with their outcomes.`:'The final round was confirmed with no goalkeeper selected.'):'Complete the final day and confirm the selected goalkeeper or goalkeepers in Promotion / Selection to produce the final shortlist.';
     const weights=CATEGORIES.map(cat=>`${cat} ${Number(state.ratingWeights[cat]||0)}%`).join(' · ');
     const days=state.days.map((day,index)=>`<section class="report-section report-day"><h3>Trial Day ${index+1} · ${esc(dayLabel(day.date))}</h3>${statsTable(state.goalies.map(goalie=>{const stats=goalieStats(goalie.id,{dayId:day.id});return{goalie,stats,score:goalieScore(stats)}}),{dayId:day.id})}${state.drills.filter(d=>d.dayId===day.id).map(drill=>`<h4>${esc(drill.name)} · Target ${drill.target} per goalkeeper</h4>${statsTable(state.goalies.map(goalie=>{const stats=goalieStats(goalie.id,{dayId:day.id,drillId:drill.id});return{goalie,stats,score:goalieScore(stats)}}),{dayId:day.id,drillId:drill.id})}`).join('')}</section>`).join('');
-    return `${reportHeader('Goalkeeper Selection Report')}<div class="recommendation"><strong>${statusTitle}</strong><div>${statusText}</div></div><section class="report-section"><h3>${finalConfirmed?'Ranked shortlist':'Provisional ranking'}</h3><p>Defence Rate is the actual-statistics component. Ratings influence is <strong>${state.ratingsInfluence}%</strong>; at 100% ratings equal, but never exceed, Defence Rate influence. Rating mix: ${esc(weights)}.</p>${results.length?`<table class="report-table"><thead><tr><th>Rank</th><th>Goalkeeper</th><th>Defence</th><th>Ratings score</th><th>Overall score</th></tr></thead><tbody>${results.map((r,i)=>`<tr><td>${i+1}</td><td><strong>${esc(r.goalie.name)}</strong></td><td>${pct(r.stats.defenceRate)}</td><td>${pct(ratingsScore(r.stats))}</td><td>${r.score.toFixed(1)}</td></tr>`).join('')}</tbody></table>`:'<p>No roster data available.</p>'}</section><section class="report-section"><h3>All goalkeepers · All trial days</h3>${statsTable(allResults)}</section>${days}<section class="report-section report-day"><h3>Shot-type and situation breakdown</h3>${breakdownTable()}</section><section class="report-section report-day"><h3>Every trial-section rating and note</h3>${ratingAuditTable()}</section><section class="report-section"><h3>Final decision</h3><p><strong>${esc(state.finalDecision)}</strong></p><div class="report-notes">${esc(state.reportNotes||'No selector notes added.')}</div></section>`;
+    const primaryTable=results.length?`<table class="report-table"><thead><tr><th>Rank</th><th>Goalkeeper</th><th>Eligibility</th>${finalConfirmed?'<th>Outcome</th>':''}<th>Defence</th><th>Ratings score</th><th>Overall score</th></tr></thead><tbody>${results.map((r,i)=>`<tr><td>${i+1}</td><td><strong>${esc(r.goalie.name)}</strong></td><td>${esc(eligibilityLabel(r.goalie))}</td>${finalConfirmed?`<td>${esc(outcomeLabel(statuses[r.goalie.id]))}</td>`:''}<td>${pct(r.stats.defenceRate)}</td><td>${pct(ratingsScore(r.stats))}</td><td>${r.score.toFixed(1)}</td></tr>`).join('')}</tbody></table>`:'<p>No roster data available.</p>';
+    const otherTable=otherResults.length?`<section class="report-section report-secondary-results"><h3>Other trial participants</h3><p>These goalkeepers trialled but were not selected for the final travelling group.</p><table class="report-table"><thead><tr><th>Rank</th><th>Goalkeeper</th><th>Eligibility</th><th>Outcome</th><th>Defence</th><th>Overall score</th></tr></thead><tbody>${otherResults.map((r,i)=>`<tr><td>${i+1}</td><td><strong>${esc(r.goalie.name)}</strong></td><td>${esc(eligibilityLabel(r.goalie))}</td><td>${esc(outcomeLabel(statuses[r.goalie.id]))}</td><td>${pct(r.stats.defenceRate)}</td><td>${r.score.toFixed(1)}</td></tr>`).join('')}</tbody></table></section>`:'';
+    return `${reportHeader('Goalkeeper Selection Report')}<div class="recommendation"><strong>${statusTitle}</strong><div>${statusText}</div></div><section class="report-section"><h3>${finalConfirmed?'Selected, reserve, non-travelling reserve and excused':'Provisional ranking'}</h3><p>Defence Rate is the actual-statistics component. Ratings influence is <strong>${state.ratingsInfluence}%</strong>; at 100% ratings equal, but never exceed, Defence Rate influence. Rating mix: ${esc(weights)}.</p>${primaryTable}</section>${otherTable}<section class="report-section"><h3>All goalkeepers · All trial days</h3>${statsTable(allResults)}</section>${days}<section class="report-section report-day"><h3>Shot-type and situation breakdown</h3>${breakdownTable()}</section><section class="report-section report-day"><h3>Every trial-section rating and note</h3>${ratingAuditTable()}</section><section class="report-section"><h3>Final decision</h3><p><strong>${esc(state.finalDecision)}</strong></p><div class="report-notes">${esc(state.reportNotes||'No selector notes added.')}</div></section>`;
   }
 
   function filteredTimeFor(goalieId,filters={}){return Object.entries(state.timers).filter(([key])=>{const [dayId,drillId,id]=key.split('|');return id===goalieId&&(!filters.dayId||filters.dayId==='all'||dayId===filters.dayId)&&(!filters.drillId||filters.drillId==='all'||drillId===filters.drillId)}).reduce((sum,[,value])=>sum+Number(value||0),0)}
-  function statsTable(rows,filters={}){return `<div class="report-table-scroll"><table class="report-table full-stats"><thead><tr><th>Goalkeeper</th><th>Attempts</th><th>Saves</th><th>Goals</th><th>Angles</th><th>Save rate</th><th>Defence</th><th>Rebounds</th><th>Dangerous</th><th>Time</th>${CATEGORIES.map(cat=>`<th>${cat}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${esc(r.goalie.name)}</strong></td><td>${r.stats.attempts}</td><td>${r.stats.saves}</td><td>${r.stats.goals}</td><td>${r.stats.aco}</td><td>${pct(r.stats.saveRate)}</td><td>${pct(r.stats.defenceRate)}</td><td>${r.stats.rebounds}</td><td>${r.stats.dangerous}</td><td>${formatTime(filteredTimeFor(r.goalie.id,filters))}</td>${CATEGORIES.map(cat=>`<td>${r.stats.categoryCounts?.[cat]?(r.stats.category[cat]||0).toFixed(1):'N/C'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+  function statsTable(rows,filters={}){return `<div class="report-table-scroll"><table class="report-table full-stats"><thead><tr><th>Goalkeeper</th><th>Eligibility</th><th>Attempts</th><th>Saves</th><th>Goals</th><th>Angles</th><th>Save rate</th><th>Defence</th><th>Rebounds</th><th>Dangerous</th><th>Time</th>${CATEGORIES.map(cat=>`<th>${cat}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${esc(r.goalie.name)}</strong></td><td>${esc(eligibilityLabel(r.goalie))}</td><td>${r.stats.attempts}</td><td>${r.stats.saves}</td><td>${r.stats.goals}</td><td>${r.stats.aco}</td><td>${pct(r.stats.saveRate)}</td><td>${pct(r.stats.defenceRate)}</td><td>${r.stats.rebounds}</td><td>${r.stats.dangerous}</td><td>${formatTime(filteredTimeFor(r.goalie.id,filters))}</td>${CATEGORIES.map(cat=>`<td>${r.stats.categoryCounts?.[cat]?(r.stats.category[cat]||0).toFixed(1):'N/C'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
   function breakdownTable(){const rows=[];state.days.forEach((day,index)=>state.goalies.forEach(goalie=>[...SHOT_TYPES.map(value=>['Shot type',value]),...SITUATIONS.map(value=>['Situation',value])].forEach(([group,value])=>{const stats=goalieStats(goalie.id,{dayId:day.id,...(group==='Shot type'?{shotType:value}:{situation:value})});if(stats.attempts)rows.push({day:`Day ${index+1} · ${dayLabel(day.date)}`,goalie:goalie.name,group,value,stats})})));return rows.length?`<div class="report-table-scroll"><table class="report-table"><thead><tr><th>Trial day</th><th>Goalkeeper</th><th>Breakdown</th><th>Value</th><th>Attempts</th><th>Saves</th><th>Goals</th><th>Angles</th><th>Save rate</th><th>Defence</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.day)}</td><td>${esc(r.goalie)}</td><td>${r.group}</td><td>${esc(r.value)}</td><td>${r.stats.attempts}</td><td>${r.stats.saves}</td><td>${r.stats.goals}</td><td>${r.stats.aco}</td><td>${pct(r.stats.saveRate)}</td><td>${pct(r.stats.defenceRate)}</td></tr>`).join('')}</tbody></table></div>`:'<p>No recorded attempts are available for breakdown.</p>'}
   function ratingAuditTable(){const latest=new Map();state.ratings.forEach(r=>latest.set(`${r.goalieId}|${r.dayId}|${r.drillId}`,r));const rows=[...latest.values()];return rows.length?`<div class="report-table-scroll"><table class="report-table"><thead><tr><th>Trial day</th><th>Section</th><th>Goalkeeper</th>${CATEGORIES.map(cat=>`<th>${cat}</th>`).join('')}<th>Notes</th></tr></thead><tbody>${rows.map(r=>{const day=state.days.find(d=>d.id===r.dayId),drill=state.drills.find(d=>d.id===r.drillId),goalie=state.goalies.find(g=>g.id===r.goalieId);return `<tr><td>${esc(dayLabel(day?.date))}</td><td>${esc(drill?.name||'Removed section')}</td><td>${esc(goalie?.name||'Removed goalkeeper')}</td>${CATEGORIES.map(cat=>`<td>${r.values?.[cat]?Number(r.values[cat]).toFixed(1):'N/C'}</td>`).join('')}<td>${esc(r.notes||'—')}</td></tr>`}).join('')}</tbody></table></div>`:'<p>No trial-section ratings have been recorded.</p>'}
 
@@ -597,14 +659,18 @@
   function addExistingLateEntry(){
     const dayId=$('promotionDay').value,goalie=state.goalies.find(g=>g.id===$('lateExistingGoalie').value),reason=lateEntryReason();if(!goalie||!reason)return;goalie.entryDayId=dayId;goalie.lateEntryReason=reason;saveState();$('lateEntryReason').value='';renderPromotion();showToast(`${goalie.name} added to this round.`);
   }
-  function beginLateEntry(kind){const reason=lateEntryReason(),dayId=$('promotionDay').value;if(!reason||!dayId)return;pendingLateEntry={reason,dayId};if(kind==='shared')openSharedGoalieDialog();else $('goalieDialog').showModal();}
+  function openTrialGoalieDialog(){
+    $('goalieForm').reset();$('goalieGender').value=['Male','Female'].includes(state.trial.gender)?state.trial.gender:'';$('goalieDialog').showModal();
+  }
+  function beginLateEntry(kind){const reason=lateEntryReason(),dayId=$('promotionDay').value;if(!reason||!dayId)return;pendingLateEntry={reason,dayId};if(kind==='shared')openSharedGoalieDialog();else openTrialGoalieDialog();}
 
   function bindEvents(){
     document.querySelectorAll('.nav-button').forEach(button=>button.addEventListener('click',()=>switchPage(button.dataset.page)));
     document.querySelectorAll('[data-go]').forEach(button=>button.addEventListener('click',()=>switchPage(button.dataset.go)));
-    $('newTrialEvent').addEventListener('click',()=>$('trialEventDialog').showModal());$('trialEventForm').addEventListener('submit',createTrialEvent);
+    $('newTrialEvent').addEventListener('click',()=>openTrialEventDialog());$('trialEventForm').addEventListener('submit',createTrialEvent);$('newTrialTemplate').addEventListener('change',applyNewTrialTemplate);$('saveEventTemplate').addEventListener('click',saveCurrentEventTemplate);
     $('saveSetup').addEventListener('click',saveSetup);$('dayForm').addEventListener('submit',addDay);$('drillForm').addEventListener('submit',addDrill);$('cancelDrillEdit').addEventListener('click',cancelDrillEdit);
-    $('openGoalieDialog').addEventListener('click',()=>{pendingLateEntry=null;$('goalieDialog').showModal();});$('addSharedGoalie').addEventListener('click',()=>{pendingLateEntry=null;openSharedGoalieDialog();});$('sharedGoalieForm').addEventListener('submit',addSharedGoalieToRoster);$('goalieForm').addEventListener('submit',addGoalie);$('ratingForm').addEventListener('submit',saveRating);
+    $('openGoalieDialog').addEventListener('click',()=>{pendingLateEntry=null;openTrialGoalieDialog();});$('addSharedGoalie').addEventListener('click',()=>{pendingLateEntry=null;openSharedGoalieDialog();});$('sharedGoalieForm').addEventListener('submit',addSharedGoalieToRoster);$('goalieForm').addEventListener('submit',addGoalie);$('ratingForm').addEventListener('submit',saveRating);
+    $('saveDayTemplate').addEventListener('click',saveCurrentDayTemplate);$('applyDayTemplate').addEventListener('click',applyDayTemplate);$('deleteDayTemplate').addEventListener('click',deleteDayTemplate);$('dayTemplateSelect').addEventListener('change',renderDayTemplates);
     document.querySelectorAll('[data-close-dialog]').forEach(button=>button.addEventListener('click',()=>{pendingLateEntry=null;button.closest('dialog').close();}));
     $('rosterDayFilter').addEventListener('change',renderRoster);
     $('recordingDay').addEventListener('change',()=>{stopAllRunningTimers();renderRecording();});$('recordingDrill').addEventListener('change',()=>{stopAllRunningTimers();renderRecording();});
@@ -635,8 +701,8 @@
     }
     if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
   }
-  window.__trialsV112Test={
-    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,validDob,sectionSituation,goalieKitIcon,ensureSectionRating,persistInlineRating,deleteTrialEvent,
+  window.__trialsV113Test={
+    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,reportResults,outcomeLabel,eligibilityLabel,validDob,sectionSituation,goalieKitIcon,ensureSectionRating,persistInlineRating,deleteTrialEvent,rankingRound,eventTemplateFromState,addDateDays,
     setState(patch){Object.assign(state,defaultState(),patch);state.shotSelections=state.shotSelections||{};state.progressions=state.progressions||{};},
     getState(){return state;}
   };

@@ -7,13 +7,13 @@
   <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
   <title>Hockey Goalie Trials: Data Driven Selection</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192-v1-12.png">
-  <link rel="apple-touch-icon" href="assets/icon-192-v1-12.png">
+  <link rel="icon" href="assets/icon-192-v1-14.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-14.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <img src="assets/trials-banner-v1-12.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <img src="assets/trials-banner-v1-14.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
     <div class="header-actions">
       <span id="saveStatus" class="save-status">Saved locally</span>
       <button id="installButton" class="button ghost hidden" type="button">Install App</button>
@@ -33,8 +33,8 @@
         <button class="nav-button" data-page="promotion"><span>✓</span>Promotion / Selection</button>
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
-      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-17.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.12<br><span>Data Driven Development</span></div>
+      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-19.png" alt="Data Driven Development Home"></a>
+      <div class="sidebar-footer">Version 1.14<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -62,8 +62,12 @@
       </section>
 
       <section id="page-events" class="page" aria-labelledby="eventsTitle">
-        <div class="page-heading"><div><p class="eyebrow">Concurrent programmes</p><h1 id="eventsTitle">Trial Events</h1></div><button id="newTrialEvent" class="button primary" type="button">Create New Trial</button></div>
+        <div class="page-heading"><div><p class="eyebrow">Concurrent programmes</p><h1 id="eventsTitle">Trial Events</h1></div><div class="heading-actions"><button id="saveEventTemplate" class="button ghost" type="button">Save Current as Template</button><button id="newTrialEvent" class="button primary" type="button">Create New Trial</button></div></div>
         <div id="trialEventGrid" class="event-card-grid"></div>
+        <article class="panel template-panel">
+          <div class="panel-header"><div><p class="eyebrow">Reusable setup</p><h2>Trial Event Templates</h2></div></div>
+          <div id="eventTemplateList" class="template-list"></div>
+        </article>
       </section>
 
       <section id="page-setup" class="page" aria-labelledby="setupTitle">
@@ -96,6 +100,21 @@
             <button id="cancelDrillEdit" class="button ghost hidden" type="button">Cancel edit</button>
           </form>
           <div id="scheduledDrills" class="table-wrap"></div>
+        </article>
+        <article class="panel template-panel">
+          <div class="panel-header"><div><p class="eyebrow">Reusable programme</p><h2>Trial Day Templates</h2></div></div>
+          <div class="template-controls">
+            <label class="field"><span>Template name</span><input id="dayTemplateName" placeholder="e.g. Standard Goalkeeper Day"></label>
+            <label class="field"><span>Save sections from</span><select id="dayTemplateSource"></select></label>
+            <button id="saveDayTemplate" class="button secondary" type="button">Save Day Template</button>
+          </div>
+          <div class="template-controls">
+            <label class="field"><span>Saved template</span><select id="dayTemplateSelect"></select></label>
+            <label class="field"><span>Apply to trial day</span><select id="dayTemplateTarget"></select></label>
+            <button id="applyDayTemplate" class="button primary" type="button">Apply Template</button>
+            <button id="deleteDayTemplate" class="button danger" type="button">Delete Template</button>
+          </div>
+          <div id="dayTemplateSummary" class="template-summary"></div>
         </article>
       </section>
 
@@ -209,7 +228,7 @@
       <div class="form-grid">
         <label class="field span-2"><span>Name</span><input id="goalieName" required></label>
         <label class="field"><span>Date of birth</span><input id="goalieDob" type="date" min="1900-01-01" max="9999-12-31" required></label>
-        <label class="field"><span>Gender</span><select id="goalieGender"><option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></label>
+        <label class="field"><span>Gender</span><select id="goalieGender" required><option value="" disabled>Select gender</option><option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></label>
         <label class="field span-2"><span>Playing experience</span><textarea id="goalieExperience" rows="3" placeholder="Teams, years played and relevant experience"></textarea></label>
         <label class="field"><span>Preferred level</span><select id="goaliePreferredLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
         <label class="field"><span>Photograph (optional)</span><input id="goaliePhoto" type="file" accept="image/*"></label>
@@ -231,11 +250,13 @@
     <form id="trialEventForm" method="dialog">
       <div class="modal-header"><div><p class="eyebrow">New programme</p><h2>Create Trial Event</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
       <div class="form-grid">
+        <label class="field span-2"><span>Start from template</span><select id="newTrialTemplate"><option value="">Blank trial</option></select></label>
         <label class="field span-2"><span>Trial name</span><input id="newTrialName" required placeholder="e.g. U16 Girls First Team Trials"></label>
         <label class="field span-2"><span>Team</span><input id="newTrialTeam" required placeholder="Team name"></label>
         <label class="field"><span>Team gender</span><select id="newTrialGender"><option>Male</option><option>Female</option><option>Mixed</option></select></label>
         <label class="field"><span>Age group</span><select id="newTrialAge"><option>U13</option><option>U14</option><option>U16</option><option>U18</option><option>U21</option><option>Senior</option><option>Masters</option></select></label>
         <label class="field"><span>Level</span><select id="newTrialLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
+        <label id="newTrialStartWrap" class="field span-2 hidden"><span>First trial day</span><input id="newTrialStartDate" type="date"></label>
       </div>
       <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Create Trial</button></div>
     </form>
