@@ -7,13 +7,13 @@
   <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
   <title>Hockey Goalie Trials: Data Driven Selection</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192-v1-10.png">
-  <link rel="apple-touch-icon" href="assets/icon-192-v1-10.png">
+  <link rel="icon" href="assets/icon-192-v1-11.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-11.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <img src="assets/trials-banner-v1-10.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <img src="assets/trials-banner-v1-11.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
     <div class="header-actions">
       <span id="saveStatus" class="save-status">Saved locally</span>
       <button id="installButton" class="button ghost hidden" type="button">Install App</button>
@@ -33,8 +33,8 @@
         <button class="nav-button" data-page="comparison"><span>⇄</span>Comparison</button>
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
-      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-15.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.10<br><span>Data Driven Development</span></div>
+      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-16.png" alt="Data Driven Development Home"></a>
+      <div class="sidebar-footer">Version 1.11<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -100,7 +100,7 @@
 
       <section id="page-roster" class="page" aria-labelledby="rosterTitle">
         <div class="page-heading"><div><p class="eyebrow">Candidates</p><h1 id="rosterTitle">Trials Roster</h1></div><div class="toolbar"><button id="addSharedGoalie" class="button secondary">Choose Shared Goalie</button><button id="openGoalieDialog" class="button primary">Add Trial-only Goalie</button></div></div>
-        <div class="toolbar"><label class="field"><span>Smock colours for</span><select id="rosterDayFilter"></select></label></div>
+        <div class="toolbar"><label class="field"><span>Smock and leg-guard colours for</span><select id="rosterDayFilter"></select></label></div>
         <div id="rosterGrid" class="goalie-card-grid large"></div>
       </section>
 
@@ -175,7 +175,7 @@
         </article>
         <div class="comparison-layout">
           <article class="panel weights-panel">
-            <div class="panel-header"><div><p class="eyebrow">Selection model</p><h2>Category weightings</h2></div><span id="weightTotal" class="pill">100%</span></div>
+            <div class="panel-header"><div><p class="eyebrow">Selection model</p><h2>Performance and ratings weightings</h2></div><span id="weightTotal" class="pill">Ratings 50%</span></div>
             <div id="weightControls" class="weight-controls"></div>
           </article>
           <article class="panel ranking-panel">
@@ -241,7 +241,7 @@
 
   <dialog id="ratingDialog" class="modal">
     <form id="ratingForm" method="dialog">
-      <div class="modal-header"><div><p class="eyebrow">Station review</p><h2>Ratings and notes</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <div class="modal-header"><div><p class="eyebrow">Trial section review</p><h2>Section rating and notes</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
       <input id="ratingGoalieId" type="hidden">
       <div class="rating-grid" id="ratingInputs"></div>
       <label class="field"><span>Coach notes</span><textarea id="ratingNotes" rows="5" placeholder="Positioning, decisions, movement, communication and development points..."></textarea></label>

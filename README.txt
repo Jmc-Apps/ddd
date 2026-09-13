@@ -1,10 +1,25 @@
-Data Driven Development Suite v1.15
+Data Driven Development Suite v1.16
 Field Hockey Goalie Stats v5.105
 Indoor Hockey Goalie Stats v1.1
-Hockey Goalie Trials v1.10
+Hockey Goalie Trials v1.11
 Stats Recorder v1.42
 
+Version 1.16 / Trials v1.11 builds on the complete v1.15 multiday and promotion release.
+
+- Warns before adding a goalkeeper who is older than the configured trial age group, calculated on 1 January of the first trial year, and keeps a visible roster warning if added anyway.
+- Adds per-day smock and leg-guard colour selection and displays both colours while recording.
+- Changes a recording station to a green completion state when its goalkeeper reaches the scheduled attempt target.
+- Automatically starts a goalkeeper's timer with their first live recorded shot if it has never been started.
+- When a running goalkeeper is replaced, starts the replacement goalkeeper's timer after 30 seconds unless it is started or cancelled manually.
+- Treats ratings and notes as one persistent review per goalkeeper, day and trial section, including Match Situation sections.
+- Replaces category blending with a ratings-influence control capped at 100%, where 100% gives the combined ratings score equal influence to Defence Rate and never more.
+- Adds individual rating weights for Technical, Physical, Tactical, Discipline and Communication.
+- Reports unequal attempts by individual trial day/session rather than only across the whole trial.
+- Expands the Selection Report to show every goalkeeper across every day and scheduled section, full outcome and rate statistics, time in goal, rating values, shot-type and situation breakdowns, and every section note.
+
 Version 1.15 adds multi-event and multi-day Trials management, editable setup lines, full inline shot capture, promotion and final selection, comparable scoring, and inline Discipline ratings.
+
+Version 1.14 updated the Recorder to v1.41 and removed the operating-system file-type filter so valid .dddbackup files remain selectable on iPhone, iPad and other restrictive file pickers while still being validated safely after selection.
 
 Version 1.13 adds central backup compatibility to the Stats Recorder. The Recorder now accepts .dddbackup and legacy .json files, previews the number of shared goalkeepers and team profiles before import, merges Field and Indoor profiles by permanent goalkeeper ID, and deliberately excludes matches, trials and benchmarking data.
 
