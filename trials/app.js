@@ -42,6 +42,7 @@
   let deferredInstall = null;
   let currentRatingContext = null;
   let editingDrillId = '';
+  let editingEventContext = '';
   let pendingLateEntry = null;
   let toastTimer = null;
 
@@ -136,6 +137,7 @@
     const opening=page!==currentPage;
     if(opening&&page==='roster')$('rosterDayFilter').value=preferredWorkingDayId();
     if(opening&&page==='recording')$('recordingDay').value=preferredWorkingDayId();
+    if(opening&&page==='video')$('videoDay').value=preferredWorkingDayId();
     if(page==='promotion'&&currentPage!=='promotion')$('promotionDay').value='';
     currentPage = page;
     document.querySelectorAll('.page').forEach(el => el.classList.toggle('active', el.id === `page-${page}`));
@@ -445,8 +447,16 @@
     $('recordingStations').innerHTML=blocked?'<div class="notice">This round cannot start until the previous day is completed and its Promotion / Selection decision is confirmed.</div>':drill?Array.from({length:lanes},(_,i)=>stationMarkup(i,daySel.value,drill.id,true)).join(''):'<div class="empty-state">Schedule a trial day and section before recording.</div>';
     if(readOnly)$('recordingStations').querySelectorAll('button,input,textarea,select').forEach(control=>control.disabled=true);else bindStationControls($('recordingStations'),daySel.value,drill?.id,true);
     $('swapGoalies').disabled=readOnly;$('undoLastEvent').disabled=readOnly;
-    renderTimeline(daySel.value,drill?.id);
+    renderRotationOverview(daySel.value,drill?.id);
+    renderEventTimeline('eventTimeline',daySel.value,drill?.id,'recording');
   }
+
+  function renderRotationOverview(dayId,drillId){
+    const drill=state.drills.find(item=>item.id===drillId),goalies=dayId?eligibleGoaliesForDay(dayId):[],assignments=new Map();[0,1].forEach(lane=>{const id=state.stationSelections[stationKey(dayId,drillId,lane)];if(id)assignments.set(id,lane?'Goal B':'Goal A')});
+    $('recordingRotationOverview').innerHTML=goalies.length?goalies.map(goalie=>{const stats=goalieStats(goalie.id,{dayId,drillId}),time=liveTimeFor(goalie.id,dayId,drillId),position=assignments.get(goalie.id),targetMet=Boolean(drill&&stats.attempts>=drill.target);return `<article class="rotation-card ${position?'in-goal':''} ${targetMet?'target-met':''}"><div class="rotation-name">${goalieKitIcon(goalie,dayId)}<div><strong>${esc(goalie.name)}</strong><span>${position||'Waiting'}</span></div></div><div class="rotation-metrics"><span><strong>${stats.attempts}${drill?` / ${drill.target}`:''}</strong>Shots faced</span><span><strong data-rotation-time="${goalie.id}" data-day="${dayId}" data-drill="${drillId||''}">${formatTime(time)}</strong>Time in goal</span></div></article>`}).join(''):'<div class="empty-state">Add eligible goalkeepers to see the rotation overview.</div>';
+  }
+
+  function liveTimeFor(goalieId,dayId,drillId){const saved=filteredTimeFor(goalieId,{dayId,drillId}),key=timerKey(dayId,drillId,goalieId),timer=Object.values(activeTimers).find(item=>item.key===key);return saved+(timer?Date.now()-timer.startedAt:0)}
 
   function stationKey(dayId,drillId,lane){return `${dayId}|${drillId}|${lane}`}
   function timerKey(dayId,drillId,goalieId){return `${dayId}|${drillId}|${goalieId}`}
@@ -515,11 +525,24 @@
   function scheduleGoalieStart(lane,dayId,drillId,goalieId){cancelPendingGoalieStart(lane);pendingGoalieStarts[lane]={goalieId,timeout:setTimeout(()=>{delete pendingGoalieStarts[lane];if(currentPage!=='recording'||activeTimers[lane]||selectedGoalie(dayId,drillId,lane)!==goalieId)return;if(startTimer(lane,dayId,drillId,goalieId)){renderRecording();showToast('Goalkeeper timer started automatically after 30 seconds.');}},30000)};}
   function stopTimer(lane){const timer=activeTimers[lane];if(!timer)return;state.timers[timer.key]=(state.timers[timer.key]||0)+(Date.now()-timer.startedAt);delete activeTimers[lane];saveState();if(!Object.keys(activeTimers).length){clearInterval(timerTicker);timerTicker=null;}}
   function stopAllRunningTimers(){Object.keys(pendingGoalieStarts).forEach(lane=>cancelPendingGoalieStart(Number(lane)));Object.keys(activeTimers).forEach(lane=>stopTimer(Number(lane)));}
-  function startTicker(){if(timerTicker)return;timerTicker=setInterval(()=>{document.querySelectorAll('[data-timer-lane]').forEach(el=>{const lane=Number(el.dataset.timerLane);const timer=activeTimers[lane];if(timer)el.textContent=formatTime((state.timers[timer.key]||0)+(Date.now()-timer.startedAt));});},500)}
+  function startTicker(){if(timerTicker)return;timerTicker=setInterval(()=>{document.querySelectorAll('[data-timer-lane]').forEach(el=>{const lane=Number(el.dataset.timerLane);const timer=activeTimers[lane];if(timer)el.textContent=formatTime((state.timers[timer.key]||0)+(Date.now()-timer.startedAt));});document.querySelectorAll('[data-rotation-time]').forEach(el=>{el.textContent=formatTime(liveTimeFor(el.dataset.rotationTime,el.dataset.day,el.dataset.drill));});},500)}
 
-  function renderTimeline(dayId,drillId){
-    const events=getEvents({dayId,drillId}).slice(-12).reverse();
-    $('eventTimeline').innerHTML=events.length?events.map(event=>{const goalie=state.goalies.find(g=>g.id===event.goalieId);return `<div class="timeline-event"><span>${new Date(event.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div><strong class="timeline-goalie-name">${goalie?goalieKitIcon(goalie,event.dayId):''}<span>${esc(goalie?.name||'Unknown goalkeeper')}</span></strong><br><span class="muted">${esc(event.shotType)} · ${esc(event.situation)}${event.rebound?' · rebound':''}</span></div><span class="event-outcome ${event.outcome.split(' ')[0]}">${esc(event.outcome)}</span></div>`}).join(''):'<div class="empty-state">Recorded events will appear here.</div>';
+  function renderEventTimeline(targetId,dayId,drillId,context){
+    const events=getEvents({dayId,drillId}).slice().reverse();
+    $(targetId).innerHTML=events.length?events.map(event=>{const goalie=state.goalies.find(g=>g.id===event.goalieId);return `<div class="timeline-event editable"><span>${new Date(event.createdAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span><div><strong class="timeline-goalie-name">${goalie?goalieKitIcon(goalie,event.dayId):''}<span>${esc(goalie?.name||'Unknown goalkeeper')}</span></strong><br><span class="muted">${esc(event.shotType)} · ${esc(event.situation)}${event.rebound?` · ${esc(event.rebound)} rebound`:''}</span></div><span class="event-outcome ${event.outcome.split(' ')[0]}">${esc(event.outcome)}</span><button type="button" class="mini-button" data-edit-shot="${event.id}" ${completedDay(event.dayId)?'disabled':''}>Edit</button></div>`}).join(''):'<div class="empty-state">Recorded events will appear here.</div>';
+    $(targetId).querySelectorAll('[data-edit-shot]').forEach(button=>button.addEventListener('click',()=>openShotEditor(button.dataset.editShot,context)));
+  }
+
+  function openShotEditor(eventId,context){
+    const event=state.events.find(item=>item.id===eventId);if(!event)return;if(completedDay(event.dayId)){showToast('Reopen this trial day before editing its shots.');return;}
+    const day=state.days.find(item=>item.id===event.dayId),drill=state.drills.find(item=>item.id===event.drillId),currentGoalie=state.goalies.find(item=>item.id===event.goalieId),goalies=eligibleGoaliesForDay(event.dayId);if(currentGoalie&&!goalies.some(item=>item.id===currentGoalie.id))goalies.push(currentGoalie);
+    editingEventContext=context;$('editShotId').value=event.id;$('editShotDay').textContent=`${dayLabel(day?.date)}`;$('editShotSection').textContent=drill?.name||'Removed section';$('editShotGoalie').innerHTML=optionList(goalies,event.goalieId);$('editShotOutcome').innerHTML=optionList(['Save','Goal','Angle Closed Off'],event.outcome);$('editShotType').innerHTML=optionList(SHOT_TYPES,event.shotType);$('editShotSituation').innerHTML=optionList(SITUATIONS,event.situation);$('editShotOutnumbered').innerHTML=optionList(OUTNUMBERED,event.outnumbered||'Not Out Numbered');$('editShotRebound').innerHTML=optionList(REBOUND_RESULTS,event.rebound||'No rebound');$('editShotNote').value=event.note||'';
+    const locked=sectionSituation(drill);$('editShotSituation').disabled=Boolean(locked);if(locked)$('editShotSituation').value=locked;$('editShotSituationHelp').textContent=locked?`${locked} is locked by this trial section.`:'';$('shotEditorDialog').showModal();
+  }
+
+  function saveShotEdit(formEvent){
+    formEvent.preventDefault();const event=state.events.find(item=>item.id===$('editShotId').value);if(!event)return;if(completedDay(event.dayId)){showToast('Reopen this trial day before editing its shots.');$('shotEditorDialog').close();return;}
+    const drill=state.drills.find(item=>item.id===event.drillId),locked=sectionSituation(drill),rebound=$('editShotRebound').value;Object.assign(event,{goalieId:$('editShotGoalie').value,outcome:$('editShotOutcome').value,shotType:$('editShotType').value,situation:locked||$('editShotSituation').value,outnumbered:$('editShotOutnumbered').value,rebound:rebound==='No rebound'?'':rebound,dangerousRebound:rebound==='Dangerous',note:$('editShotNote').value.trim(),updatedAt:new Date().toISOString()});saveState('Shot updated');$('shotEditorDialog').close();editingEventContext==='video'?renderVideoReview():renderRecording();showToast('Recorded shot updated.');
   }
 
   function openRating(goalieId,dayId,drillId){
@@ -540,9 +563,10 @@
   }
 
   function renderVideoReview(){
-    const daySel=$('videoDay');ensureSelect(daySel,state.days.map((d,i)=>({id:d.id,name:`Day ${i+1} · ${dayLabel(d.date)}`})),'Add a trial day first');const drills=drillOptionsForDay(daySel.value);ensureSelect($('videoDrill'),drills,'Schedule a section first');const drill=state.drills.find(d=>d.id===$('videoDrill').value);const lanes=drill?.name==='Match Situation'?2:1;
-    ['A','B'].forEach((name,i)=>{const wrap=$(`videoStation${name}`);wrap.innerHTML=drill&&i<lanes?stationMarkup(i,daySel.value,drill.id,false):'';if(drill&&i<lanes)bindStationControls(wrap,daySel.value,drill.id,false);});
+    const daySel=$('videoDay');ensureSelect(daySel,state.days.map((d,i)=>({id:d.id,name:`Day ${i+1} · ${dayLabel(d.date)}`})),'Add a trial day first',daySel.value||preferredWorkingDayId());const drills=drillOptionsForDay(daySel.value);ensureSelect($('videoDrill'),drills,'Schedule a section first');const drill=state.drills.find(d=>d.id===$('videoDrill').value),lanes=drill?.name==='Match Situation'?2:1,readOnly=completedDay(daySel.value);$('videoReadOnlyNotice').classList.toggle('hidden',!readOnly);
+    ['A','B'].forEach((name,i)=>{const wrap=$(`videoStation${name}`);wrap.innerHTML=drill&&i<lanes?stationMarkup(i,daySel.value,drill.id,false):'';if(drill&&i<lanes){if(readOnly)wrap.querySelectorAll('button,input,textarea,select').forEach(control=>control.disabled=true);else bindStationControls(wrap,daySel.value,drill.id,false);}});
     $('videoB').closest('.video-lane').classList.toggle('hidden',lanes<2);
+    renderEventTimeline('videoEventTimeline',daySel.value,drill?.id,'video');
   }
 
   function setVideo(input,video){input.addEventListener('change',()=>{if(video.src)URL.revokeObjectURL(video.src);const file=input.files[0];if(file){video.src=URL.createObjectURL(file);video.load();}})}
@@ -637,7 +661,7 @@
   function eligibilityLabel(goalie){const check=eligibility(goalie);return check.eligible?'Eligible':`Ineligible for ${state.trial.ageGroup}`}
   function finalStatusMap(progress){const statuses={...(progress?.finalStatuses||{})};if(progress?.confirmed&&!Object.keys(statuses).length)state.goalies.forEach(goalie=>{statuses[goalie.id]=(progress.goalieIds||[]).includes(goalie.id)?'selected':'not_selected'});return statuses}
   function reportResults(){const finalDay=state.days.at(-1),progress=finalDay&&state.progressions[finalDay.id],finalConfirmed=Boolean(progress?.final&&progress?.confirmed);if(!finalConfirmed)return allReportResults();const statuses=finalStatusMap(progress);return allReportResults().filter(item=>['selected','reserve','non_travelling_reserve','excused'].includes(statuses[item.goalie.id]))}
-  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-15.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
+  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-16.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
 
   function renderReport(){
     const results=reportResults(),allResults=allReportResults(),selected=$('reportGoalie').value||allResults[0]?.goalie.id||'',individual=$('reportType').value==='feedback';$('reportGoalie').innerHTML=optionList(state.goalies,selected);$('reportGoalieWrap').classList.toggle('hidden',!individual);$('reportNotesLabel').textContent=individual?'Selectors’ feedback':'Selector notes and decision evidence';$('reportNotes').placeholder=individual?'Add feedback for this goalkeeper...':'Add the selectors’ observations, context and final reasoning...';$('reportNotes').value=individual?(state.feedbackNotes?.[$('reportGoalie').value]||''):state.reportNotes;
@@ -682,7 +706,7 @@
     document.querySelectorAll('[data-go]').forEach(button=>button.addEventListener('click',()=>switchPage(button.dataset.go)));
     $('newTrialEvent').addEventListener('click',()=>openTrialEventDialog());$('trialEventForm').addEventListener('submit',createTrialEvent);$('newTrialTemplate').addEventListener('change',applyNewTrialTemplate);$('saveEventTemplate').addEventListener('click',saveCurrentEventTemplate);
     $('saveSetup').addEventListener('click',saveSetup);$('dayForm').addEventListener('submit',addDay);$('drillForm').addEventListener('submit',addDrill);$('cancelDrillEdit').addEventListener('click',cancelDrillEdit);
-    $('openGoalieDialog').addEventListener('click',()=>{pendingLateEntry=null;openTrialGoalieDialog();});$('addSharedGoalie').addEventListener('click',()=>{pendingLateEntry=null;openSharedGoalieDialog();});$('sharedGoalieForm').addEventListener('submit',addSharedGoalieToRoster);$('goalieForm').addEventListener('submit',addGoalie);$('ratingForm').addEventListener('submit',saveRating);
+    $('openGoalieDialog').addEventListener('click',()=>{pendingLateEntry=null;openTrialGoalieDialog();});$('addSharedGoalie').addEventListener('click',()=>{pendingLateEntry=null;openSharedGoalieDialog();});$('sharedGoalieForm').addEventListener('submit',addSharedGoalieToRoster);$('goalieForm').addEventListener('submit',addGoalie);$('ratingForm').addEventListener('submit',saveRating);$('shotEditorForm').addEventListener('submit',saveShotEdit);
     $('saveDayTemplate').addEventListener('click',saveCurrentDayTemplate);$('applyDayTemplate').addEventListener('click',applyDayTemplate);$('deleteDayTemplate').addEventListener('click',deleteDayTemplate);$('dayTemplateSelect').addEventListener('change',renderDayTemplates);
     document.querySelectorAll('[data-close-dialog]').forEach(button=>button.addEventListener('click',()=>{pendingLateEntry=null;button.closest('dialog').close();}));
     $('rosterDayFilter').addEventListener('change',renderRoster);
@@ -713,8 +737,8 @@
     }
     if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
   }
-  window.__trialsV115Test={
-    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,feedbackReport,reportResults,outcomeLabel,eligibilityLabel,finalStatusMap,validDob,sectionSituation,goalieKitIcon,ensureSectionRating,persistInlineRating,deleteTrialEvent,rankingRound,eventTemplateFromState,addDateDays,preferredWorkingDayId,completedDay,selectionOutcomeNeedsEligibilityWarning,reopenPromotionDay,
+  window.__trialsV116Test={
+    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,feedbackReport,reportResults,outcomeLabel,eligibilityLabel,finalStatusMap,validDob,sectionSituation,goalieKitIcon,ensureSectionRating,persistInlineRating,deleteTrialEvent,rankingRound,eventTemplateFromState,addDateDays,preferredWorkingDayId,completedDay,selectionOutcomeNeedsEligibilityWarning,reopenPromotionDay,renderRotationOverview,openShotEditor,saveShotEdit,
     setState(patch){Object.assign(state,defaultState(),patch);state.shotSelections=state.shotSelections||{};state.progressions=state.progressions||{};},
     getState(){return state;}
   };

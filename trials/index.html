@@ -7,13 +7,13 @@
   <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
   <title>Hockey Goalie Trials: Data Driven Selection</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192-v1-15.png">
-  <link rel="apple-touch-icon" href="assets/icon-192-v1-15.png">
+  <link rel="icon" href="assets/icon-192-v1-16.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-16.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <img src="assets/trials-banner-v1-15.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <img src="assets/trials-banner-v1-16.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
     <div class="header-actions">
       <span id="saveStatus" class="save-status">Saved locally</span>
       <button id="installButton" class="button ghost hidden" type="button">Install App</button>
@@ -33,8 +33,8 @@
         <button class="nav-button" data-page="promotion"><span>✓</span>Promotion / Selection</button>
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
-      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-20.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.15<br><span>Data Driven Development</span></div>
+      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-21.png" alt="Data Driven Development Home"></a>
+      <div class="sidebar-footer">Version 1.16<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -133,10 +133,14 @@
             <label class="field"><span>Trial section</span><select id="recordingDrill"></select></label>
           </div>
         </article>
+        <article class="panel rotation-panel">
+          <div class="panel-header"><div><p class="eyebrow">Goalkeeper rotation</p><h2>All goalkeepers in this round</h2></div><span class="muted">Updates after every shot and timer change</span></div>
+          <div id="recordingRotationOverview" class="rotation-overview"></div>
+        </article>
         <div id="recordingReadOnlyNotice" class="notice hidden">This trial day is completed and is read-only. Reopen it in Promotion / Selection to make changes.</div>
         <div id="recordingStations" class="station-grid"></div>
         <article class="panel">
-          <div class="panel-header"><div><p class="eyebrow">Latest events</p><h2>Section timeline</h2></div><button id="undoLastEvent" class="button ghost">Undo last</button></div>
+          <div class="panel-header"><div><p class="eyebrow">Recorded events</p><h2>Section timeline</h2></div><button id="undoLastEvent" class="button ghost">Undo last</button></div>
           <div id="eventTimeline" class="timeline-list"></div>
         </article>
       </section>
@@ -174,6 +178,7 @@
           </div>
           <p class="muted">Load one camera angle above each goalkeeper recording section. Videos remain on this device and are not stored in the trial database.</p>
         </article>
+        <div id="videoReadOnlyNotice" class="notice hidden">This trial day is completed and is read-only. Reopen it in Promotion / Selection to record or edit shots.</div>
         <div class="video-review-grid">
           <section class="video-lane">
             <div class="video-stage"><video id="videoA" controls playsinline></video><label class="file-button">Load angle for Goal A<input type="file" id="videoFileA" accept="video/*"></label></div>
@@ -184,6 +189,10 @@
             <div id="videoStationB" class="video-station"></div>
           </section>
         </div>
+        <article class="panel">
+          <div class="panel-header"><div><p class="eyebrow">Recorded evidence</p><h2>Section shots</h2></div></div>
+          <div id="videoEventTimeline" class="timeline-list"></div>
+        </article>
       </section>
 
       <section id="page-comparison" class="page" aria-labelledby="comparisonTitle">
@@ -272,6 +281,24 @@
       <label class="field"><span>Coach notes</span><textarea id="ratingNotes" rows="5" placeholder="Positioning, decisions, movement, communication and development points..."></textarea></label>
       <p class="muted">Ratings and notes save automatically.</p>
       <div class="modal-actions"><button type="button" class="button primary" data-close-dialog>Close</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="shotEditorDialog" class="modal">
+    <form id="shotEditorForm" method="dialog">
+      <div class="modal-header"><div><p class="eyebrow">Correct recorded evidence</p><h2>Edit Trial Shot</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <input id="editShotId" type="hidden">
+      <div class="edit-shot-context"><span id="editShotDay"></span><strong id="editShotSection"></strong></div>
+      <div class="form-grid">
+        <label class="field span-2"><span>Goalkeeper</span><select id="editShotGoalie" required></select></label>
+        <label class="field"><span>Shot outcome</span><select id="editShotOutcome"></select></label>
+        <label class="field"><span>Shot type</span><select id="editShotType"></select></label>
+        <label class="field"><span>Shot situation</span><select id="editShotSituation"></select><small id="editShotSituationHelp" class="muted"></small></label>
+        <label class="field"><span>Out numbered</span><select id="editShotOutnumbered"></select></label>
+        <label class="field"><span>Rebound result</span><select id="editShotRebound"></select></label>
+        <label class="field span-2"><span>Notes</span><textarea id="editShotNote" rows="3"></textarea></label>
+      </div>
+      <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Save Shot Changes</button></div>
     </form>
   </dialog>
 

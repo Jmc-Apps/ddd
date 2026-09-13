@@ -1,8 +1,18 @@
-Data Driven Development Suite v1.20
+Data Driven Development Suite v1.21
 Field Hockey Goalie Stats v5.105
 Indoor Hockey Goalie Stats v1.1
-Hockey Goalie Trials v1.15
+Hockey Goalie Trials v1.16
 Stats Recorder v1.42
+
+Version 1.21 / Trials v1.16 builds on the complete v1.20 trial workflow release.
+
+- Adds a live Goalkeeper Rotation Overview above Trial Recording showing every goalkeeper in the current round, their coloured kit icon, shots faced against target, time in goal and current Goal A / Goal B assignment.
+- Updates the rotation overview after shots, goalkeeper changes, swaps and while timers are running.
+- Adds recorded-shot editing to both Trial Recording and Video Review while keeping each shot in its original trial day and section.
+- Allows correction of the goalkeeper, outcome, shot type, situation, outnumbered state, rebound result and notes.
+- Keeps Penalty Corner, Penalty Stroke and 8 Second 1v1 situations locked when editing shots.
+- Opens Video Review on the earliest trial day not marked completed, falling back to the final day when all days are complete.
+- Keeps completed-day video recording and shot editing read-only until the day is reopened in Promotion / Selection.
 
 Version 1.20 / Trials v1.15 builds on the complete v1.19 trial workflow release.
 
