@@ -1,8 +1,19 @@
-Data Driven Development Suite v1.19
+Data Driven Development Suite v1.20
 Field Hockey Goalie Stats v5.105
 Indoor Hockey Goalie Stats v1.1
-Hockey Goalie Trials v1.14
+Hockey Goalie Trials v1.15
 Stats Recorder v1.42
+
+Version 1.20 / Trials v1.15 builds on the complete v1.19 trial workflow release.
+
+- Opens Trial Recording and Trials Roster on the earliest trial day not marked completed, falling back to the final day when all days are complete.
+- Makes completed Trial Recording and roster-day controls read-only until the day is explicitly reopened in Promotion / Selection.
+- Reopening a day keeps recorded evidence but clears progression and selection confirmations from that day onward so they can be confirmed again.
+- Removes the separate Final decision selector and confirmed-selection summary from reports; confirmed Promotion / Selection outcomes are the single source of truth.
+- Shows the confirmed selection outcome on each individual feedback report, or Outcome pending before the final decision is confirmed.
+- Renames Coach feedback to Selectors’ feedback and omits the feedback section entirely when no feedback has been entered.
+- Shows age ineligibility only alongside a selection status and warns again before an ineligible goalkeeper is marked Selected, Reserve or Non travelling reserve.
+- Improves service-worker upgrade handling so refreshed builds are less likely to retain stale Trials code.
 
 Version 1.19 / Trials v1.14 builds on the complete v1.18 trial workflow release.
 

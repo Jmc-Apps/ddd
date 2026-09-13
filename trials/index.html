@@ -7,13 +7,13 @@
   <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
   <title>Hockey Goalie Trials: Data Driven Selection</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192-v1-14.png">
-  <link rel="apple-touch-icon" href="assets/icon-192-v1-14.png">
+  <link rel="icon" href="assets/icon-192-v1-15.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-15.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <img src="assets/trials-banner-v1-14.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <img src="assets/trials-banner-v1-15.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
     <div class="header-actions">
       <span id="saveStatus" class="save-status">Saved locally</span>
       <button id="installButton" class="button ghost hidden" type="button">Install App</button>
@@ -33,8 +33,8 @@
         <button class="nav-button" data-page="promotion"><span>✓</span>Promotion / Selection</button>
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
-      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-19.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.14<br><span>Data Driven Development</span></div>
+      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-20.png" alt="Data Driven Development Home"></a>
+      <div class="sidebar-footer">Version 1.15<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -121,6 +121,7 @@
       <section id="page-roster" class="page" aria-labelledby="rosterTitle">
         <div class="page-heading"><div><p class="eyebrow">Candidates</p><h1 id="rosterTitle">Trials Roster</h1></div><div class="toolbar"><button id="addSharedGoalie" class="button secondary">Choose Shared Goalie</button><button id="openGoalieDialog" class="button primary">Add Trial-only Goalie</button></div></div>
         <div class="toolbar"><label class="field"><span>Smock and leg-guard colours for</span><select id="rosterDayFilter"></select></label></div>
+        <div id="rosterReadOnlyNotice" class="notice hidden">This trial day is completed. Reopen it in Promotion / Selection before changing its roster colours or reviews.</div>
         <div id="rosterGrid" class="goalie-card-grid large"></div>
       </section>
 
@@ -132,6 +133,7 @@
             <label class="field"><span>Trial section</span><select id="recordingDrill"></select></label>
           </div>
         </article>
+        <div id="recordingReadOnlyNotice" class="notice hidden">This trial day is completed and is read-only. Reopen it in Promotion / Selection to make changes.</div>
         <div id="recordingStations" class="station-grid"></div>
         <article class="panel">
           <div class="panel-header"><div><p class="eyebrow">Latest events</p><h2>Section timeline</h2></div><button id="undoLastEvent" class="button ghost">Undo last</button></div>
@@ -145,6 +147,7 @@
           <div class="promotion-toolbar">
             <label class="field"><span>Trial day / round</span><select id="promotionDay"></select></label>
             <button id="markDayComplete" class="button secondary" type="button">Mark Day Completed</button>
+            <button id="reopenDay" class="button ghost hidden" type="button">Reopen Day</button>
           </div>
           <div id="promotionGuidance" class="notice"></div>
         </article>
@@ -212,11 +215,10 @@
         <article class="panel report-controls no-print">
           <label class="field"><span>Report</span><select id="reportType"><option value="selection">Selector report</option><option value="feedback">Individual feedback</option></select></label>
           <label class="field" id="reportGoalieWrap"><span>Goalkeeper</span><select id="reportGoalie"></select></label>
-          <label class="field grow"><span>Final decision</span><select id="finalDecision"><option>Pending</option><option>Selected</option><option>Shortlisted</option><option>Development squad</option><option>Not selected</option></select></label>
         </article>
         <div id="reportCanvas" class="report-canvas"></div>
         <article class="panel no-print">
-          <label class="field"><span>Coach notes and final decision evidence</span><textarea id="reportNotes" rows="6" placeholder="Add the selectors’ observations, context and final reasoning..."></textarea></label>
+          <label class="field"><span id="reportNotesLabel">Selector notes and decision evidence</span><textarea id="reportNotes" rows="6" placeholder="Add the selectors’ observations, context and final reasoning..."></textarea></label>
         </article>
       </section>
     </main>
