@@ -7,13 +7,13 @@
   <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
   <title>Hockey Goalie Trials: Data Driven Selection</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192-v1-18.png">
-  <link rel="apple-touch-icon" href="assets/icon-192-v1-18.png">
+  <link rel="icon" href="assets/icon-192-v1-19.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-19.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <img src="assets/trials-banner-v1-18.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <img src="assets/trials-banner-v1-19.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
     <div class="header-actions">
       <span id="saveStatus" class="save-status">Saved locally</span>
       <button id="installButton" class="button ghost hidden" type="button">Install App</button>
@@ -33,8 +33,8 @@
         <button class="nav-button" data-page="promotion"><span>✓</span>Promotion / Selection</button>
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
-      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-23.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.18<br><span>Data Driven Development</span></div>
+      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-24.png" alt="Data Driven Development Home"></a>
+      <div class="sidebar-footer">Version 1.19<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -170,11 +170,16 @@
       </section>
 
       <section id="page-video" class="page" aria-labelledby="videoTitle">
-        <div class="page-heading"><div><p class="eyebrow">Post-session capture</p><h1 id="videoTitle">Video Stats Review</h1></div></div>
+        <div class="page-heading"><div><p class="eyebrow">Post-session capture</p><h1 id="videoTitle">Video Stats Review</h1></div><div class="heading-actions"><button id="swapVideoGoalies" class="button ghost hidden" type="button">Swap Goal A ↔ Goal B</button></div></div>
         <article class="panel">
           <div class="recording-selectors">
             <label class="field"><span>Trial day</span><select id="videoDay"></select></label>
             <label class="field"><span>Trial section</span><select id="videoDrill"></select></label>
+          </div>
+          <div class="video-folder-controls">
+            <button id="videoChooseFolder" class="button secondary" type="button">Choose Trial Video Folder</button>
+            <button id="videoReconnectFiles" class="button ghost hidden" type="button">Reconnect Remembered Videos</button>
+            <span id="videoFolderStatus" class="muted">No video folder remembered for this trial.</span>
           </div>
           <p class="muted">Add multiple videos to each angle. The shared controls keep both playlists together; videos remain on this device and are not stored in the trial database.</p>
         </article>
@@ -218,14 +223,16 @@
         </article>
         <div class="video-review-grid">
           <section class="video-lane">
-            <div class="video-angle-heading"><div><p class="eyebrow">Camera playlist</p><h2>Angle A</h2></div><label class="button ghost video-add-button">Add videos<input type="file" id="videoFileA" accept="video/*" multiple></label></div>
+            <div class="video-angle-heading"><div><p class="eyebrow">Camera playlist</p><h2>Angle A</h2></div><button id="chooseVideoFilesA" class="button ghost video-add-button" type="button">Add videos</button><input class="hidden" type="file" id="videoFileA" accept="video/*" multiple></div>
             <div class="video-stage"><video id="videoA" playsinline preload="metadata"></video><div id="videoEmptyA" class="video-empty">Add one or more videos to Angle A</div></div>
+            <div class="video-reframe-controls" aria-label="Angle A reframing controls"><button class="button ghost" type="button" data-video-zoom="0|-0.25">Zoom −</button><span id="videoZoomLabelA">100%</span><button class="button ghost" type="button" data-video-zoom="0|0.25">Zoom +</button><button class="button ghost" type="button" data-video-reset-view="0">Reset Framing</button><span class="muted">Drag the video to reposition it</span></div>
             <div id="videoPlaylistA" class="video-playlist"></div>
             <div id="videoStationA" class="video-station"></div>
           </section>
           <section class="video-lane">
-            <div class="video-angle-heading"><div><p class="eyebrow">Camera playlist</p><h2>Angle B</h2></div><label class="button ghost video-add-button">Add videos<input type="file" id="videoFileB" accept="video/*" multiple></label></div>
+            <div class="video-angle-heading"><div><p class="eyebrow">Camera playlist</p><h2>Angle B</h2></div><button id="chooseVideoFilesB" class="button ghost video-add-button" type="button">Add videos</button><input class="hidden" type="file" id="videoFileB" accept="video/*" multiple></div>
             <div class="video-stage"><video id="videoB" playsinline preload="metadata" muted></video><div id="videoEmptyB" class="video-empty">Add one or more videos to Angle B</div></div>
+            <div class="video-reframe-controls" aria-label="Angle B reframing controls"><button class="button ghost" type="button" data-video-zoom="1|-0.25">Zoom −</button><span id="videoZoomLabelB">100%</span><button class="button ghost" type="button" data-video-zoom="1|0.25">Zoom +</button><button class="button ghost" type="button" data-video-reset-view="1">Reset Framing</button><span class="muted">Drag the video to reposition it</span></div>
             <div id="videoPlaylistB" class="video-playlist"></div>
             <div id="videoStationB" class="video-station"></div>
           </section>
@@ -346,6 +353,15 @@
       </div>
       <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Save Shot Changes</button></div>
     </form>
+  </dialog>
+
+  <dialog id="videoTimeConflictDialog" class="modal">
+    <div class="modal-card">
+      <div class="modal-header"><div><p class="eyebrow">Goalkeeper time</p><h2>Manual time already recorded</h2></div></div>
+      <p id="videoTimeConflictText" class="muted"></p>
+      <p>Should the time calculated from the video be added to the manual time, or replace it?</p>
+      <div class="modal-actions"><button id="cancelVideoTime" type="button" class="button ghost">Cancel</button><button id="replaceVideoTime" type="button" class="button secondary">Replace Manual Time</button><button id="addVideoTime" type="button" class="button primary">Add to Manual Time</button></div>
+    </div>
   </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>

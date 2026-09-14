@@ -1,8 +1,18 @@
-Data Driven Development Suite v1.23
+Data Driven Development Suite v1.24
 Field Hockey Goalie Stats v5.105
 Indoor Hockey Goalie Stats v1.1
-Hockey Goalie Trials v1.18
+Hockey Goalie Trials v1.19
 Stats Recorder v1.42
+
+Version 1.24 / Trials v1.19 completes the advanced Trials Video Review workflow.
+
+- Makes the main shared video seek bar explicitly draggable so scrubbing moves both synchronized angles.
+- Adds Swap Goal A / Goal B to two-goal Match Situation video review sections.
+- Adds goalkeeper timers driven by video timestamps, independent of playback speed.
+- When manual section time already exists, asks whether video-calculated time should be added, replace it, or be cancelled.
+- Reads selected local video files directly for waveform analysis and processes angles sequentially to improve long-video waveform and Auto Sync reliability in Chrome.
+- Remembers a video folder per trial and exact Angle A / Angle B file handles per trial day and section, with automatic or prompted reconnection.
+- Adds independent zoom, drag-to-position and reset-framing controls to both video angles and remembers each angle’s framing.
 
 Version 1.23 / Trials v1.18 adds advanced synchronized Trials video review controls.
 
