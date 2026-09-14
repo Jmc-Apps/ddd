@@ -7,13 +7,13 @@
   <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
   <title>Hockey Goalie Trials: Data Driven Selection</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192-v1-17.png">
-  <link rel="apple-touch-icon" href="assets/icon-192-v1-17.png">
+  <link rel="icon" href="assets/icon-192-v1-18.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-18.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <img src="assets/trials-banner-v1-17.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <img src="assets/trials-banner-v1-18.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
     <div class="header-actions">
       <span id="saveStatus" class="save-status">Saved locally</span>
       <button id="installButton" class="button ghost hidden" type="button">Install App</button>
@@ -33,8 +33,8 @@
         <button class="nav-button" data-page="promotion"><span>✓</span>Promotion / Selection</button>
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
-      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-22.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.17<br><span>Data Driven Development</span></div>
+      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-23.png" alt="Data Driven Development Home"></a>
+      <div class="sidebar-footer">Version 1.18<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -181,11 +181,21 @@
         <div id="videoReadOnlyNotice" class="notice hidden">This trial day is completed and is read-only. Reopen it in Promotion / Selection to record or edit shots.</div>
         <article class="panel video-transport" aria-label="Shared video controls">
           <div class="video-transport-row">
+            <button id="videoBackFive" class="button ghost" type="button">−5s</button>
             <button id="videoFrameBack" class="button ghost" type="button" title="Previous frame">◀ Frame</button>
             <button id="videoPlayPause" class="button primary video-play" type="button">▶ Play both</button>
             <button id="videoFrameForward" class="button ghost" type="button" title="Next frame">Frame ▶</button>
-            <label class="video-speed">Speed <select id="videoSpeed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+            <button id="videoForwardFive" class="button ghost" type="button">+5s</button>
+            <button id="videoLoopTen" class="button ghost" type="button">Loop −5s ↔ +5s</button>
             <span id="videoTimeLabel" class="video-time">00:00 / 00:00</span>
+          </div>
+          <div class="video-speed-buttons" role="group" aria-label="Playback speed">
+            <span>Speed</span>
+            <button type="button" data-video-speed="0.25">0.25×</button>
+            <button type="button" data-video-speed="0.5">0.5×</button>
+            <button type="button" class="active" data-video-speed="1">1×</button>
+            <button type="button" data-video-speed="1.5">1.5×</button>
+            <button type="button" data-video-speed="2">2×</button>
           </div>
           <input id="videoSeek" class="video-seek" type="range" min="0" max="0" step="0.01" value="0" aria-label="Shared video position">
           <div class="video-sync-row">
@@ -195,9 +205,16 @@
             <button class="button ghost" type="button" data-video-nudge="0.033333">+Frame</button>
             <button class="button ghost" type="button" data-video-nudge="1">+1s</button>
             <button id="videoSetSync" class="button secondary" type="button">Sync current frames</button>
+            <button id="videoPlaceMarkerA" class="button ghost" type="button">Place Marker A</button>
+            <button id="videoPlaceMarkerB" class="button ghost" type="button">Place Marker B</button>
+            <button id="videoApplyMarkers" class="button secondary" type="button" disabled>Sync Markers</button>
+            <button id="videoToggleWaveforms" class="button ghost" type="button">Show Waveforms</button>
+            <button id="videoSuggestAutoSync" class="button secondary" type="button">Suggest Auto Sync</button>
             <button id="videoClearSync" class="button ghost" type="button">Clear sync</button>
             <span id="videoSyncStatus" class="muted">Add videos to both angles, move each to the same moment, then sync.</span>
           </div>
+          <div id="videoAutoSyncPanel" class="video-auto-sync hidden" aria-live="polite"></div>
+          <div id="videoWaveformPanel" class="video-waveform-panel hidden" aria-live="polite"></div>
         </article>
         <div class="video-review-grid">
           <section class="video-lane">
