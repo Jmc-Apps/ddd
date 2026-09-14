@@ -1,8 +1,16 @@
-Data Driven Development Suite v1.24
-Field Hockey Goalie Stats v5.105
-Indoor Hockey Goalie Stats v1.1
-Hockey Goalie Trials v1.19
-Stats Recorder v1.42
+Data Driven Development Suite v1.25
+Field Hockey Goalie Stats v5.106
+Indoor Hockey Goalie Stats v1.2
+Hockey Goalie Trials v1.20
+Stats Recorder v1.43
+
+Version 1.25 / Trials v1.20 adds deflection tracking and a streamed large-video analysis fallback.
+
+- Adds “Deflection/Tip in” as a shot type throughout Field Hockey, Indoor Hockey, Trials and Stats Recorder.
+- Draws deflection and tip-in shots with a pink outline on heat maps while preserving the existing result colour.
+- Includes shot type in benchmark heat-map data returned by the bundled Cloudflare Worker source.
+- Processes large local videos through a memory-efficient media stream in Chrome when direct audio decoding is unsuitable.
+- Shows progress during streamed waveform analysis and uses the resulting envelopes for manual alignment and Auto Sync.
 
 Version 1.24 / Trials v1.19 completes the advanced Trials Video Review workflow.
 

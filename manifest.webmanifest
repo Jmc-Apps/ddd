@@ -2,7 +2,7 @@
   "name": "Data Driven Development",
   "short_name": "DDD",
   "description": "Connected goalkeeper statistics, trials, benchmarking and backup suite.",
-  "start_url": "./index.html?v=1.24",
+  "start_url": "./index.html?v=1.25",
   "scope": "./",
   "display": "standalone",
   "background_color": "#dceaf2",

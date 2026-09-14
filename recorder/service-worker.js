@@ -1,16 +1,16 @@
-const CACHE_NAME='ddd-stats-recorder-v1-42-chain-branding';
+const CACHE_NAME='ddd-stats-recorder-v1-43-deflection-shot-type';
 const FILES=[
  './',
  './index.html',
  './manifest.webmanifest',
- './manifest.webmanifest?v=1.42',
+ './manifest.webmanifest?v=1.43',
  './assets/d_heat_map.png',
  './assets/goal_box_heat_map.png',
- './assets/ddd-banner-v1-42.png',
- './icon-192-v1-42.png',
- './icon-512-v1-42.png',
- './apple-touch-icon-v1-42.png',
- './favicon-32-v1-42.png'
+ './assets/ddd-banner-v1-43.png',
+ './icon-192-v1-43.png',
+ './icon-512-v1-43.png',
+ './apple-touch-icon-v1-43.png',
+ './favicon-32-v1-43.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(FILES)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
