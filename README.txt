@@ -1,8 +1,19 @@
-Data Driven Development Suite v1.25
-Field Hockey Goalie Stats v5.106
-Indoor Hockey Goalie Stats v1.2
-Hockey Goalie Trials v1.20
+Data Driven Development Suite v1.26
+Field Hockey Goalie Stats v5.107
+Indoor Hockey Goalie Stats v1.3
+Hockey Goalie Trials v1.21
 Stats Recorder v1.43
+
+Version 1.26 / Trials v1.21 adds goal-based Trials video review and per-shot clip export.
+
+- Renames Trials video Angle A and Angle B to Goal A and Goal B for Match Situation sections.
+- Shows a single Goal video and playlist for every other trial section.
+- Stores Goal A or Goal B on every recorded shot, preserves it through goalkeeper swaps, migrates older records, and allows correction in the shot editor.
+- Moves each goal's reframing controls into its header and replaces the permanent playlist panel with a compact pop-up editor.
+- Makes the Trials sync controls collapsible per trial section while leaving the shared transport controls visible.
+- Shifts both Trials waveforms onto one common visual timeline after manual or automatic sync.
+- Exports a video-linked shot from its recorded goal with configurable time before and after, saved reframing, original audio, and a coloured goalkeeper/details overlay.
+- Uses the simpler Trials white-line and circular-handle sync marker appearance in Field and Indoor Video Stats Review.
 
 Version 1.25 / Trials v1.20 adds deflection tracking and a streamed large-video analysis fallback.
 
