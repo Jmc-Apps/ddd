@@ -1,8 +1,15 @@
-Data Driven Development Suite v1.28
+Data Driven Development Suite v1.29
 Field Hockey Goalie Stats v5.109
 Indoor Hockey Goalie Stats v1.5
-Hockey Goalie Trials v1.23
+Hockey Goalie Trials v1.24
 Stats Recorder v1.43
+
+Version 1.29 / Trials v1.24 strengthens selection eligibility and final ranking clarity.
+
+- Marks age-ineligible goalkeepers with a red tile border and a red eligibility notice on Promotion / Selection.
+- Shows the goalkeeper's age on 1 January and the trial age group directly on the ineligible tile.
+- Keeps Selected, Reserve and Non-travelling Reserve goalkeepers in the first Selection Report ranking group.
+- Starts every other trial participant's rank immediately after the lowest rank in that selected group, while retaining the grey secondary section.
 
 Version 1.28 / Trials v1.23 simplifies Stats navigation and the enlarged-video workflow.
 
