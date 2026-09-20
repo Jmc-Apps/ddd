@@ -1,8 +1,15 @@
-Data Driven Development Suite v1.27
-Field Hockey Goalie Stats v5.108
-Indoor Hockey Goalie Stats v1.4
-Hockey Goalie Trials v1.22
+Data Driven Development Suite v1.28
+Field Hockey Goalie Stats v5.109
+Indoor Hockey Goalie Stats v1.5
+Hockey Goalie Trials v1.23
 Stats Recorder v1.43
+
+Version 1.28 / Trials v1.23 simplifies Stats navigation and the enlarged-video workflow.
+
+- Removes the Goalies sidebar tab from Field Hockey and Indoor Hockey because permanent profiles and teams are managed on the central platform.
+- Renames the Match sidebar tab to New Match in both Stats apps.
+- Changes each Trials Enlarge Video button to Shrink Video while its goal video is enlarged; the same button restores the normal layout.
+- Restores the Enlarge Video label when fullscreen is exited through the browser or when leaving Video Review.
 
 Version 1.27 / Trials v1.22 centralizes permanent enrollment and adds enlarged Trials video review.
 

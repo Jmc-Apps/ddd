@@ -833,7 +833,7 @@
   function eligibilityLabel(goalie){const check=eligibility(goalie);return check.eligible?'Eligible':`Ineligible for ${state.trial.ageGroup}`}
   function finalStatusMap(progress){const statuses={...(progress?.finalStatuses||{})};if(progress?.confirmed&&!Object.keys(statuses).length)state.goalies.forEach(goalie=>{statuses[goalie.id]=(progress.goalieIds||[]).includes(goalie.id)?'selected':'not_selected'});return statuses}
   function reportResults(){const finalDay=state.days.at(-1),progress=finalDay&&state.progressions[finalDay.id],finalConfirmed=Boolean(progress?.final&&progress?.confirmed);if(!finalConfirmed)return allReportResults();const statuses=finalStatusMap(progress);return allReportResults().filter(item=>['selected','reserve','non_travelling_reserve','excused'].includes(statuses[item.goalie.id]))}
-  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-22.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
+  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-23.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
 
   function renderReport(){
     const results=reportResults(),allResults=allReportResults(),selected=$('reportGoalie').value||allResults[0]?.goalie.id||'',individual=$('reportType').value==='feedback';$('reportGoalie').innerHTML=optionList(state.goalies,selected);$('reportGoalieWrap').classList.toggle('hidden',!individual);$('reportNotesLabel').textContent=individual?'Selectors’ feedback':'Selector notes and decision evidence';$('reportNotes').placeholder=individual?'Add feedback for this goalkeeper...':'Add the selectors’ observations, context and final reasoning...';$('reportNotes').value=individual?(state.feedbackNotes?.[$('reportGoalie').value]||''):state.reportNotes;
@@ -869,10 +869,11 @@
 
   function enlargeTrialVideo(index){
     const page=$('page-video'),goal=Number(index)===1?'b':'a';
+    if(page.classList.contains(`video-goal-${goal}-expanded`)){exitTrialVideoEnlarge();return;}
     page.classList.remove('video-goal-a-expanded','video-goal-b-expanded');
     page.classList.add('video-goal-expanded',`video-goal-${goal}-expanded`);
     document.body.classList.add('trial-video-expanded');
-    $('videoExitEnlarge').classList.remove('hidden');
+    document.querySelectorAll('[data-video-enlarge]').forEach(button=>button.textContent=Number(button.dataset.videoEnlarge)===Number(index)?'Shrink Video':'Enlarge Video');
     page.scrollTop=0;
     if(!document.fullscreenElement&&page.requestFullscreen)page.requestFullscreen().catch(()=>{});
   }
@@ -880,7 +881,7 @@
     const page=$('page-video');if(!page)return;
     page.classList.remove('video-goal-expanded','video-goal-a-expanded','video-goal-b-expanded');
     document.body.classList.remove('trial-video-expanded');
-    $('videoExitEnlarge')?.classList.add('hidden');
+    document.querySelectorAll('[data-video-enlarge]').forEach(button=>button.textContent='Enlarge Video');
     if(closeFullscreen&&document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});
   }
 
@@ -902,7 +903,7 @@
     document.querySelectorAll('[data-close-dialog]').forEach(button=>button.addEventListener('click',()=>{pendingLateEntry=null;button.closest('dialog').close();}));
     $('rosterDayFilter').addEventListener('change',renderRoster);
     $('recordingDay').addEventListener('change',()=>{stopAllRunningTimers();renderRecording();});$('recordingDrill').addEventListener('change',()=>{stopAllRunningTimers();renderRecording();});
-    $('swapGoalies').addEventListener('click',swapGoalkeepers);$('swapVideoGoalies').addEventListener('click',swapVideoGoalkeepers);$('videoExitEnlarge').addEventListener('click',()=>exitTrialVideoEnlarge());document.querySelectorAll('[data-video-enlarge]').forEach(button=>button.addEventListener('click',()=>enlargeTrialVideo(button.dataset.videoEnlarge)));document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&$('page-video').classList.contains('video-goal-expanded'))exitTrialVideoEnlarge(false);});
+    $('swapGoalies').addEventListener('click',swapGoalkeepers);$('swapVideoGoalies').addEventListener('click',swapVideoGoalkeepers);document.querySelectorAll('[data-video-enlarge]').forEach(button=>button.addEventListener('click',()=>enlargeTrialVideo(button.dataset.videoEnlarge)));document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&$('page-video').classList.contains('video-goal-expanded'))exitTrialVideoEnlarge(false);});
     $('videoDay').addEventListener('change',()=>{stopAllVideoGoalieTimers(false);pauseAllVideoPlayback();renderVideoReview();});$('videoDrill').addEventListener('change',()=>{stopAllVideoGoalieTimers(false);pauseAllVideoPlayback();renderVideoReview();});
     $('promotionDay').addEventListener('change',renderPromotion);$('markDayComplete').addEventListener('click',markPromotionDayComplete);$('reopenDay').addEventListener('click',reopenPromotionDay);$('confirmPromotion').addEventListener('click',confirmPromotion);$('addExistingLateEntry').addEventListener('click',addExistingLateEntry);$('addLateTrialGoalie').addEventListener('click',()=>beginLateEntry('trial'));$('addLateSharedGoalie').addEventListener('click',()=>beginLateEntry('shared'));
     $('videoChooseFolder').addEventListener('click',chooseTrialVideoFolder);$('videoReconnectFiles').addEventListener('click',()=>restoreRememberedVideoFiles(true));$('chooseVideoFilesA').addEventListener('click',()=>chooseVideoFiles(0));$('chooseVideoFilesB').addEventListener('click',()=>chooseVideoFiles(1));

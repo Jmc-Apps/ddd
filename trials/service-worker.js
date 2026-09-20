@@ -1,5 +1,5 @@
-const CACHE = 'hockey-goalie-trials-v1-22-central-profiles-enlarged-video';
-const ASSETS = ['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','../assets/home-banner-v1-0.png','../assets/ddd-banner-v1-27.png','./assets/trials-banner-v1-22.png','./assets/icon-192-v1-22.png','./assets/icon-512-v1-22.png'];
+const CACHE = 'hockey-goalie-trials-v1-23-toggle-video-size';
+const ASSETS = ['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','../assets/home-banner-v1-0.png','../assets/ddd-banner-v1-28.png','./assets/trials-banner-v1-23.png','./assets/icon-192-v1-23.png','./assets/icon-512-v1-23.png'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('hockey-goalie-trials-') && key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', event => {
