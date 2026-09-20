@@ -7,13 +7,13 @@
   <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
   <title>Hockey Goalie Trials: Data Driven Selection</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192-v1-21.png">
-  <link rel="apple-touch-icon" href="assets/icon-192-v1-21.png">
+  <link rel="icon" href="assets/icon-192-v1-22.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-22.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <img src="assets/trials-banner-v1-21.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <img src="assets/trials-banner-v1-22.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
     <div class="header-actions">
       <span id="saveStatus" class="save-status">Saved locally</span>
       <button id="installButton" class="button ghost hidden" type="button">Install App</button>
@@ -34,7 +34,7 @@
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
       <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-26.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.21<br><span>Data Driven Development</span></div>
+      <div class="sidebar-footer">Version 1.22<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -170,7 +170,7 @@
       </section>
 
       <section id="page-video" class="page" aria-labelledby="videoTitle">
-        <div class="page-heading"><div><p class="eyebrow">Post-session capture</p><h1 id="videoTitle">Video Stats Review</h1></div><div class="heading-actions"><button id="swapVideoGoalies" class="button ghost hidden" type="button">Swap Goal A ↔ Goal B</button></div></div>
+        <div class="page-heading"><div><p class="eyebrow">Post-session capture</p><h1 id="videoTitle">Video Stats Review</h1></div><div class="heading-actions"><button id="videoExitEnlarge" class="button ghost hidden" type="button">Exit Enlarged Video</button><button id="swapVideoGoalies" class="button ghost hidden" type="button">Swap Goal A ↔ Goal B</button></div></div>
         <article class="panel">
           <div class="recording-selectors">
             <label class="field"><span>Trial day</span><select id="videoDay"></select></label>
@@ -226,13 +226,13 @@
         </article>
         <div class="video-review-grid">
           <section id="videoLaneA" class="video-lane">
-            <div class="video-angle-heading"><div><p class="eyebrow">Goal video</p><h2 id="videoGoalHeadingA">Goal A</h2></div><div class="video-heading-controls"><div class="video-reframe-controls" aria-label="Goal A reframing controls"><button class="button ghost" type="button" data-video-zoom="0|-0.25">Zoom −</button><span id="videoZoomLabelA">100%</span><button class="button ghost" type="button" data-video-zoom="0|0.25">Zoom +</button><button class="button ghost" type="button" data-video-reset-view="0">Reset Framing</button></div><button class="button ghost" type="button" data-edit-video-playlist="0">Edit Playlist</button><button id="chooseVideoFilesA" class="button ghost video-add-button" type="button">Add videos</button></div><input class="hidden" type="file" id="videoFileA" accept="video/*" multiple></div>
+            <div class="video-angle-heading"><div><p class="eyebrow">Goal video</p><h2 id="videoGoalHeadingA">Goal A</h2></div><div class="video-heading-controls"><div class="video-reframe-controls" aria-label="Goal A reframing controls"><button class="button ghost" type="button" data-video-zoom="0|-0.25">Zoom −</button><span id="videoZoomLabelA">100%</span><button class="button ghost" type="button" data-video-zoom="0|0.25">Zoom +</button><button class="button ghost" type="button" data-video-reset-view="0">Reset Framing</button></div><button class="button ghost" type="button" data-video-enlarge="0">Enlarge Video</button><button class="button ghost" type="button" data-edit-video-playlist="0">Edit Playlist</button><button id="chooseVideoFilesA" class="button ghost video-add-button" type="button">Add videos</button></div><input class="hidden" type="file" id="videoFileA" accept="video/*" multiple></div>
             <div class="video-stage"><video id="videoA" playsinline preload="metadata"></video><div id="videoEmptyA" class="video-empty">Add one or more videos to Goal A</div></div>
             <p class="muted video-drag-hint">Drag the video to reposition it</p>
             <div id="videoStationA" class="video-station"></div>
           </section>
           <section id="videoLaneB" class="video-lane">
-            <div class="video-angle-heading"><div><p class="eyebrow">Goal video</p><h2 id="videoGoalHeadingB">Goal B</h2></div><div class="video-heading-controls"><div class="video-reframe-controls" aria-label="Goal B reframing controls"><button class="button ghost" type="button" data-video-zoom="1|-0.25">Zoom −</button><span id="videoZoomLabelB">100%</span><button class="button ghost" type="button" data-video-zoom="1|0.25">Zoom +</button><button class="button ghost" type="button" data-video-reset-view="1">Reset Framing</button></div><button class="button ghost" type="button" data-edit-video-playlist="1">Edit Playlist</button><button id="chooseVideoFilesB" class="button ghost video-add-button" type="button">Add videos</button></div><input class="hidden" type="file" id="videoFileB" accept="video/*" multiple></div>
+            <div class="video-angle-heading"><div><p class="eyebrow">Goal video</p><h2 id="videoGoalHeadingB">Goal B</h2></div><div class="video-heading-controls"><div class="video-reframe-controls" aria-label="Goal B reframing controls"><button class="button ghost" type="button" data-video-zoom="1|-0.25">Zoom −</button><span id="videoZoomLabelB">100%</span><button class="button ghost" type="button" data-video-zoom="1|0.25">Zoom +</button><button class="button ghost" type="button" data-video-reset-view="1">Reset Framing</button></div><button class="button ghost" type="button" data-video-enlarge="1">Enlarge Video</button><button class="button ghost" type="button" data-edit-video-playlist="1">Edit Playlist</button><button id="chooseVideoFilesB" class="button ghost video-add-button" type="button">Add videos</button></div><input class="hidden" type="file" id="videoFileB" accept="video/*" multiple></div>
             <div class="video-stage"><video id="videoB" playsinline preload="metadata" muted></video><div id="videoEmptyB" class="video-empty">Add one or more videos to Goal B</div></div>
             <p class="muted video-drag-hint">Drag the video to reposition it</p>
             <div id="videoStationB" class="video-station"></div>

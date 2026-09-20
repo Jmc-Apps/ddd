@@ -1,8 +1,16 @@
-Data Driven Development Suite v1.26
-Field Hockey Goalie Stats v5.107
-Indoor Hockey Goalie Stats v1.3
-Hockey Goalie Trials v1.21
+Data Driven Development Suite v1.27
+Field Hockey Goalie Stats v5.108
+Indoor Hockey Goalie Stats v1.4
+Hockey Goalie Trials v1.22
 Stats Recorder v1.43
+
+Version 1.27 / Trials v1.22 centralizes permanent enrollment and adds enlarged Trials video review.
+
+- Moves permanent goalkeeper and team enrollment, editing and deletion to the Data Driven Development platform.
+- Makes the goalkeeper profile and platform team sections in Field Hockey and Indoor Hockey read-only, with a direct link to the platform manager.
+- Preserves the Field Hockey Trials workflow for adding trial-only goalkeepers as well as choosing goalkeepers from the shared platform directory.
+- Adds an Enlarge Video control to Goal A and Goal B in Trials Video Review, keeping the shared playback controls and recording tools available in the enlarged view.
+- Uses a six-digit confirmation before deleting a shared goalkeeper and their Field and Indoor match data; linked historical trial records are retained.
 
 Version 1.26 / Trials v1.21 adds goal-based Trials video review and per-shot clip export.
 
