@@ -7,13 +7,13 @@
   <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
   <title>Hockey Goalie Trials: Data Driven Selection</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/icon-192-v1-24.png">
-  <link rel="apple-touch-icon" href="assets/icon-192-v1-24.png">
+  <link rel="icon" href="assets/icon-192-v1-25.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-25.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <img src="assets/trials-banner-v1-24.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <img src="assets/trials-banner-v1-25.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
     <div class="header-actions">
       <span id="saveStatus" class="save-status">Saved locally</span>
       <button id="installButton" class="button ghost hidden" type="button">Install App</button>
@@ -34,7 +34,7 @@
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
       <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-26.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.24<br><span>Data Driven Development</span></div>
+      <div class="sidebar-footer">Version 1.25<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -330,7 +330,10 @@
         <label class="field"><span>Team gender</span><select id="newTrialGender"><option>Male</option><option>Female</option><option>Mixed</option></select></label>
         <label class="field"><span>Age group</span><select id="newTrialAge"><option>U13</option><option>U14</option><option>U16</option><option>U18</option><option>U21</option><option>Senior</option><option>Masters</option></select></label>
         <label class="field"><span>Level</span><select id="newTrialLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
-        <label id="newTrialStartWrap" class="field span-2 hidden"><span>First trial day</span><input id="newTrialStartDate" type="date"></label>
+        <div id="newTrialDatesWrap" class="template-date-panel span-2 hidden">
+          <div class="template-date-heading"><strong>Choose every trial day</strong><span>Set the date for each session included in this template.</span></div>
+          <div id="newTrialDates" class="template-date-grid"></div>
+        </div>
       </div>
       <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Create Trial</button></div>
     </form>

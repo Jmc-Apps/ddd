@@ -217,9 +217,19 @@
   function openTrialEventDialog(templateId=''){
     $('trialEventForm').reset();$('newTrialTemplate').innerHTML='<option value="">Blank trial</option>'+optionList(state.trialEventTemplates,'');$('newTrialTemplate').value=templateId;applyNewTrialTemplate();$('trialEventDialog').showModal();
   }
+  function templateDateValidation(dates,expectedCount){
+    if(dates.length!==expectedCount||dates.some(date=>!/^\d{4}-\d{2}-\d{2}$/.test(date)))return 'Choose a valid date for every trial day.';
+    if(new Set(dates).size!==dates.length)return 'Each trial day must have a different date.';
+    if(dates.some((date,index)=>index>0&&date<=dates[index-1]))return 'Trial day dates must be in chronological order.';
+    return '';
+  }
+  function renderNewTrialDates(template){
+    const days=template?.days||[];$('newTrialDatesWrap').classList.toggle('hidden',!days.length);
+    $('newTrialDates').innerHTML=days.map((day,index)=>{const sections=(template.drills||[]).filter(drill=>Number(drill.dayIndex)===index).map(drill=>drill.name),hint=sections.length?sections.join(' · '):'No sections saved for this day';return `<label class="field"><span>Trial Day ${index+1}</span><input type="date" data-new-trial-day-date="${index}" required><small>${esc(hint)}</small></label>`}).join('');
+  }
   function applyNewTrialTemplate(){
-    const template=state.trialEventTemplates.find(item=>item.id===$('newTrialTemplate').value),hasDays=Boolean(template?.days?.length);$('newTrialStartWrap').classList.toggle('hidden',!hasDays);$('newTrialStartDate').required=hasDays;
-    if(!template){$('newTrialName').value='';$('newTrialTeam').value='';$('newTrialGender').value='Male';$('newTrialAge').value='U16';$('newTrialLevel').value='School';$('newTrialStartDate').value='';return;}
+    const template=state.trialEventTemplates.find(item=>item.id===$('newTrialTemplate').value);renderNewTrialDates(template);
+    if(!template){$('newTrialName').value='';$('newTrialTeam').value='';$('newTrialGender').value='Male';$('newTrialAge').value='U16';$('newTrialLevel').value='School';return;}
     $('newTrialName').value=template.trial?.name||template.name;$('newTrialTeam').value=template.trial?.team||'';$('newTrialGender').value=template.trial?.gender||'Male';$('newTrialAge').value=template.trial?.ageGroup||'U16';$('newTrialLevel').value=template.trial?.level||'School';
   }
 
@@ -243,7 +253,7 @@
     event.preventDefault();syncActiveSession();
     const blank=defaultState(),id=uid(),template=state.trialEventTemplates.find(item=>item.id===$('newTrialTemplate').value);
     blank.trial={name:$('newTrialName').value.trim(),team:$('newTrialTeam').value.trim(),gender:$('newTrialGender').value,ageGroup:$('newTrialAge').value,level:$('newTrialLevel').value,tier:template?.trial?.tier||'A/1st'};
-    if(template?.days?.length){const start=$('newTrialStartDate').value;if(!start){showToast('Choose the first trial day date.');return;}blank.days=template.days.map(day=>({id:uid(),date:addDateDays(start,Number(day.offset)||0),status:'planned'}));blank.drills=(template.drills||[]).filter(drill=>blank.days[drill.dayIndex]).map(drill=>({id:uid(),dayId:blank.days[drill.dayIndex].id,name:drill.name,target:drill.target}));}
+    if(template?.days?.length){const dates=[...document.querySelectorAll('[data-new-trial-day-date]')].map(input=>input.value),dateError=templateDateValidation(dates,template.days.length);if(dateError){showToast(dateError);return;}blank.days=template.days.map((day,index)=>({id:uid(),date:dates[index],status:'planned'}));blank.drills=(template.drills||[]).filter(drill=>blank.days[drill.dayIndex]).map(drill=>({id:uid(),dayId:blank.days[drill.dayIndex].id,name:drill.name,target:drill.target}));}
     state.activeTrialId=id;applySession(blank);state.trialSessions[id]=captureSession(state);saveState();$('trialEventDialog').close();$('trialEventForm').reset();switchPage('setup');showToast('New trial event created.');
   }
 
@@ -834,7 +844,7 @@
   function eligibilityLabel(goalie){const check=eligibility(goalie);return check.eligible?'Eligible':`Ineligible for ${state.trial.ageGroup}`}
   function finalStatusMap(progress){const statuses={...(progress?.finalStatuses||{})};if(progress?.confirmed&&!Object.keys(statuses).length)state.goalies.forEach(goalie=>{statuses[goalie.id]=(progress.goalieIds||[]).includes(goalie.id)?'selected':'not_selected'});return statuses}
   function reportResults(){const finalDay=state.days.at(-1),progress=finalDay&&state.progressions[finalDay.id],finalConfirmed=Boolean(progress?.final&&progress?.confirmed);if(!finalConfirmed)return allReportResults();const statuses=finalStatusMap(progress);return allReportResults().filter(item=>['selected','reserve','non_travelling_reserve'].includes(statuses[item.goalie.id]))}
-  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-24.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
+  function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-25.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
 
   function renderReport(){
     const results=reportResults(),allResults=allReportResults(),selected=$('reportGoalie').value||allResults[0]?.goalie.id||'',individual=$('reportType').value==='feedback';$('reportGoalie').innerHTML=optionList(state.goalies,selected);$('reportGoalieWrap').classList.toggle('hidden',!individual);$('reportNotesLabel').textContent=individual?'Selectors’ feedback':'Selector notes and decision evidence';$('reportNotes').placeholder=individual?'Add feedback for this goalkeeper...':'Add the selectors’ observations, context and final reasoning...';$('reportNotes').value=individual?(state.feedbackNotes?.[$('reportGoalie').value]||''):state.reportNotes;
@@ -945,7 +955,7 @@
     if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
   }
   window.__trialsV119Test={
-    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,feedbackReport,reportResults,outcomeLabel,eligibilityLabel,finalStatusMap,validDob,sectionSituation,goalieKitIcon,ensureSectionRating,persistInlineRating,deleteTrialEvent,rankingRound,eventTemplateFromState,addDateDays,preferredWorkingDayId,completedDay,selectionOutcomeNeedsEligibilityWarning,reopenPromotionDay,renderRotationOverview,openShotEditor,saveShotEdit,dayTimeFor,playlistDuration,locateVideoTime,masterDuration,audioCorrelation,findAutoSyncOffset,normalizeAudioEnvelope,currentVideoSession,jumpVideo,toggleVideoLoop,placeVideoSyncMarker,applyVideoSyncMarkers,
+    comparableCategories,strengthDevelopment,ratingsScore,goalieScore,dayCanStart,eligibleGoaliesForDay,selectedGoalie,ratingCategories,captureSession,eligibility,comparisonWarnings,selectionReport,feedbackReport,reportResults,outcomeLabel,eligibilityLabel,finalStatusMap,validDob,sectionSituation,goalieKitIcon,ensureSectionRating,persistInlineRating,deleteTrialEvent,rankingRound,eventTemplateFromState,addDateDays,templateDateValidation,preferredWorkingDayId,completedDay,selectionOutcomeNeedsEligibilityWarning,reopenPromotionDay,renderRotationOverview,openShotEditor,saveShotEdit,dayTimeFor,playlistDuration,locateVideoTime,masterDuration,audioCorrelation,findAutoSyncOffset,normalizeAudioEnvelope,currentVideoSession,jumpVideo,toggleVideoLoop,placeVideoSyncMarker,applyVideoSyncMarkers,
     timerSourceFor,combinedTimerValue,updateCombinedTimer,
     setState(patch){Object.assign(state,defaultState(),patch);state.shotSelections=state.shotSelections||{};state.progressions=state.progressions||{};state.timerSources=state.timerSources||{};},
     getState(){return state;}

@@ -1,8 +1,15 @@
-Data Driven Development Suite v1.29
+Data Driven Development Suite v1.30
 Field Hockey Goalie Stats v5.109
 Indoor Hockey Goalie Stats v1.5
-Hockey Goalie Trials v1.24
+Hockey Goalie Trials v1.25
 Stats Recorder v1.43
+
+Version 1.30 / Trials v1.25 completes multi-day Trial Event Template scheduling.
+
+- Displays a separate required date field for every day or session in a selected Trial Event Template.
+- Shows each template day's saved trial sections beside its date so the schedule is clear before creation.
+- Uses the exact selected date for each trial day instead of silently calculating later dates from the first day.
+- Prevents creation when a session date is missing, duplicated or not in chronological order.
 
 Version 1.29 / Trials v1.24 strengthens selection eligibility and final ranking clarity.
 
