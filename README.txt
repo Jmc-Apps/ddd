@@ -1,8 +1,16 @@
-Data Driven Development Suite v1.31
-Field Hockey Goalie Stats v5.110
-Indoor Hockey Goalie Stats v1.6
+Data Driven Development Suite v1.32
+Field Hockey Goalie Stats v5.111
+Indoor Hockey Goalie Stats v1.7
 Hockey Goalie Trials v1.26
 Stats Recorder v1.43
+
+Version 1.32 / Field Hockey v5.111 / Indoor v1.7 fixes team-aware match selection in Stats and Reports.
+
+- Adds a Home Team Filter to Indoor Hockey Reports and filters the Individual Match Report choices by the selected team.
+- Makes Indoor Hockey Stats match choices follow the selected home team and opponent; applies team/opponent filters before selecting the most recent five matches.
+- Filters Field Hockey Stats and report match choices by the selected team and 11-a-side / 7-a-side format.
+- Keeps Indoor Hockey's match format fixed to its indoor rules; it has no selectable match-format field.
+- Preserves the 7-a-side classification, benchmark format separation, D1 migration and prior-year age cutoff from v1.31.
 
 Version 1.31 / Field Hockey v5.110 / Indoor v1.6 / Trials v1.26 adds 7-a-side classification and the prior-year age cutoff.
 

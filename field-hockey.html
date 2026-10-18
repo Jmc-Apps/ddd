@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Field Hockey Goalie Stats: Data Driven Development v5.110</title>
+<title>Field Hockey Goalie Stats: Data Driven Development v5.111</title>
 <link rel="manifest" href="field-hockey.webmanifest">
 <meta name="theme-color" content="#d4e5ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2019,7 +2019,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 <nav id="v570Sidebar" class="tabs noPrint" aria-label="Main navigation">
 <button type="button" id="v570SidebarToggle" class="v570SidebarToggle" aria-expanded="true"><span class="v570Wide">Collapse Menu</span><span class="v570Narrow" aria-hidden="true">›</span></button>
 <button class="tab homeLogoTab active" data-tab="home" data-short="H" aria-label="Home"><span><img src="assets/home-banner-v1-0.png" alt="Home"></span></button><button class="tab" data-tab="match" data-short="NM"><span>New Match</span></button><button class="tab" data-tab="matchEditor" data-short="ME"><span>Match Editor</span></button><button class="tab" data-tab="stats" data-short="S"><span>Stats</span></button><button class="tab" data-tab="heat" data-short="HM"><span>Heat Maps</span></button><button class="tab" data-tab="reports" data-short="R"><span>Reports</span></button><a class="tab v570ExternalTab" href="./index.html#resources" data-short="?"><span>Shared Resources</span></a><a class="dddSidebarReturn" href="./index.html" aria-label="Return to Data Driven Development Home"><img src="assets/ddd-banner-v1-31.png" alt="Data Driven Development Home"></a>
-<div class="v573SidebarMeta"><span class="v573Full">Field Hockey Goalie Stats<br>Data Driven Development · Version 5.110</span><span class="v573Compact">v5.110</span></div>
+<div class="v573SidebarMeta"><span class="v573Full">Field Hockey Goalie Stats<br>Data Driven Development · Version 5.111</span><span class="v573Compact">v5.111</span></div>
 </nav>
 
 <section id="home" class="panel active">
@@ -2028,7 +2028,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
       <img src="assets/home-emblem-v467.png" alt="Hockey Goalie Stats" class="homeLogo">
     </div>
     <div class="versionBox">
-      <b>Version 5.110</b>
+      <b>Version 5.111</b>
       <div class="small">Build Date: 2026-09-14</div>
     </div>
     <div id="homeSummary" class="hiddenHomeSummary"></div>
@@ -2064,7 +2064,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
   <div id="v521VideoReviewRoot" class="v521VideoReviewRoot"></div>
 </section>
 
-<section id="reports" class="panel"><div class="card noPrint"><h2>Reports</h2><div class="grid2"><div><label>Goalie</label><select id="reportGoalie"></select></div><div><label>Year</label><select id="reportYear"></select></div></div><label>Match Format</label><select id="reportMatchFormat"><option value="all">All formats</option><option value="11-a-side">11-a-side</option><option value="7-a-side">7-a-side</option></select><label>Match</label><select id="reportMatch"></select>
+<section id="reports" class="panel"><div class="card noPrint"><h2>Reports</h2><div class="grid2"><div><label>Goalie</label><select id="reportGoalie"></select></div><div><label>Year</label><select id="reportYear"></select></div></div><label>Match</label><select id="reportMatch"></select>
 <div class="v471ReportChooser">
   <div class="grid2">
     <div>
@@ -2085,6 +2085,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
     </div>
     <div id="v471ReportHint" class="muted" style="align-self:end">Select a report, then generate it.</div>
   </div>
+  <div class="grid2 v131ReportFilters"><div><label for="reportHomeTeamFilter">Home Team Filter</label><select id="reportHomeTeamFilter"><option value="all">All teams</option></select></div><div><label for="reportMatchFormat">Match Format</label><select id="reportMatchFormat"><option value="all">All formats</option><option value="11-a-side">11-a-side</option><option value="7-a-side">7-a-side</option></select></div></div>
   <div id="v471ReportFields" class="v471ReportFields"></div>
   <div class="v471ReportActions">
     <button class="btn good" onclick="generateV471SelectedReport()">Generate Report</button>
@@ -2147,7 +2148,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 </main>
 
 <script>
-const APP_VERSION_566='5.110';
+const APP_VERSION_566='5.111';
 window.APP_VERSION=APP_VERSION_566;
 const STORAGE_KEY='hockeyGoalieStatsV3';
 const ratings=['Positioning','Communication','Rebound Control','Decision Making'];
@@ -7279,34 +7280,128 @@ setTimeout(()=>{decorateBenchmark573();const g=goalie();if(g?.benchmarkConsent==
 <script src="single-goalie-transfer.js"></script>
 <script src="multi-goalie.js"></script>
 <script>
-/* DDD v1.31: format-aware Field Hockey Stats and reports */
+/* DDD v1.32 source fix: dependent team/format match filters for Stats and Reports. */
 (function(){
   const byId=id=>document.getElementById(id);
-  const normalized=m=>m?.matchFormat==='7-a-side'?'7-a-side':'11-a-side';
-  document.addEventListener('change',event=>{if(event.target?.id==='statsMatchFormat'){try{renderStats()}catch(error){}}});
-  const originalAll={};
+  const formatOf=m=>m&&m.matchFormat==='7-a-side'?'7-a-side':'11-a-side';
+  const selectedGoalie=()=>{
+    try{if(typeof goalie==='function')return goalie()}catch(e){}
+    const id=byId('statsGoalie')?.value||byId('reportGoalie')?.value||'';
+    try{return (window.db?.goalies||window.state?.goalies||[]).find(g=>String(g.id)===String(id))||null}catch(e){return null}
+  };
+  const orderedMatches=g=>(Array.isArray(g?.matches)?g.matches:[]).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))||String(b.id||'').localeCompare(String(a.id||'')));
+  function filterSelection(g,{team='all',format='all',opponent='All',year='',period='all',matchId=''}={}){
+    let matches=orderedMatches(g);
+    if(team&&String(team).toLowerCase()!=='all')matches=matches.filter(m=>String(m.homeTeam||'')===String(team));
+    if(opponent&&String(opponent).toLowerCase()!=='all')matches=matches.filter(m=>String(m.opponentTeam||m.opponent||'')===String(opponent));
+    if(format&&format!=='all')matches=matches.filter(m=>formatOf(m)===format);
+    if(year&&period==='year')matches=matches.filter(m=>String(m.date||'').slice(0,4)===String(year));
+    if(period==='match')matches=matches.filter(m=>String(m.id)===String(matchId));
+    if(period==='last5')matches=matches.slice(0,5);
+    return matches;
+  }
+  window.v131FilterSelection=filterSelection;
+  function setMatchOptions(select,matches,selectedId){
+    if(!select)return;
+    const available=new Set(matches.map(m=>String(m.id)));
+    const keep=available.has(String(selectedId||select.value||''))?String(selectedId||select.value):String(matches[0]?.id||'');
+    select.innerHTML='';
+    const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent=matches.length?'Select match':'No matches for these filters';select.appendChild(placeholder);
+    matches.forEach(m=>{const option=document.createElement('option');option.value=String(m.id);option.textContent=m.name||`${m.date||''} - ${m.homeTeam||''} VS ${m.opponentTeam||m.opponent||''}`;if(option.value===keep)option.selected=true;select.appendChild(option)});
+    select.value=keep;
+  }
+  function statsMatchesForFilters(){
+    const g=selectedGoalie();
+    const period=byId('statsPeriod')?.value||'all';
+    return filterSelection(g,{team:byId('statsHome')?.value||'All',opponent:byId('statsOpp')?.value||'All',format:byId('statsMatchFormat')?.value||'all',year:byId('statsYear')?.value||'',period:period==='match'?'all':period});
+  }
+  function refreshStatsMatchOptions(){
+    const select=byId('statsMatch');if(!select)return;
+    const matches=statsMatchesForFilters();setMatchOptions(select,matches,select.value);
+  }
+  const oldPopulate=window.populateYearsAndMatches;
+  if(typeof oldPopulate==='function')window.populateYearsAndMatches=function(){oldPopulate.apply(this,arguments);refreshStatsMatchOptions();refreshReportMatchOptions()};
+  const oldFilter=window.filterMatches;
+  window.filterMatches=function(g,period='year',year='',home='All',opp='All'){
+    return filterSelection(g,{team:home||'All',opponent:opp||'All',format:byId('statsMatchFormat')?.value||'all',year,period,matchId:byId('statsMatch')?.value||''});
+  };
+  const oldRenderStats=window.renderStats;
+  if(typeof oldRenderStats==='function')window.renderStats=function(){refreshStatsMatchOptions();return oldRenderStats.apply(this,arguments)};
+
+  function reportTeam(){return byId('reportHomeTeamFilter')?.value||'all'}
+  function reportMatches(){return filterSelection(selectedGoalie(),{team:reportTeam(),format:byId('reportMatchFormat')?.value||'all'})}
+  function populateReportTeamFilter(){
+    const select=byId('reportHomeTeamFilter');if(!select)return;
+    const teams=[...new Set(orderedMatches(selectedGoalie()).map(m=>String(m.homeTeam||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));
+    const current=select.value||'all';select.innerHTML='';
+    const all=document.createElement('option');all.value='all';all.textContent='All teams';select.appendChild(all);
+    teams.forEach(team=>{const option=document.createElement('option');option.value=team;option.textContent=team;select.appendChild(option)});
+    select.value=teams.includes(current)?current:'all';
+  }
+  function refreshReportMatchOptions(){
+    populateReportTeamFilter();
+    const matches=reportMatches();
+    const base=byId('reportMatch');
+    const clone=byId('v471_reportMatch');
+    const chosen=clone?.value||base?.value||'';
+    setMatchOptions(base,matches,chosen);
+    if(clone)setMatchOptions(clone,matches,base?.value||chosen);
+    // Keep the Team / Home Team report selector limited to teams that have matches in the chosen format.
+    const teams=[...new Set(filterSelection(selectedGoalie(),{format:byId('reportMatchFormat')?.value||'all'}).map(m=>String(m.homeTeam||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));
+    for(const select of [byId('v470ReportHomeTeam'),byId('v471_v470ReportHomeTeam')]){
+      if(!select)continue;const old=select.value;select.innerHTML='';
+      teams.forEach(team=>{const option=document.createElement('option');option.value=team;option.textContent=team;select.appendChild(option)});
+      select.value=teams.includes(old)?old:(teams[0]||'');
+    }
+  }
+  const oldReportFields=window.updateV471ReportFields;
+  if(typeof oldReportFields==='function')window.updateV471ReportFields=function(){const result=oldReportFields.apply(this,arguments);refreshReportMatchOptions();return result};
+
+  const oldAll={};
   ['allMatches','allMatches517','allMatchesSafe','sortedMatches506','all'].forEach(name=>{
     if(typeof window[name]!=='function')return;
-    originalAll[name]=window[name];
+    oldAll[name]=window[name];
     window[name]=function(){
-      const list=originalAll[name].apply(this,arguments);
-      const format=window.__dddReportFormatFilter;
-      return format&&format!=='all'&&Array.isArray(list)?list.filter(match=>normalized(match)===format):list;
+      const list=oldAll[name].apply(this,arguments);
+      const format=window.__dddReportFormatFilter,team=window.__dddReportHomeTeamFilter;
+      return Array.isArray(list)?list.filter(m=>(!format||format==='all'||formatOf(m)===format)&&(!team||team==='all'||String(m.homeTeam||'')===String(team))):list;
     };
   });
-  const generate=window.generateV471SelectedReport;
-  if(typeof generate==='function')window.generateV471SelectedReport=function(){
+  const oldGenerate=window.generateV471SelectedReport;
+  if(typeof oldGenerate==='function')window.generateV471SelectedReport=function(){
     const format=byId('reportMatchFormat')?.value||'all';
-    if(format!=='all'&&(byId('v471ReportType')?.value||'')==='individual'){
-      const id=byId('v471_reportMatch')?.value||byId('reportMatch')?.value;
-      const getter=window.goalie||window.getGoalie517||window.getGoalie;
-      const selected=(window.allMatches||(()=>[]))(typeof getter==='function'?getter():null);
-      const match=selected.find(item=>String(item.id)===String(id));
-      if(match&&normalized(match)!==format){alert('The selected match does not use the chosen match format. Choose a matching game or set Match Format to All formats.');return;}
+    const team=reportTeam();
+    const type=byId('v471ReportType')?.value||'';
+    if(type==='team'){
+      const selected=byId('v471_v470ReportHomeTeam')?.value||byId('v470ReportHomeTeam')?.value||'';
+      if(selected)byId('reportHomeTeamFilter').value=selected;
+    }
+    const selectedTeam=reportTeam();
+    if(type==='individual'){
+      const id=byId('v471_reportMatch')?.value||byId('reportMatch')?.value||'';
+      const match=orderedMatches(selectedGoalie()).find(m=>String(m.id)===String(id));
+      if(!match||((selectedTeam!=='all')&&String(match.homeTeam||'')!==String(selectedTeam))||(format!=='all'&&formatOf(match)!==format)){
+        alert('Choose a match that matches the selected home team and match format.');return;
+      }
+      if(byId('reportMatch'))byId('reportMatch').value=id;
     }
     window.__dddReportFormatFilter=format;
-    try{return generate.apply(this,arguments)}finally{window.__dddReportFormatFilter=''}
+    window.__dddReportHomeTeamFilter=selectedTeam;
+    try{return oldGenerate.apply(this,arguments)}finally{window.__dddReportFormatFilter='';window.__dddReportHomeTeamFilter=''}
   };
+  document.addEventListener('change',event=>{
+    const id=event.target?.id;
+    if(['statsHome','statsOpp','statsMatchFormat','statsPeriod','statsYear','statsGoalie'].includes(id)){refreshStatsMatchOptions();if(typeof window.renderStats==='function')window.renderStats()}
+    if(['reportHomeTeamFilter','reportMatchFormat','reportGoalie','reportYear','v471ReportType'].includes(id)){
+      if(id==='reportHomeTeamFilter'&&byId('v471ReportType')?.value==='team'){
+        const team=reportTeam();if(byId('v470ReportHomeTeam'))byId('v470ReportHomeTeam').value=team;
+        if(byId('v471_v470ReportHomeTeam'))byId('v471_v470ReportHomeTeam').value=team;
+      }
+      refreshReportMatchOptions();if(typeof window.updateV471ReportFields==='function'&&id!=='reportGoalie')window.updateV471ReportFields();
+    }
+    if(id==='v471_reportMatch'&&byId('reportMatch'))byId('reportMatch').value=event.target.value;
+  });
+  setTimeout(()=>{refreshStatsMatchOptions();refreshReportMatchOptions()},0);
 })();
 </script>
 </body>

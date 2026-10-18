@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Indoor Hockey Goalie Stats: Data Driven Development v1.6</title>
+<title>Indoor Hockey Goalie Stats: Data Driven Development v1.7</title>
 <link rel="manifest" href="indoor-hockey.webmanifest">
 <meta name="theme-color" content="#d4e5ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2019,7 +2019,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 <nav id="v570Sidebar" class="tabs noPrint" aria-label="Main navigation">
 <button type="button" id="v570SidebarToggle" class="v570SidebarToggle" aria-expanded="true"><span class="v570Wide">Collapse Menu</span><span class="v570Narrow" aria-hidden="true">›</span></button>
 <button class="tab homeLogoTab active" data-tab="home" data-short="H" aria-label="Home"><span><img src="assets/home-banner-v1-0.png" alt="Home"></span></button><button class="tab" data-tab="match" data-short="NM"><span>New Match</span></button><button class="tab" data-tab="matchEditor" data-short="ME"><span>Match Editor</span></button><button class="tab" data-tab="stats" data-short="S"><span>Stats</span></button><button class="tab" data-tab="heat" data-short="HM"><span>Heat Maps</span></button><button class="tab" data-tab="reports" data-short="R"><span>Reports</span></button><a class="tab v570ExternalTab" href="./index.html#resources" data-short="?"><span>Shared Resources</span></a><a class="dddSidebarReturn" href="./index.html" aria-label="Return to Data Driven Development Home"><img src="assets/ddd-banner-v1-31.png" alt="Data Driven Development Home"></a>
-<div class="v573SidebarMeta"><span class="v573Full">Indoor Hockey Goalie Stats<br>Data Driven Development · Version 1.6</span><span class="v573Compact">v1.6</span></div>
+<div class="v573SidebarMeta"><span class="v573Full">Indoor Hockey Goalie Stats<br>Data Driven Development · Version 1.7</span><span class="v573Compact">v1.7</span></div>
 </nav>
 
 <section id="home" class="panel active">
@@ -2028,7 +2028,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
       <img src="assets/indoor-hockey-logo-v1-0.png" alt="Indoor Hockey Goalie Stats" class="homeLogo">
     </div>
     <div class="versionBox">
-      <b>Version 1.6</b>
+      <b>Version 1.7</b>
       <div class="small">Build Date: 2026-09-14</div>
     </div>
     <div id="homeSummary" class="hiddenHomeSummary"></div>
@@ -2064,7 +2064,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
   <div id="v521VideoReviewRoot" class="v521VideoReviewRoot"></div>
 </section>
 
-<section id="reports" class="panel"><div class="card noPrint"><h2>Reports</h2><div class="grid2"><div><label>Goalie</label><select id="reportGoalie"></select></div><div><label>Year</label><select id="reportYear"></select></div></div><label>Match</label><select id="reportMatch"></select>
+<section id="reports" class="panel"><div class="card noPrint"><h2>Reports</h2><div class="grid2"><div><label>Goalie</label><select id="reportGoalie"></select></div><div><label>Year</label><select id="reportYear"></select></div></div><div class="grid2"><div><label>Home Team Filter</label><select id="reportTeamFilter"><option value="All">All Teams</option></select></div></div><label>Match</label><select id="reportMatch"></select>
 <div class="v471ReportChooser">
   <div class="grid2">
     <div>
@@ -2147,7 +2147,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 </main>
 
 <script>
-const APP_VERSION_566='1.6';
+const APP_VERSION_566='1.7';
 window.APP_VERSION=APP_VERSION_566;
 const STORAGE_KEY='indoorHockeyGoalieStatsV1';
 const SHARED_DIRECTORY_KEY='hockeyGoalieStatsV3';
@@ -7317,6 +7317,60 @@ setTimeout(()=>{decorateBenchmark573();const g=goalie();if(g?.benchmarkConsent==
   const startBeforeIndoor=startOrUpdateMatch;startOrUpdateMatch=function(){const result=startBeforeIndoor.apply(this,arguments),m=activeMatch();if(m&&m.indoorKeeperActive===undefined){m.indoorKeeperActive=true;m.sportType='indoor_hockey';saveDB()}updateStatus();return result};window.startOrUpdateMatch=startOrUpdateMatch;
   const renderBeforeIndoor=renderAll;renderAll=function(){const result=renderBeforeIndoor.apply(this,arguments);updateStatus();renderIndoorTagButtons();return result};window.renderAll=renderAll;
   updateStatus();renderIndoorTagButtons();
+})();
+</script>
+<script>
+/* Indoor Hockey v1.1: keep Stats and Reports match choices in the selected team context. */
+(function(){
+  const byId=id=>document.getElementById(id);
+  const currentGoalie=()=>{try{return goalie()}catch(x){const id=byId('statsGoalie')?.value||byId('reportGoalie')?.value;return (db?.goalies||[]).find(g=>g.id===id)||null}};
+  const matches=g=>{try{return allMatches(g)}catch(x){return (g?.matches||[]).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')))}};
+  const putOptions=(el,items,selected,emptyLabel)=>{
+    if(!el)return;
+    const old=selected??el.value;
+    el.innerHTML=(emptyLabel?'<option value="">'+emptyLabel+'</option>':'')+items.map(m=>'<option value="'+esc(m.id)+'">'+esc(m.name||((m.date||'')+' - '+(m.homeTeam||'')+' VS '+(m.opponentTeam||m.opponent||'')))+'</option>').join('');
+    if(items.some(m=>String(m.id)===String(old)))el.value=old;
+    else if(items.length)el.value=items[0].id;
+    else el.value='';
+  };
+  function teamsForMatches(ms){return [...new Set(ms.map(m=>m.homeTeam).filter(Boolean))].sort((a,b)=>a.localeCompare(b))}
+  function refreshTeamFilter(){
+    const g=currentGoalie(),ms=matches(g),filter=byId('reportTeamFilter');
+    if(!filter)return;
+    const selected=filter.value||'All',teams=teamsForMatches(ms);
+    filter.innerHTML='<option value="All">All Teams</option>'+teams.map(t=>'<option value="'+esc(t)+'">'+esc(t)+'</option>').join('');
+    filter.value=selected==='All'||teams.includes(selected)?selected:'All';
+    syncReportMatches();
+  }
+  function syncStatsMatches(){
+    const g=currentGoalie(),home=byId('statsHome')?.value||'All',opp=byId('statsOpp')?.value||'All';
+    let ms=matches(g).filter(m=>(home==='All'||m.homeTeam===home)&&(opp==='All'||(m.opponentTeam||m.opponent)===opp));
+    putOptions(byId('statsMatch'),ms,byId('statsMatch')?.value,'No matching matches');
+  }
+  function syncReportMatches(){
+    const g=currentGoalie(),team=byId('reportTeamFilter')?.value||'All';
+    const ms=matches(g).filter(m=>team==='All'||m.homeTeam===team);
+    putOptions(byId('reportMatch'),ms,byId('reportMatch')?.value,'No matching matches');
+    if(typeof window.updateV471ReportFields==='function')window.updateV471ReportFields();
+  }
+  const existingFilterMatches=window.filterMatches;
+  window.filterMatches=function(g,period='year',year='',home='All',opp='All'){
+    let ms=matches(g).filter(m=>(!home||home==='All'||m.homeTeam===home)&&(!opp||opp==='All'||(m.opponentTeam||m.opponent)===opp));
+    if(period==='match')ms=ms.filter(m=>m.id===byId('statsMatch')?.value);
+    if(period==='year')ms=ms.filter(m=>String((m.date||'').slice(0,4))===String(year));
+    if(period==='last5')ms=ms.slice(0,5);
+    return ms;
+  };
+  // Keep the report and stats match lists current before the existing change handlers render.
+  document.addEventListener('change',event=>{
+    if(['statsHome','statsOpp'].includes(event.target?.id)){syncStatsMatches();}
+    if(['reportTeamFilter','reportGoalie'].includes(event.target?.id)){refreshTeamFilter();}
+  },true);
+  const priorRender=window.renderAll;
+  window.renderAll=function(){const result=typeof priorRender==='function'?priorRender.apply(this,arguments):undefined;setTimeout(()=>{refreshTeamFilter();syncStatsMatches()},0);return result};
+  const priorRefresh=window.refreshV470ReportSelectors;
+  window.refreshV470ReportSelectors=function(){if(typeof priorRefresh==='function')priorRefresh.apply(this,arguments);refreshTeamFilter();};
+  refreshTeamFilter();syncStatsMatches();
 })();
 </script>
 <style>
