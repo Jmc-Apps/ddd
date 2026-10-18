@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Field Hockey Goalie Stats: Data Driven Development v5.111</title>
+<title>Field Hockey Goalie Stats: Data Driven Development v5.112</title>
 <link rel="manifest" href="field-hockey.webmanifest">
 <meta name="theme-color" content="#d4e5ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2019,7 +2019,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 <nav id="v570Sidebar" class="tabs noPrint" aria-label="Main navigation">
 <button type="button" id="v570SidebarToggle" class="v570SidebarToggle" aria-expanded="true"><span class="v570Wide">Collapse Menu</span><span class="v570Narrow" aria-hidden="true">›</span></button>
 <button class="tab homeLogoTab active" data-tab="home" data-short="H" aria-label="Home"><span><img src="assets/home-banner-v1-0.png" alt="Home"></span></button><button class="tab" data-tab="match" data-short="NM"><span>New Match</span></button><button class="tab" data-tab="matchEditor" data-short="ME"><span>Match Editor</span></button><button class="tab" data-tab="stats" data-short="S"><span>Stats</span></button><button class="tab" data-tab="heat" data-short="HM"><span>Heat Maps</span></button><button class="tab" data-tab="reports" data-short="R"><span>Reports</span></button><a class="tab v570ExternalTab" href="./index.html#resources" data-short="?"><span>Shared Resources</span></a><a class="dddSidebarReturn" href="./index.html" aria-label="Return to Data Driven Development Home"><img src="assets/ddd-banner-v1-31.png" alt="Data Driven Development Home"></a>
-<div class="v573SidebarMeta"><span class="v573Full">Field Hockey Goalie Stats<br>Data Driven Development · Version 5.111</span><span class="v573Compact">v5.111</span></div>
+<div class="v573SidebarMeta"><span class="v573Full">Field Hockey Goalie Stats<br>Data Driven Development · Version 5.112</span><span class="v573Compact">v5.112</span></div>
 </nav>
 
 <section id="home" class="panel active">
@@ -2028,8 +2028,8 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
       <img src="assets/home-emblem-v467.png" alt="Hockey Goalie Stats" class="homeLogo">
     </div>
     <div class="versionBox">
-      <b>Version 5.111</b>
-      <div class="small">Build Date: 2026-09-14</div>
+      <b>Version 5.112</b>
+      <div class="small">Build Date: 2026-10-18</div>
     </div>
     <div id="homeSummary" class="hiddenHomeSummary"></div>
   </div>
@@ -2148,7 +2148,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 </main>
 
 <script>
-const APP_VERSION_566='5.111';
+const APP_VERSION_566='5.112';
 window.APP_VERSION=APP_VERSION_566;
 const STORAGE_KEY='hockeyGoalieStatsV3';
 const ratings=['Positioning','Communication','Rebound Control','Decision Making'];
@@ -7402,6 +7402,44 @@ setTimeout(()=>{decorateBenchmark573();const g=goalie();if(g?.benchmarkConsent==
     if(id==='v471_reportMatch'&&byId('reportMatch'))byId('reportMatch').value=event.target.value;
   });
   setTimeout(()=>{refreshStatsMatchOptions();refreshReportMatchOptions()},0);
+})();
+</script>
+<script>
+/* DDD report range selectors and included matches must share the active team/format filters. */
+(function(){
+  const byId=id=>document.getElementById(id);
+  function filteredRangeMatches(g){
+    const filter=window.v131FilterSelection;
+    const team=byId('reportHomeTeamFilter')?.value||'all';
+    const format=byId('reportMatchFormat')?.value||'all';
+    const ms=typeof filter==='function'?filter(g,{team,format}):(g?.matches||[]);
+    return ms.slice().sort((a,b)=>String(a.date||'').localeCompare(String(b.date||''))||String(a.name||'').localeCompare(String(b.name||'')));
+  }
+  function populateRangeSelectors(g){
+    const ms=filteredRangeMatches(g),start=byId('v472DDDStart'),end=byId('v472DDDEnd');
+    if(!start||!end)return;
+    const oldStart=start.value,oldEnd=end.value;
+    for(const [select,old,defaultMatch] of [[start,oldStart,ms[0]],[end,oldEnd,ms[ms.length-1]]]){
+      select.innerHTML='';
+      const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent=ms.length?'Select match':'No matches for these filters';select.appendChild(placeholder);
+      for(const m of ms){const option=document.createElement('option');option.value=String(m.id);option.textContent=m.name||`${m.date||''} - ${m.homeTeam||''} VS ${m.opponentTeam||m.opponent||''}`;select.appendChild(option)}
+      select.value=ms.some(m=>String(m.id)===String(old))?String(old):String(defaultMatch?.id||'');
+    }
+  }
+  const previousUpdate=window.updateV471ReportFields;
+  if(typeof previousUpdate==='function')window.updateV471ReportFields=function(){const result=previousUpdate.apply(this,arguments);if(byId('v471ReportType')?.value==='ddd')populateRangeSelectors(window.v131GetSelectedGoalie?.());return result};
+  window.selectedDDDRanges506=function(g){
+    const ms=filteredRangeMatches(g),start=byId('v472DDDStart')?.value,end=byId('v472DDDEnd')?.value;
+    if(!ms.length)return [];
+    let first=ms.findIndex(m=>String(m.id)===String(start)),last=ms.findIndex(m=>String(m.id)===String(end));
+    if(first<0)first=0;if(last<0)last=ms.length-1;if(first>last){const swap=first;first=last;last=swap}
+    return ms.slice(first,last+1);
+  };
+  // The app's goalie helper remains authoritative; expose a narrow accessor for the field refresh.
+  window.v131GetSelectedGoalie=window.v131GetSelectedGoalie||function(){try{return typeof goalie==='function'?goalie():null}catch(e){return null}};
+  const reportFilters=['reportHomeTeamFilter','reportMatchFormat','reportGoalie','v471ReportType'];
+  document.addEventListener('change',event=>{if(reportFilters.includes(event.target?.id)&&byId('v471ReportType')?.value==='ddd')setTimeout(()=>populateRangeSelectors(window.v131GetSelectedGoalie?.()),0)});
+  setTimeout(()=>{if(byId('v471ReportType')?.value==='ddd')populateRangeSelectors(window.v131GetSelectedGoalie?.())},0);
 })();
 </script>
 </body>

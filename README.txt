@@ -1,8 +1,16 @@
-Data Driven Development Suite v1.32
-Field Hockey Goalie Stats v5.111
-Indoor Hockey Goalie Stats v1.7
+Data Driven Development Suite v1.33
+Field Hockey Goalie Stats v5.112
+Indoor Hockey Goalie Stats v1.8
 Hockey Goalie Trials v1.26
 Stats Recorder v1.43
+
+Version 1.33 / Field Hockey v5.112 / Indoor v1.8 applies team filters to the DDD report match ranges.
+
+- Filters the Field Hockey Data Driven Development report's first/last match selectors by the chosen home team and 11-a-side / 7-a-side format.
+- Applies those same team and format filters to every match included in the Field Hockey DDD report and its match trend.
+- Filters the Indoor Hockey Data Driven Development report's range selectors, included matches and match trend by the selected home team.
+- Retains the v1.32 team-aware Stats and Reports match choices in both sports.
+- Indoor Hockey remains fixed to its indoor match rules and does not add a match-format selector.
 
 Version 1.32 / Field Hockey v5.111 / Indoor v1.7 fixes team-aware match selection in Stats and Reports.
 
