@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#d4e5ee">
+  <meta name="description" content="Hockey Goalie Trials: Data Driven Selection">
+  <title>Hockey Goalie Trials: Data Driven Selection</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon-192-v1-26.png">
+  <link rel="apple-touch-icon" href="assets/icon-192-v1-26.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <img src="assets/trials-banner-v1-26.png" alt="Hockey Goalie Trials: Data Driven Selection" class="banner-logo">
+    <div class="header-actions">
+      <span id="saveStatus" class="save-status">Saved locally</span>
+      <button id="installButton" class="button ghost hidden" type="button">Install App</button>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <nav id="mainNav" class="nav-list">
+        <button class="nav-button home-logo-button active" data-page="dashboard" aria-label="Home"><img src="../assets/home-banner-v1-0.png" alt="Home"></button>
+        <button class="nav-button" data-page="events"><span>▦</span>Trial Events</button>
+        <button class="nav-button" data-page="setup"><span>⚙</span>Trial Setup</button>
+        <button class="nav-button" data-page="roster"><span>◉</span>Trials Roster</button>
+        <button class="nav-button" data-page="recording"><span>●</span>Trial Recording</button>
+        <button class="nav-button" data-page="video"><span>▶</span>Video Review</button>
+        <button class="nav-button" data-page="comparison"><span>⇄</span>Comparison</button>
+        <button class="nav-button" data-page="promotion"><span>✓</span>Promotion / Selection</button>
+        <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
+      </nav>
+      <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-31.png" alt="Data Driven Development Home"></a>
+      <div class="sidebar-footer">Version 1.26<br><span>Data Driven Development</span></div>
+    </aside>
+
+    <main id="mainContent" class="main-content">
+      <section id="page-dashboard" class="page active" aria-labelledby="dashboardTitle">
+        <div class="page-heading">
+          <div><p class="eyebrow">Trial overview</p><h1 id="dashboardTitle">Selection dashboard</h1></div>
+          <button class="button primary" data-go="recording">Start recording</button>
+        </div>
+        <div id="setupNotice" class="notice hidden">Complete Trial Setup to begin scheduling drills and recording results.</div>
+        <div class="metric-grid" id="dashboardMetrics"></div>
+        <div class="dashboard-grid">
+          <article class="panel feature-panel">
+            <div class="panel-header"><div><p class="eyebrow">Current trial</p><h2 id="dashboardTrialName">No trial configured</h2></div><span id="trialStatePill" class="pill">Setup required</span></div>
+            <div id="dashboardTrialDetails" class="detail-grid"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-header"><div><p class="eyebrow">Scheduled work</p><h2>Drill progress</h2></div></div>
+            <div id="dashboardDrills" class="stack-list"></div>
+          </article>
+        </div>
+        <article class="panel">
+          <div class="panel-header"><div><p class="eyebrow">Roster snapshot</p><h2>Goalkeepers</h2></div><button class="button ghost" data-go="roster">Manage roster</button></div>
+          <div id="dashboardRoster" class="goalie-card-grid"></div>
+        </article>
+      </section>
+
+      <section id="page-events" class="page" aria-labelledby="eventsTitle">
+        <div class="page-heading"><div><p class="eyebrow">Concurrent programmes</p><h1 id="eventsTitle">Trial Events</h1></div><div class="heading-actions"><button id="saveEventTemplate" class="button ghost" type="button">Save Current as Template</button><button id="newTrialEvent" class="button primary" type="button">Create New Trial</button></div></div>
+        <div id="trialEventGrid" class="event-card-grid"></div>
+        <article class="panel template-panel">
+          <div class="panel-header"><div><p class="eyebrow">Reusable setup</p><h2>Trial Event Templates</h2></div></div>
+          <div id="eventTemplateList" class="template-list"></div>
+        </article>
+      </section>
+
+      <section id="page-setup" class="page" aria-labelledby="setupTitle">
+        <div class="page-heading"><div><p class="eyebrow">Create the trial</p><h1 id="setupTitle">Trial Setup</h1></div><button id="saveSetup" class="button primary">Save setup</button></div>
+        <div class="two-column">
+          <article class="panel">
+            <div class="panel-header"><div><p class="eyebrow">Trial details</p><h2>Team and classification</h2></div></div>
+            <form id="setupForm" class="form-grid">
+              <label class="field span-2"><span>Trial name</span><input id="trialName" required placeholder="e.g. U16 Girls First Team Trials"></label>
+              <label class="field"><span>Team</span><input id="teamName" required placeholder="Team name"></label>
+              <label class="field"><span>Team gender</span><select id="teamGender"><option>Male</option><option>Female</option><option>Mixed</option></select></label>
+              <label class="field"><span>Age group</span><select id="ageGroup"><option>U13</option><option>U14</option><option>U16</option><option>U18</option><option>U21</option><option>Senior</option><option>Masters</option></select></label>
+              <label class="field"><span>Level</span><select id="teamLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
+              <label class="field"><span>Tier</span><select id="teamTier"><option>A/1st</option><option>B/2nd</option><option>C/3rd</option><option>D/4th</option><option>Other</option></select></label>
+            </form>
+          </article>
+          <article class="panel">
+            <div class="panel-header"><div><p class="eyebrow">Trial calendar</p><h2>Trial days</h2></div></div>
+            <form id="dayForm" class="inline-form"><label class="field grow"><span>Date</span><input type="date" id="trialDayDate"></label><button class="button secondary" type="submit">Add day</button></form>
+            <div id="trialDaysList" class="stack-list compact"></div>
+          </article>
+        </div>
+        <article class="panel">
+          <div class="panel-header"><div><p class="eyebrow">Trial programme</p><h2>Schedule drills and sections</h2></div><span class="muted">Every drill needs a target per goalie</span></div>
+          <form id="drillForm" class="drill-form">
+            <label class="field"><span>Trial day</span><select id="drillDay"></select></label>
+            <label class="field"><span>Drill or section</span><select id="drillType"><option>Penalty Corners</option><option>Penalty Strokes</option><option>8Sec 1v1</option><option>Match Situation</option></select></label>
+            <label class="field"><span>Attempts per goalie</span><input id="drillTarget" type="number" min="1" value="10" required></label>
+            <button id="drillSubmit" class="button secondary" type="submit">Add to trial</button>
+            <button id="cancelDrillEdit" class="button ghost hidden" type="button">Cancel edit</button>
+          </form>
+          <div id="scheduledDrills" class="table-wrap"></div>
+        </article>
+        <article class="panel template-panel">
+          <div class="panel-header"><div><p class="eyebrow">Reusable programme</p><h2>Trial Day Templates</h2></div></div>
+          <div class="template-controls">
+            <label class="field"><span>Template name</span><input id="dayTemplateName" placeholder="e.g. Standard Goalkeeper Day"></label>
+            <label class="field"><span>Save sections from</span><select id="dayTemplateSource"></select></label>
+            <button id="saveDayTemplate" class="button secondary" type="button">Save Day Template</button>
+          </div>
+          <div class="template-controls">
+            <label class="field"><span>Saved template</span><select id="dayTemplateSelect"></select></label>
+            <label class="field"><span>Apply to trial day</span><select id="dayTemplateTarget"></select></label>
+            <button id="applyDayTemplate" class="button primary" type="button">Apply Template</button>
+            <button id="deleteDayTemplate" class="button danger" type="button">Delete Template</button>
+          </div>
+          <div id="dayTemplateSummary" class="template-summary"></div>
+        </article>
+      </section>
+
+      <section id="page-roster" class="page" aria-labelledby="rosterTitle">
+        <div class="page-heading"><div><p class="eyebrow">Candidates</p><h1 id="rosterTitle">Trials Roster</h1></div><div class="toolbar"><button id="addSharedGoalie" class="button secondary">Choose Shared Goalie</button><button id="openGoalieDialog" class="button primary">Add Trial-only Goalie</button></div></div>
+        <div class="toolbar"><label class="field"><span>Smock and leg-guard colours for</span><select id="rosterDayFilter"></select></label></div>
+        <div id="rosterReadOnlyNotice" class="notice hidden">This trial day is completed. Reopen it in Promotion / Selection before changing its roster colours or reviews.</div>
+        <div id="rosterGrid" class="goalie-card-grid large"></div>
+      </section>
+
+      <section id="page-recording" class="page" aria-labelledby="recordingTitle">
+        <div class="page-heading"><div><p class="eyebrow">Live capture</p><h1 id="recordingTitle">Trial Recording</h1></div><div class="heading-actions"><button id="swapGoalies" class="button ghost hidden" type="button">Swap Goal A ↔ Goal B</button><span id="recordingModePill" class="pill">Select a section</span></div></div>
+        <article class="panel recording-setup">
+          <div class="recording-selectors two-only">
+            <label class="field"><span>Trial day</span><select id="recordingDay"></select></label>
+            <label class="field"><span>Trial section</span><select id="recordingDrill"></select></label>
+          </div>
+        </article>
+        <article class="panel rotation-panel">
+          <div class="panel-header"><div><p class="eyebrow">Goalkeeper rotation</p><h2>All goalkeepers in this round</h2></div><span class="muted">Updates after every shot and timer change</span></div>
+          <div id="recordingRotationOverview" class="rotation-overview"></div>
+        </article>
+        <div id="recordingReadOnlyNotice" class="notice hidden">This trial day is completed and is read-only. Reopen it in Promotion / Selection to make changes.</div>
+        <div id="recordingStations" class="station-grid"></div>
+        <article class="panel">
+          <div class="panel-header"><div><p class="eyebrow">Recorded events</p><h2>Section timeline</h2></div><button id="undoLastEvent" class="button ghost">Undo last</button></div>
+          <div id="eventTimeline" class="timeline-list"></div>
+        </article>
+      </section>
+
+      <section id="page-promotion" class="page" aria-labelledby="promotionTitle">
+        <div class="page-heading"><div><p class="eyebrow">Round decisions</p><h1 id="promotionTitle">Promotion / Selection</h1></div><span id="promotionState" class="pill">Select a day</span></div>
+        <article class="panel">
+          <div class="promotion-toolbar">
+            <label class="field"><span>Trial day / round</span><select id="promotionDay"></select></label>
+            <button id="markDayComplete" class="button secondary" type="button">Mark Day Completed</button>
+            <button id="reopenDay" class="button ghost hidden" type="button">Reopen Day</button>
+          </div>
+          <div id="promotionGuidance" class="notice"></div>
+        </article>
+        <div id="promotionGoalies" class="promotion-grid"></div>
+        <article id="lateEntryPanel" class="panel hidden">
+          <div class="panel-header"><div><p class="eyebrow">Late entry</p><h2>Add a goalkeeper who missed an earlier round</h2></div></div>
+          <div class="late-entry-grid">
+            <label class="field"><span>Existing trial goalkeeper</span><select id="lateExistingGoalie"></select></label>
+            <label class="field grow"><span>Required reason</span><input id="lateEntryReason" placeholder="Explain why the goalkeeper did not attend the previous round"></label>
+            <button id="addExistingLateEntry" class="button secondary" type="button">Add Existing Goalie</button>
+            <button id="addLateTrialGoalie" class="button ghost" type="button">Add New Trial-only Goalie</button>
+            <button id="addLateSharedGoalie" class="button ghost" type="button">Choose New Shared Goalie</button>
+          </div>
+        </article>
+        <div class="promotion-actions"><button id="confirmPromotion" class="button primary" type="button">Confirm Progressing Goalies</button></div>
+      </section>
+
+      <section id="page-video" class="page" aria-labelledby="videoTitle">
+        <div class="page-heading"><div><p class="eyebrow">Post-session capture</p><h1 id="videoTitle">Video Stats Review</h1></div><div class="heading-actions"><button id="swapVideoGoalies" class="button ghost hidden" type="button">Swap Goal A ↔ Goal B</button></div></div>
+        <article class="panel">
+          <div class="recording-selectors">
+            <label class="field"><span>Trial day</span><select id="videoDay"></select></label>
+            <label class="field"><span>Trial section</span><select id="videoDrill"></select></label>
+          </div>
+          <div class="video-folder-controls">
+            <button id="videoChooseFolder" class="button secondary" type="button">Choose Trial Video Folder</button>
+            <button id="videoReconnectFiles" class="button ghost hidden" type="button">Reconnect Remembered Videos</button>
+            <span id="videoFolderStatus" class="muted">No video folder remembered for this trial.</span>
+          </div>
+          <p class="muted">Add multiple videos to each angle. The shared controls keep both playlists together; videos remain on this device and are not stored in the trial database.</p>
+        </article>
+        <div id="videoReadOnlyNotice" class="notice hidden">This trial day is completed and is read-only. Reopen it in Promotion / Selection to record or edit shots.</div>
+        <article class="panel video-transport" aria-label="Shared video controls">
+          <div class="video-transport-row">
+            <button id="videoBackFive" class="button ghost" type="button">−5s</button>
+            <button id="videoFrameBack" class="button ghost" type="button" title="Previous frame">◀ Frame</button>
+            <button id="videoPlayPause" class="button primary video-play" type="button">▶ Play both</button>
+            <button id="videoFrameForward" class="button ghost" type="button" title="Next frame">Frame ▶</button>
+            <button id="videoForwardFive" class="button ghost" type="button">+5s</button>
+            <button id="videoLoopTen" class="button ghost" type="button">Loop −5s ↔ +5s</button>
+            <span id="videoTimeLabel" class="video-time">00:00 / 00:00</span>
+          </div>
+          <div class="video-speed-buttons" role="group" aria-label="Playback speed">
+            <span>Speed</span>
+            <button type="button" data-video-speed="0.25">0.25×</button>
+            <button type="button" data-video-speed="0.5">0.5×</button>
+            <button type="button" class="active" data-video-speed="1">1×</button>
+            <button type="button" data-video-speed="1.5">1.5×</button>
+            <button type="button" data-video-speed="2">2×</button>
+          </div>
+          <input id="videoSeek" class="video-seek" type="range" min="0" max="0" step="0.01" value="0" aria-label="Shared video position">
+          <div class="video-sync-heading"><button id="videoToggleSyncPanel" class="button ghost" type="button" aria-expanded="true">Collapse Video Sync</button><span id="videoSyncSummary" class="muted">Video Sync · Goals start together</span></div>
+          <div id="videoSyncControls" class="video-sync-controls">
+          <div class="video-sync-row">
+            <span class="muted">Align Goal B:</span>
+            <button class="button ghost" type="button" data-video-nudge="-1">−1s</button>
+            <button class="button ghost" type="button" data-video-nudge="-0.033333">−Frame</button>
+            <button class="button ghost" type="button" data-video-nudge="0.033333">+Frame</button>
+            <button class="button ghost" type="button" data-video-nudge="1">+1s</button>
+            <button id="videoSetSync" class="button secondary" type="button">Sync current frames</button>
+            <button id="videoPlaceMarkerA" class="button ghost" type="button">Place Marker A</button>
+            <button id="videoPlaceMarkerB" class="button ghost" type="button">Place Marker B</button>
+            <button id="videoApplyMarkers" class="button secondary" type="button" disabled>Sync Markers</button>
+            <button id="videoToggleWaveforms" class="button ghost" type="button">Show Waveforms</button>
+            <button id="videoSuggestAutoSync" class="button secondary" type="button">Suggest Auto Sync</button>
+            <button id="videoClearSync" class="button ghost" type="button">Clear sync</button>
+            <span id="videoSyncStatus" class="muted">Add videos to both goals, move each to the same moment, then sync.</span>
+          </div>
+          <div id="videoAutoSyncPanel" class="video-auto-sync hidden" aria-live="polite"></div>
+          <div id="videoWaveformPanel" class="video-waveform-panel hidden" aria-live="polite"></div>
+          </div>
+        </article>
+        <div class="video-review-grid">
+          <section id="videoLaneA" class="video-lane">
+            <div class="video-angle-heading"><div><p class="eyebrow">Goal video</p><h2 id="videoGoalHeadingA">Goal A</h2></div><div class="video-heading-controls"><div class="video-reframe-controls" aria-label="Goal A reframing controls"><button class="button ghost" type="button" data-video-zoom="0|-0.25">Zoom −</button><span id="videoZoomLabelA">100%</span><button class="button ghost" type="button" data-video-zoom="0|0.25">Zoom +</button><button class="button ghost" type="button" data-video-reset-view="0">Reset Framing</button></div><button class="button ghost" type="button" data-video-enlarge="0">Enlarge Video</button><button class="button ghost" type="button" data-edit-video-playlist="0">Edit Playlist</button><button id="chooseVideoFilesA" class="button ghost video-add-button" type="button">Add videos</button></div><input class="hidden" type="file" id="videoFileA" accept="video/*" multiple></div>
+            <div class="video-stage"><video id="videoA" playsinline preload="metadata"></video><div id="videoEmptyA" class="video-empty">Add one or more videos to Goal A</div></div>
+            <p class="muted video-drag-hint">Drag the video to reposition it</p>
+            <div id="videoStationA" class="video-station"></div>
+          </section>
+          <section id="videoLaneB" class="video-lane">
+            <div class="video-angle-heading"><div><p class="eyebrow">Goal video</p><h2 id="videoGoalHeadingB">Goal B</h2></div><div class="video-heading-controls"><div class="video-reframe-controls" aria-label="Goal B reframing controls"><button class="button ghost" type="button" data-video-zoom="1|-0.25">Zoom −</button><span id="videoZoomLabelB">100%</span><button class="button ghost" type="button" data-video-zoom="1|0.25">Zoom +</button><button class="button ghost" type="button" data-video-reset-view="1">Reset Framing</button></div><button class="button ghost" type="button" data-video-enlarge="1">Enlarge Video</button><button class="button ghost" type="button" data-edit-video-playlist="1">Edit Playlist</button><button id="chooseVideoFilesB" class="button ghost video-add-button" type="button">Add videos</button></div><input class="hidden" type="file" id="videoFileB" accept="video/*" multiple></div>
+            <div class="video-stage"><video id="videoB" playsinline preload="metadata" muted></video><div id="videoEmptyB" class="video-empty">Add one or more videos to Goal B</div></div>
+            <p class="muted video-drag-hint">Drag the video to reposition it</p>
+            <div id="videoStationB" class="video-station"></div>
+          </section>
+        </div>
+        <article class="panel">
+          <div class="panel-header"><div><p class="eyebrow">Recorded evidence</p><h2>Section shots</h2></div></div>
+          <div class="video-export-settings"><label class="field"><span>Seconds before shot</span><input id="videoExportBefore" type="number" min="0" max="60" value="5"></label><label class="field"><span>Seconds after shot</span><input id="videoExportAfter" type="number" min="1" max="60" value="8"></label><span id="videoExportStatus" class="muted">Choose Export Clip on a video-linked shot.</span></div>
+          <div id="videoEventTimeline" class="timeline-list"></div>
+        </article>
+        <article class="panel video-shot-timeline-panel">
+          <div class="panel-header"><div><p class="eyebrow">Synced evidence</p><h2>Shot timeline</h2></div><span class="muted">Select a marker to jump both goals to that shot</span></div>
+          <div id="videoShotTimeline" class="video-shot-timeline"><div class="video-shot-track"></div><div id="videoShotPlayhead" class="video-shot-playhead"></div><div id="videoShotMarkers" class="video-shot-markers"></div></div>
+          <div id="videoUnlinkedShots" class="muted video-unlinked-shots"></div>
+        </article>
+      </section>
+
+      <dialog id="videoPlaylistDialog" class="modal video-playlist-dialog">
+        <div class="modal-card">
+          <div class="modal-header"><div><p class="eyebrow">Goal video files</p><h2 id="videoPlaylistDialogTitle">Edit Playlist</h2></div><button class="icon-button" type="button" data-close-video-playlist aria-label="Close">×</button></div>
+          <div id="videoPlaylistDialogBody" class="video-playlist"></div>
+          <div class="modal-actions"><button id="videoPlaylistAdd" type="button" class="button secondary">Add Videos</button><button type="button" class="button primary" data-close-video-playlist>Done</button></div>
+        </div>
+      </dialog>
+
+      <section id="page-comparison" class="page" aria-labelledby="comparisonTitle">
+        <div class="page-heading"><div><p class="eyebrow">Fair comparison</p><h1 id="comparisonTitle">Comparison Dashboard</h1></div></div>
+        <article class="panel filter-panel">
+          <div class="filter-grid">
+            <label class="field"><span>Trial day</span><select id="compareDay"><option value="all">All days</option></select></label>
+            <label class="field"><span>Drill</span><select id="compareDrill"><option value="all">All drills</option></select></label>
+            <label class="field"><span>Shot type</span><select id="compareShot"><option value="all">All shot types</option></select></label>
+            <label class="field"><span>Situation</span><select id="compareSituation"><option value="all">All situations</option></select></label>
+          </div>
+        </article>
+        <div class="comparison-layout">
+          <article class="panel weights-panel">
+            <div class="panel-header"><div><p class="eyebrow">Selection model</p><h2>Performance and ratings weightings</h2></div><span id="weightTotal" class="pill">Ratings 50%</span></div>
+            <div id="weightControls" class="weight-controls"></div>
+          </article>
+          <article class="panel ranking-panel">
+            <div class="panel-header"><div><p class="eyebrow">Overall</p><h2>Current ranking</h2></div></div>
+            <div id="rankingList" class="ranking-list"></div>
+          </article>
+        </div>
+        <div id="comparisonWarnings"></div>
+        <div id="comparisonCards" class="comparison-cards"></div>
+      </section>
+
+      <section id="page-reports" class="page" aria-labelledby="reportsTitle">
+        <div class="page-heading"><div><p class="eyebrow">Decision evidence</p><h1 id="reportsTitle">Selection Report</h1></div><button id="printReport" class="button primary">Print / Save PDF</button></div>
+        <article class="panel report-controls no-print">
+          <label class="field"><span>Report</span><select id="reportType"><option value="selection">Selector report</option><option value="feedback">Individual feedback</option></select></label>
+          <label class="field" id="reportGoalieWrap"><span>Goalkeeper</span><select id="reportGoalie"></select></label>
+        </article>
+        <div id="reportCanvas" class="report-canvas"></div>
+        <article class="panel no-print">
+          <label class="field"><span id="reportNotesLabel">Selector notes and decision evidence</span><textarea id="reportNotes" rows="6" placeholder="Add the selectors’ observations, context and final reasoning..."></textarea></label>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="goalieDialog" class="modal">
+    <form id="goalieForm" method="dialog">
+      <div class="modal-header"><div><p class="eyebrow">Roster profile</p><h2>Add goalkeeper</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <div class="form-grid">
+        <label class="field span-2"><span>Name</span><input id="goalieName" required></label>
+        <label class="field"><span>Date of birth</span><input id="goalieDob" type="date" min="1900-01-01" max="9999-12-31" required></label>
+        <label class="field"><span>Gender</span><select id="goalieGender" required><option value="" disabled>Select gender</option><option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></label>
+        <label class="field span-2"><span>Playing experience</span><textarea id="goalieExperience" rows="3" placeholder="Teams, years played and relevant experience"></textarea></label>
+        <label class="field"><span>Preferred level</span><select id="goaliePreferredLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
+        <label class="field"><span>Photograph (optional)</span><input id="goaliePhoto" type="file" accept="image/*"></label>
+      </div>
+      <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Add to roster</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="sharedGoalieDialog" class="modal">
+    <form id="sharedGoalieForm" method="dialog" class="modal-card">
+      <div class="modal-header"><div><p class="eyebrow">Shared directory</p><h2>Choose Existing Goalie</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <p class="muted">Selecting a shared goalie adds them to this Trials roster. Removing them later will not delete their shared profile.</p>
+      <label class="field"><span>Goalkeeper</span><select id="sharedGoalieSelect" required></select></label>
+      <div class="modal-actions"><button class="button ghost" type="button" data-close-dialog>Cancel</button><button class="button primary" type="submit">Add to Trials Roster</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="trialEventDialog" class="modal">
+    <form id="trialEventForm" method="dialog">
+      <div class="modal-header"><div><p class="eyebrow">New programme</p><h2>Create Trial Event</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <div class="form-grid">
+        <label class="field span-2"><span>Start from template</span><select id="newTrialTemplate"><option value="">Blank trial</option></select></label>
+        <label class="field span-2"><span>Trial name</span><input id="newTrialName" required placeholder="e.g. U16 Girls First Team Trials"></label>
+        <label class="field span-2"><span>Team</span><input id="newTrialTeam" required placeholder="Team name"></label>
+        <label class="field"><span>Team gender</span><select id="newTrialGender"><option>Male</option><option>Female</option><option>Mixed</option></select></label>
+        <label class="field"><span>Age group</span><select id="newTrialAge"><option>U13</option><option>U14</option><option>U16</option><option>U18</option><option>U21</option><option>Senior</option><option>Masters</option></select></label>
+        <label class="field"><span>Level</span><select id="newTrialLevel"><option>School</option><option>Club</option><option>Provincial</option><option>National</option></select></label>
+        <div id="newTrialDatesWrap" class="template-date-panel span-2 hidden">
+          <div class="template-date-heading"><strong>Choose every trial day</strong><span>Set the date for each session included in this template.</span></div>
+          <div id="newTrialDates" class="template-date-grid"></div>
+        </div>
+      </div>
+      <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Create Trial</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="ratingDialog" class="modal">
+    <form id="ratingForm" method="dialog">
+      <div class="modal-header"><div><p class="eyebrow">Trial section review</p><h2>Section rating and notes</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <input id="ratingGoalieId" type="hidden">
+      <div class="rating-grid" id="ratingInputs"></div>
+      <label class="field"><span>Coach notes</span><textarea id="ratingNotes" rows="5" placeholder="Positioning, decisions, movement, communication and development points..."></textarea></label>
+      <p class="muted">Ratings and notes save automatically.</p>
+      <div class="modal-actions"><button type="button" class="button primary" data-close-dialog>Close</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="shotEditorDialog" class="modal">
+    <form id="shotEditorForm" method="dialog">
+      <div class="modal-header"><div><p class="eyebrow">Correct recorded evidence</p><h2>Edit Trial Shot</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close">×</button></div>
+      <input id="editShotId" type="hidden">
+      <div class="edit-shot-context"><span id="editShotDay"></span><strong id="editShotSection"></strong></div>
+      <div class="form-grid">
+        <label class="field"><span>Goalkeeper</span><select id="editShotGoalie" required></select></label>
+        <label id="editShotGoalField" class="field"><span>Goal</span><select id="editShotGoal"><option value="A">Goal A</option><option value="B">Goal B</option></select></label>
+        <label class="field"><span>Shot outcome</span><select id="editShotOutcome"></select></label>
+        <label class="field"><span>Shot type</span><select id="editShotType"></select></label>
+        <label class="field"><span>Shot situation</span><select id="editShotSituation"></select><small id="editShotSituationHelp" class="muted"></small></label>
+        <label class="field"><span>Out numbered</span><select id="editShotOutnumbered"></select></label>
+        <label class="field"><span>Rebound result</span><select id="editShotRebound"></select></label>
+        <label class="field span-2"><span>Notes</span><textarea id="editShotNote" rows="3"></textarea></label>
+      </div>
+      <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Save Shot Changes</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="videoTimeConflictDialog" class="modal">
+    <div class="modal-card">
+      <div class="modal-header"><div><p class="eyebrow">Goalkeeper time</p><h2>Manual time already recorded</h2></div></div>
+      <p id="videoTimeConflictText" class="muted"></p>
+      <p>Should the time calculated from the video be added to the manual time, or replace it?</p>
+      <div class="modal-actions"><button id="cancelVideoTime" type="button" class="button ghost">Cancel</button><button id="replaceVideoTime" type="button" class="button secondary">Replace Manual Time</button><button id="addVideoTime" type="button" class="button primary">Add to Manual Time</button></div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
