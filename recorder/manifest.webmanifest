@@ -1,12 +1,12 @@
 {
   "name": "Data Driven Development Stats Recorder",
   "short_name": "DDD Recorder",
-  "start_url": "./index.html?v=1.44",
+  "start_url": "./index.html?v=1.45",
   "scope": "./",
   "display": "standalone",
   "background_color": "#dceaf2",
   "theme_color": "#d4e5ee",
-  "description": "Data Driven Development Stats Recorder v1.44",
+  "description": "Data Driven Development Stats Recorder v1.45",
   "icons": [
     {
       "src": "apple-touch-icon-v1-43.png",

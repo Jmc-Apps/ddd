@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Data Driven Development Stats Recorder v1.44</title>
-<link rel="manifest" href="manifest.webmanifest?v=1.44">
+<title>Data Driven Development Stats Recorder v1.45</title>
+<link rel="manifest" href="manifest.webmanifest?v=1.45">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-v1-43.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32-v1-43.png">
 <meta name="theme-color" content="#d4e5ee">
@@ -255,7 +255,7 @@ html,body{background:#dceaf2!important;color:#17374e!important}.app{background:l
 <body>
 <div class="recorderShell">
 <div class="app">
-<header><div class="topbar"><img class="recorderHeaderLogo" src="assets/ddd-banner-v1-43.png" alt="Data Driven Development"><span class="recorderModuleTitle">Stats Recorder</span><div class="ver">v1.44</div></div></header>
+<header><div class="topbar"><img class="recorderHeaderLogo" src="assets/ddd-banner-v1-43.png" alt="Data Driven Development"><span class="recorderModuleTitle">Stats Recorder</span><div class="ver">v1.45</div></div></header>
 <main>
 <section id="home" class="screen active">
   <div class="recorderHomeLogo"></div>
@@ -277,7 +277,7 @@ html,body{background:#dceaf2!important;color:#17374e!important}.app{background:l
 </div>
 </div>
 <script>
-const RECORDER_VERSION="1.44", HOCKEY_STATS_VERSION="5.106", LS_STATE="gsr_v129_state", LS_MASTER="goalieStatsRecorderMasterData";
+const RECORDER_VERSION="1.45", HOCKEY_STATS_VERSION="5.106", LS_STATE="gsr_v129_state", LS_MASTER="goalieStatsRecorderMasterData";
 let state=JSON.parse(localStorage.getItem(LS_STATE)||localStorage.getItem("gsr_v128_state")||localStorage.getItem("gsr_v127_state")||localStorage.getItem("gsr_v126_state")||"null")||{goalieName:"",homeTeam:"",opponentTeam:"",date:new Date().toISOString().slice(0,10),homeGoals:0,periodCount:4,shots:[],timeline:[],ratings:{"Positioning":4,"Communication":4,"Rebound Control":4,"Decision Making":4}};
 if(!state.periodCount)state.periodCount=4;
 let pending=null,pendingMasterImport=null;
@@ -397,7 +397,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 
 <script>
 (function(){
-  window.RECORDER_VERSION="1.44";
+  window.RECORDER_VERSION="1.45";
 
   function n(v){ var x=Number(v||0); return Number.isFinite(x)?x:0; }
 
@@ -467,7 +467,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* v1.34: live Save Rate and Defence Rate on Home screen */
 (function(){
-  window.RECORDER_VERSION="1.44";
+  window.RECORDER_VERSION="1.45";
 
   function pct(a,b){
     return b > 0 ? Math.round((a / b) * 100) + "%" : "N/C";
@@ -584,7 +584,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
     renderLiveRates();
     document.querySelectorAll("*").forEach(function(el){
       if(el.children.length === 0 && /v1\.\d+/.test(el.textContent || "")){
-        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.44");
+        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.45");
       }
     });
   }, 0);
@@ -595,7 +595,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* v1.34: restore live Save Rate, prominent final save, confirm before cancel */
 (function(){
-  window.RECORDER_VERSION="1.44";
+  window.RECORDER_VERSION="1.45";
 
   function pct(a,b){
     return b > 0 ? Math.round((a / b) * 100) + "%" : "N/C";
@@ -786,7 +786,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
     refreshUi();
     document.querySelectorAll("*").forEach(function(el){
       if(el.children.length === 0 && /v1\.\d+/.test(el.textContent || "")){
-        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.44");
+        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.45");
       }
     });
   }, 0);
@@ -797,7 +797,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* v1.34: restore Home layout and remove duplicate old defence card */
 (function(){
-  window.RECORDER_VERSION="1.44";
+  window.RECORDER_VERSION="1.45";
 
   function pct(a,b){
     return b > 0 ? Math.round((a / b) * 100) + "%" : "N/C";
@@ -940,7 +940,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
     renderRates();
     document.querySelectorAll("*").forEach(function(el){
       if(el.children.length === 0 && /v1\.\d+/.test(el.textContent || "")){
-        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.44");
+        el.textContent = el.textContent.replace(/v1\.\d+/g, "v1.45");
       }
     });
   }, 0);
@@ -951,7 +951,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* v1.34: branding + period count safety sync */
 (function(){
-  window.RECORDER_VERSION="1.44";
+  window.RECORDER_VERSION="1.45";
   function byId(id){return document.getElementById(id)}
   function n(v){var x=Number(v||4);if(!Number.isFinite(x)||x<1)x=4;if(x>12)x=12;return Math.round(x)}
   function ensurePeriodField(){
@@ -1034,7 +1034,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
 <script>
 /* Recorder: Stats-compatible fields, shootout export, and iPhone icon cache support */
 (function(){
-  window.RECORDER_VERSION="1.44";
+  window.RECORDER_VERSION="1.45";
   function indoor129(){return (document.getElementById("sportType")?.value||state.sportType||"field_hockey")==="indoor_hockey"}
   function sit129(){return ["Normal Game Play","Penalty Corner","Penalty Stroke",indoor129()?"6 Second Shoot-out":"8 Second 1v1"]}
   const TYPE129=["1st Shot","Rebound","Deflection/Tip in","In Game 1v1","Own Goal","Other"];
@@ -1134,7 +1134,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
   }
 
   function startShot129(outcome){
-    pending={outcome:outcome,type:"1st Shot",shotType:"1st Shot",shotCategory:"1st Shot",shotSituation:"Normal Game Play",situation:"Normal Game Play",outnumbered:"Not Out Numbered",rebound:"No rebound",note:"",dX:null,dY:null,gX:null,gY:null};
+    pending={outcome:outcome,type:"1st Shot",shotType:"1st Shot",shotCategory:"1st Shot",shotSituation:"Normal Game Play",situation:"Normal Game Play",outnumbered:"Not Out Numbered",rebound:(outcome==="Save"?"Safe":"No rebound"),note:"",dX:null,dY:null,gX:null,gY:null};
     showWizard129(1);
   }
   function choice129(icon,label,key,val,next){
@@ -1142,6 +1142,8 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
     return '<div class="choice '+(on?'selected':'')+'" data-choice-key="'+key+'" data-choice-val="'+esc129(val)+'" data-choice-next="'+next+'"><div class="icon">'+icon+'</div><div>'+esc129(label)+'</div></div>';
   }
   function showWizard129(step){
+    /* Rebounds are recorded for saves only: goals and Angles Closed Off skip the rebound step. */
+    if(step===4&&pending&&pending.outcome!=="Save"){pending.rebound="No rebound";step=5;}
     showScreen("wizard");
     by129("wizardTitle").textContent="Record "+pending.outcome;
     by129("progressBar").style.width=(Math.min(step,7)/7*100)+"%";
@@ -1182,6 +1184,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
   }
   function saveShot129(){
     if(!pending)return;
+    if(pending.outcome!=="Save")pending.rebound="No rebound";
     var noteEl=by129("shotNote");
     var sit=normSit129(pending.shotSituation);
     var typ=normType129(pending.type);
@@ -1277,7 +1280,7 @@ window.addEventListener("load",()=>{if(!state.timeline)state.timeline=[];loadMas
           .then(regs=>Promise.all((regs||[]).map(r=>r.unregister())))
           .then(()=>caches?caches.keys():[])
           .then(keys=>Promise.all((keys||[]).map(k=>caches.delete(k))))
-          .then(()=>{localStorage.setItem("gsr_last_forced_refresh","v1.44 "+new Date().toISOString());location.reload(true)})
+          .then(()=>{localStorage.setItem("gsr_last_forced_refresh","v1.45 "+new Date().toISOString());location.reload(true)})
           .catch(()=>location.reload(true));
       }
     }

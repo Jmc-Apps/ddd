@@ -1,9 +1,27 @@
-Data Driven Development Suite v1.34
-Field Hockey Goalie Stats v5.113
-Indoor Hockey Goalie Stats v1.9
-Hockey Goalie Trials v1.27
-Stats Recorder v1.44
-Benchmark Worker v1.2 (deploy separately, after migration 0003)
+Data Driven Development Suite v1.35
+Field Hockey Goalie Stats v5.114
+Indoor Hockey Goalie Stats v1.10
+Hockey Goalie Trials v1.28
+Stats Recorder v1.45
+Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.35 / Field v5.114 / Indoor v1.10 / Trials v1.28 / Recorder v1.45 records rebounds for every save, highlights low coaching ratings and adds coaching insights to the Training Focus report.
+
+Rebounds
+- Every save now starts with Safe selected. Choose Dangerous, or No rebound when the rebound could not be seen.
+- Rebounds are recorded for saves only. For goals and Angles Closed Off the rebound choices are greyed out, the Recorder skips the rebound step, and no rebound is stored.
+- Applies to live recording, Video Stats Review, the shot editors, Trials stations and the Trials shot editor, and the Recorder. In Trials the rebound resets after each saved shot.
+- The Safe Rebound Rate calculation is unchanged: safe / (safe + dangerous), so No rebound does not affect it.
+
+Coaching ratings
+- Scores of 1 or 2 are highlighted as low in the Individual Match report and in the Trials Selection Report rating tables.
+- The Data Driven Development and Training Focus reports include a Coaching Ratings table for every included match, with averages; 1-2 scores and averages of 2.5 or below are highlighted.
+
+Training Focus report: Coaching Insights (Data Driven Development Theory)
+- Save rate against the expected range for the level: U13 65-75%, U16 70-80%, 1st Team 75-85%, Provincial 80%.
+- Low save rate (individual technique), many shots and many goals (team defensive structure; 12+ shots and 3+ goals a match), frequent rebound goals (25%+ of goals; kicking width and clearing to the sidelines), goals while outnumbered (30%+ of goals), and rebound distribution (flagged at 30%+ dangerous).
+- Where goals come from on the D heat map and where they go in on the goal box heat map.
+- 5-match save-rate trend, and low coaching ratings with the intervention advice (including calling marking assignments at least 5 seconds before circle entry).
 
 Version 1.34 / Field v5.113 / Indoor v1.9 / Trials v1.27 / Recorder v1.44 fixes report filtering, benchmark separation, restore and the Recorder, and makes the suite easier for new users.
 

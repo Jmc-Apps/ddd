@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Field Hockey Goalie Stats: Data Driven Development v5.113</title>
+<title>Field Hockey Goalie Stats: Data Driven Development v5.114</title>
 <link rel="manifest" href="field-hockey.webmanifest">
 <meta name="theme-color" content="#d4e5ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2019,7 +2019,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 <nav id="v570Sidebar" class="tabs noPrint" aria-label="Main navigation">
 <button type="button" id="v570SidebarToggle" class="v570SidebarToggle" aria-expanded="true"><span class="v570Wide">Collapse Menu</span><span class="v570Narrow" aria-hidden="true">›</span></button>
 <button class="tab homeLogoTab active" data-tab="home" data-short="H" aria-label="Home"><span><img src="assets/home-banner-v1-0.png" alt="Home"></span></button><button class="tab" data-tab="match" data-short="NM"><span>New Match</span></button><button class="tab" data-tab="matchEditor" data-short="ME"><span>Match Editor</span></button><button class="tab" data-tab="stats" data-short="S"><span>Stats</span></button><button class="tab" data-tab="heat" data-short="HM"><span>Heat Maps</span></button><button class="tab" data-tab="reports" data-short="R"><span>Reports</span></button><a class="tab v570ExternalTab" href="./index.html#resources" data-short="?"><span>Shared Resources</span></a><a class="dddSidebarReturn" href="./index.html" aria-label="Return to Data Driven Development Home"><img src="assets/ddd-banner-v1-31.png" alt="Data Driven Development Home"></a>
-<div class="v573SidebarMeta"><span class="v573Full">Field Hockey Goalie Stats<br>Data Driven Development · Version 5.113</span><span class="v573Compact">v5.113</span></div>
+<div class="v573SidebarMeta"><span class="v573Full">Field Hockey Goalie Stats<br>Data Driven Development · Version 5.114</span><span class="v573Compact">v5.114</span></div>
 </nav>
 
 <section id="home" class="panel active">
@@ -2028,8 +2028,8 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
       <img src="assets/home-emblem-v467.png" alt="Hockey Goalie Stats" class="homeLogo">
     </div>
     <div class="versionBox">
-      <b>Version 5.113</b>
-      <div class="small">Build Date: 2026-10-24</div>
+      <b>Version 5.114</b>
+      <div class="small">Build Date: 2026-10-25</div>
     </div>
     <div id="homeSummary" class="hiddenHomeSummary"></div>
   </div>
@@ -2148,7 +2148,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 </main>
 
 <script>
-const APP_VERSION_566='5.113';
+const APP_VERSION_566='5.114';
 window.APP_VERSION=APP_VERSION_566;
 const STORAGE_KEY='hockeyGoalieStatsV3';
 const ratings=['Positioning','Communication','Rebound Control','Decision Making'];
@@ -2158,7 +2158,7 @@ const outcomes=['Save','Goal','Angle Closed Off'];
 const rebounds=['No rebound','Safe','Dangerous'];
 const outnumberedOptions=['Not Out Numbered','2 vs 1','3 vs 1','4+ vs 1'];
 let db=loadDB(), currentGoalieId=db.currentGoalieId||'', activeMatchId=db.activeMatchId||'';
-let tapD=null,tapGoal=null,editDPoint=null,editGoalPoint=null, selectedShotType='1st Shot', selectedShotSituation='Normal Game Play', selectedOutcome='Save', selectedRebound='No rebound', selectedOutnumbered='Not Out Numbered', editType='1st Shot', editSituation='Normal Game Play', editOutcome='Save', editRebound='No rebound', editOutnumbered='Not Out Numbered';
+let tapD=null,tapGoal=null,editDPoint=null,editGoalPoint=null, selectedShotType='1st Shot', selectedShotSituation='Normal Game Play', selectedOutcome='Save', selectedRebound='Safe', selectedOutnumbered='Not Out Numbered', editType='1st Shot', editSituation='Normal Game Play', editOutcome='Save', editRebound='No rebound', editOutnumbered='Not Out Numbered';
 
 function uid(){return 'id_'+Math.random().toString(36).slice(2)+Date.now().toString(36)}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -2276,8 +2276,8 @@ function renderButtonGroup(id,items,selected,fn){
     return `<button type="button" class="chip ${x===selected?'on':''}" onclick="${fn}('${safe}')">${dot}${esc(x)}</button>`;
   }).join('');
 }
-function selectShotType(x){selectedShotType=x;renderShotButtons()} function selectShotSituation(x){selectedShotSituation=x||'Normal Game Play'; if(selectedShotSituation==='Penalty Stroke'){tapD={x:50,y:26}} else if(tapD&&tapD.x===50&&tapD.y===26){tapD=null} renderShotButtons();renderShotMaps()} function selectOutcome(x){selectedOutcome=x;renderShotButtons();renderShotMaps()} function selectRebound(x){selectedRebound=x;renderShotButtons()} function selectOutnumbered(x){selectedOutnumbered=x;renderShotButtons()}
-function selectEditType(x){editType=x;renderEditorSelectors()} function selectEditSituation(x){editSituation=x||'Normal Game Play';renderEditorSelectors()} function selectEditOutcome(x){editOutcome=x;renderEditorSelectors()} function selectEditRebound(x){editRebound=x;renderEditorSelectors()} function selectEditOutnumbered(x){editOutnumbered=x;renderEditorSelectors()}
+function selectShotType(x){selectedShotType=x;renderShotButtons()} function selectShotSituation(x){selectedShotSituation=x||'Normal Game Play'; if(selectedShotSituation==='Penalty Stroke'){tapD={x:50,y:26}} else if(tapD&&tapD.x===50&&tapD.y===26){tapD=null} renderShotButtons();renderShotMaps()} function selectOutcome(x){if(x!==selectedOutcome)selectedRebound=x==='Save'?'Safe':'No rebound';selectedOutcome=x;renderShotButtons();renderShotMaps()} function selectRebound(x){if(selectedOutcome!=='Save')return;selectedRebound=x;renderShotButtons()} function selectOutnumbered(x){selectedOutnumbered=x;renderShotButtons()}
+function selectEditType(x){editType=x;renderEditorSelectors()} function selectEditSituation(x){editSituation=x||'Normal Game Play';renderEditorSelectors()} function selectEditOutcome(x){if(x!==editOutcome){if(x!=='Save')editRebound='No rebound';else if(editRebound==='No rebound')editRebound='Safe'}editOutcome=x;renderEditorSelectors()} function selectEditRebound(x){if(editOutcome!=='Save')return;editRebound=x;renderEditorSelectors()} function selectEditOutnumbered(x){editOutnumbered=x;renderEditorSelectors()}
 function renderShotButtons(){renderButtonGroup('outcomeButtons',outcomes,selectedOutcome,'selectOutcome');renderButtonGroup('shotSituationButtons',shotSituations,selectedShotSituation||'Normal Game Play','selectShotSituation');renderButtonGroup('shotTypeButtons',shotTypes,selectedShotType,'selectShotType');renderButtonGroup('outnumberedButtons',outnumberedOptions,selectedOutnumbered,'selectOutnumbered');renderButtonGroup('reboundButtons',rebounds,selectedRebound,'selectRebound');renderButtonGroup('editOutcomeButtons',outcomes,editOutcome,'selectEditOutcome');renderButtonGroup('editSituationButtons',shotSituations,editSituation||'Normal Game Play','selectEditSituation');renderButtonGroup('editTypeButtons',shotTypes,editType,'selectEditType');renderButtonGroup('editOutnumberedButtons',outnumberedOptions,editOutnumbered,'selectEditOutnumbered');renderButtonGroup('editReboundButtons',rebounds,editRebound,'selectEditRebound')}
 
 function ptColor(out){return out==='Goal'?'#ef5350':out==='Angle Closed Off'?'#ffca28':'#2fd17c'}
@@ -2299,7 +2299,7 @@ function saveShotWithoutHeat(){
     situation:sit,
     outcome:selectedOutcome,
     outnumbered:selectedOutnumbered,
-    rebound:selectedRebound==='No rebound'?'':selectedRebound,
+    rebound:(selectedOutcome!=='Save'||selectedRebound==='No rebound')?'':selectedRebound,
     note:shotNote.value,
     time:new Date().toISOString()
   };
@@ -2312,7 +2312,7 @@ function saveShotWithoutHeat(){
   showStatus('shotStatus','Shot saved without heat map. Add placement later in Heat Map Editor.');
 }
 
-function saveShot(){const m=activeMatch();if(!m){alert('Start a match first.');return}const sit=selectedShotSituation||'Normal Game Play';if(sit==='Penalty Stroke')tapD={x:50,y:26};if(!tapD){alert('Tap the D heat map.');return} if(selectedOutcome!=='Angle Closed Off' && !tapGoal){alert('Tap the goal box heat map for saves and goals.');return}let dpt=sit==='Penalty Stroke'?{x:50,y:26}:tapD;let shot={id:uid(),type:selectedShotType,shotSituation:sit,situation:sit,outcome:selectedOutcome,outnumbered:selectedOutnumbered,rebound:selectedRebound==='No rebound'?'':selectedRebound,note:shotNote.value,dX:dpt.x,dY:dpt.y,time:new Date().toISOString()};
+function saveShot(){const m=activeMatch();if(!m){alert('Start a match first.');return}const sit=selectedShotSituation||'Normal Game Play';if(sit==='Penalty Stroke')tapD={x:50,y:26};if(!tapD){alert('Tap the D heat map.');return} if(selectedOutcome!=='Angle Closed Off' && !tapGoal){alert('Tap the goal box heat map for saves and goals.');return}let dpt=sit==='Penalty Stroke'?{x:50,y:26}:tapD;let shot={id:uid(),type:selectedShotType,shotSituation:sit,situation:sit,outcome:selectedOutcome,outnumbered:selectedOutnumbered,rebound:(selectedOutcome!=='Save'||selectedRebound==='No rebound')?'':selectedRebound,note:shotNote.value,dX:dpt.x,dY:dpt.y,time:new Date().toISOString()};
   if(selectedOutcome!=='Angle Closed Off'){
     let gx=tapGoal.x;
     if(mirrorGoal.checked)gx=100-gx;
@@ -2320,7 +2320,7 @@ function saveShot(){const m=activeMatch();if(!m){alert('Start a match first.');r
     shot.gY=tapGoal.y;
   }
   m.shots.push(shot);saveDB();resetShotInputs();renderAll();updateOpponentGoalsDisplay();showStatus('shotStatus','Shot saved.')}
-function resetShotInputs(){selectedShotType='1st Shot';selectedShotSituation='Normal Game Play';selectedOutcome='Save';selectedRebound='No rebound';selectedOutnumbered='Not Out Numbered';shotNote.value='';tapD=null;tapGoal=null;renderShotButtons();renderShotMaps()}
+function resetShotInputs(){selectedShotType='1st Shot';selectedShotSituation='Normal Game Play';selectedOutcome='Save';selectedRebound='Safe';selectedOutnumbered='Not Out Numbered';shotNote.value='';tapD=null;tapGoal=null;renderShotButtons();renderShotMaps()}
 
 
 function calculatedOpponentGoals(m){
@@ -2346,8 +2346,8 @@ function matchesForHeat(){const g=goalie();if(!g)return[];if(heatView.value==='m
 function renderHeatMaps(){const pts=shotsFor(matchesForHeat());dHeat.innerHTML=basePitch(pts);goalHeat.innerHTML=baseGoal(pts)}
 
 function renderEditorSelectors(){const g=goalie(),m=matchById(g,editMatch.value)||allMatches(g)[0];if(m)editMatch.value=m.id;setOptions('editShot',(m?.shots||[]).map((s,i)=>({id:s.id,name:`${i+1}. ${s.outcome} - ${s.type}`})),editShot.value||m?.shots?.[0]?.id||'','New shot / select shot');const s=(m?.shots||[]).find(x=>x.id===editShot.value);if(s){editType=s.type;editOutcome=s.outcome;editOutnumbered=s.outnumbered||'Not Out Numbered';editRebound=s.rebound||'No rebound';editDPoint={x:s.dX,y:s.dY};editGoalPoint={x:s.gX,y:s.gY}}else{editDPoint=editDPoint||{x:50,y:55};editGoalPoint=editGoalPoint||{x:50,y:28}}renderShotButtons();editD.innerHTML=basePitch([],p=>{editDPoint=p;renderEditorSelectors()},editDPoint);editGoal.innerHTML=baseGoal([],p=>{editGoalPoint=p;renderEditorSelectors()},editGoalPoint)}
-function saveEditedShot(){const g=goalie(),m=matchById(g,editMatch.value);if(!m){alert('Select a match.');return}let s=(m.shots||[]).find(x=>x.id===editShot.value);if(!s){s={id:uid(),time:new Date().toISOString()};m.shots=m.shots||[];m.shots.push(s)}let gx=editGoalPoint?.x??s.gX??50;if(editMirrorGoal.checked)gx=100-gx;Object.assign(s,{type:editType,outcome:editOutcome,outnumbered:editOutnumbered,rebound:editRebound==='No rebound'?'':editRebound,dX:editDPoint?.x??50,dY:editDPoint?.y??55,gX:gx,gY:editGoalPoint?.y??28});saveDB();renderAll();showStatus('editStatus','Shot saved/updated.')} 
-function addShotInEditor(){editShot.value='';editDPoint={x:50,y:55};editGoalPoint={x:50,y:28};editType='1st Shot';editOutcome='Save';editOutnumbered='Not Out Numbered';editRebound='No rebound';saveEditedShot()}
+function saveEditedShot(){const g=goalie(),m=matchById(g,editMatch.value);if(!m){alert('Select a match.');return}let s=(m.shots||[]).find(x=>x.id===editShot.value);if(!s){s={id:uid(),time:new Date().toISOString()};m.shots=m.shots||[];m.shots.push(s)}let gx=editGoalPoint?.x??s.gX??50;if(editMirrorGoal.checked)gx=100-gx;Object.assign(s,{type:editType,outcome:editOutcome,outnumbered:editOutnumbered,rebound:(editOutcome!=='Save'||editRebound==='No rebound')?'':editRebound,dX:editDPoint?.x??50,dY:editDPoint?.y??55,gX:gx,gY:editGoalPoint?.y??28});saveDB();renderAll();showStatus('editStatus','Shot saved/updated.')} 
+function addShotInEditor(){editShot.value='';editDPoint={x:50,y:55};editGoalPoint={x:50,y:28};editType='1st Shot';editOutcome='Save';editOutnumbered='Not Out Numbered';editRebound='Safe';saveEditedShot()}
 function removeEditedShot(){const g=goalie(),m=matchById(g,editMatch.value);if(!m||!editShot.value){alert('Select a shot to remove.');return}if(!confirm('Remove this shot record?'))return;m.shots=(m.shots||[]).filter(s=>s.id!==editShot.value);editShot.value='';saveDB();renderAll();showStatus('editStatus','Shot removed.')}
 
 function reportHeader(title,g,subtitle=''){return `<h1>${esc(title)}</h1><p><b>${esc(g?.name||'')}</b> • ${esc(ageGroup(g))} • ${esc(g?.gender||'')}<br>${esc(subtitle)}<br>Generated: ${new Date().toLocaleString()}</p>`}
@@ -3245,7 +3245,7 @@ function exportGoaliesTeams(){
     sh.situation=sh.shotSituation;
     if(sh.shotSituation==="Penalty Stroke"){sh.dX=50;sh.dY=26;}
     sh.outnumbered=$("v459EditOutnumbered")?.value||"Not Out Numbered";
-    sh.rebound=$("v459EditRebound")?.value||"";
+    sh.rebound=sh.outcome==="Save"?($("v459EditRebound")?.value||""):"";
     sh.note=$("v459EditNote")?.value||"";
     normalizeShot(sh);
     rebuildTimeline(m); saveNow(); renderClean();
@@ -6280,8 +6280,8 @@ function moveClip523(angleId,clipId,dir){let m=currentMatchV(),vr=m&&ensureRevie
 function mapPoint(ev,svg){let r=svg.getBoundingClientRect();return {x:Math.round(Math.max(0,Math.min(100,(ev.clientX-r.left)/r.width*100))*10)/10,y:Math.round(Math.max(0,Math.min(100,(ev.clientY-r.top)/r.height*100))*10)/10}}
 function drawMap(kind){let box=$(kind==='d'?'v521DMap':'v521GMap'),m=currentMatchV();if(!box||!m)return;let sel=kind==='d'?vrDraft?.d:vrDraft?.g;let cb=p=>{if(!vrDraft)resetDraft();if(kind==='d')vrDraft.d=p;else vrDraft.g=p;renderRecordMaps()};if(kind==='d')box.innerHTML=basePitch([],cb,sel);else box.innerHTML=baseGoal([],cb,sel)}
 function renderRecordMaps(){drawMap('d');drawMap('g');}
-function resetDraft(){vrDraft={outcome:'Save',shotSituation:'Normal Game Play',type:'1st Shot',outnumbered:'Not Out Numbered',rebound:'No rebound',note:'',d:null,g:null};}
-function setDraft(k,v){if(!vrDraft)resetDraft();vrDraft[k]=v;if(k==='shotSituation'&&v==='Penalty Stroke')vrDraft.d={x:50,y:36.7};if(k==='outcome'&&v==='Angle Closed Off')vrDraft.g=null;renderRecordPanel();}
+function resetDraft(){vrDraft={outcome:'Save',shotSituation:'Normal Game Play',type:'1st Shot',outnumbered:'Not Out Numbered',rebound:'Safe',note:'',d:null,g:null};}
+function setDraft(k,v){if(!vrDraft)resetDraft();const v134Prev=vrDraft[k];vrDraft[k]=v;if(k==='shotSituation'&&v==='Penalty Stroke')vrDraft.d={x:50,y:36.7};if(k==='outcome'&&v==='Angle Closed Off')vrDraft.g=null;if(k==='outcome'&&v!==v134Prev)vrDraft.rebound=v==='Save'?'Safe':'No rebound';renderRecordPanel();}
 function chips(list,key){return '<div class="v521ChipRow">'+(list||[]).map(x=>'<button type="button" class="v521Chip '+(vrDraft&&vrDraft[key]===x?'on':'')+'" data-v521-draft="'+key+'|'+escV(x)+'">'+escV(x)+'</button>').join('')+'</div>'}
 function renderRecordPanel(){let root=$('v521RecordPanel'),m=currentMatchV();if(!root||!m)return;if(!vrDraft)resetDraft();let shoot=ensureReview(m).shootoutMode;if(shoot){renderShootoutPanel();return}root.innerHTML='<h3>Record Shot</h3><label>Shot Outcome</label>'+chips(outcomes,'outcome')+'<label>Shot Situation</label>'+chips(shotSituations,'shotSituation')+'<label>Shot Type</label>'+chips(shotTypes,'type')+'<label>Out Numbered</label>'+chips(outnumberedOptions,'outnumbered')+'<label>Rebound Result</label>'+chips(rebounds,'rebound')+'<label>Notes</label><textarea id="v521ShotNote" placeholder="Optional note">'+escV(vrDraft.note||'')+'</textarea><div class="v521Small">Heat map placement is required. Save/Goal require D and Goal Box. Angle Closed Off requires D only. Penalty Stroke uses the fixed P spot.</div><button type="button" class="btn good" data-v521-save-shot>Save Video-Linked Shot</button><button type="button" class="btn secondary" data-v521-clear-shot>Clear Shot</button><div id="v521ShotStatus" class="v521Status"></div>';renderRecordMaps();}
 function shotLetter(o){return o==='Goal'?'G':(o==='Angle Closed Off'?'A':'S')}
@@ -6289,7 +6289,7 @@ function shotFill(o){return o==='Goal'?'#ef5350':(o==='Angle Closed Off'?'#ffca2
 function sitStroke(s){if(s==='Penalty Corner')return {c:'#111',w:3};if(s==='Penalty Stroke')return {c:'#2478ff',w:3};if(/8 Second 1v1/i.test(s))return {c:'#8e44ff',w:3};return {c:'#fff',w:1}}
 function timelineSvg(shot){let st=sitStroke(shot.shotSituation||shot.situation||'Normal Game Play'),l=shotLetter(shot.outcome),f=shotFill(shot.outcome);return '<svg viewBox="0 0 34 34" width="34" height="34"><circle cx="17" cy="17" r="13.5" fill="'+f+'" stroke="'+st.c+'" stroke-width="'+st.w+'"></circle><text x="17" y="21" text-anchor="middle" font-size="14" font-weight="900" font-family="Arial,Helvetica,sans-serif" fill="#071014">'+l+'</text></svg>'}
 function videoMetaForShot(){let m=currentMatchV(),vr=ensureReview(m),a=activeAngle(m),v=videoEl(),playlist=currentPlaylistTime(),clip=a&&a.clips[a.activeClipIndex]||null,matchTime=vrNoCoverage?Number(vr.masterTime)||0:masterAtCurrent(a);return {version:VR_VERSION,matchTime:matchTime,periodTime:matchTime,period:vr.currentPeriod||1,angleId:a?.id||'',angleName:a?.name||'',clipId:clip?.id||'',clipName:clip?.name||'',clipIndex:a?.activeClipIndex||0,sourceVideoTimestamp:Number(v?.currentTime)||0,playlistTime:playlist,zoom:a?.view?.zoom||1,panX:a?.view?.x||0,panY:a?.view?.y||0,playbackRate:vrPlaybackRate}}
-function saveVideoShot(){let m=currentMatchV();if(!m){alert('Open a match first.');return}if(!vrDraft)resetDraft();let note=$('v521ShotNote')?.value||'';if(vrDraft.shotSituation==='Penalty Stroke')vrDraft.d={x:50,y:36.7};if(!vrDraft.d){$('v521ShotStatus').textContent='Tap the D heat map before saving.';return}if(vrDraft.outcome!=='Angle Closed Off'&&!vrDraft.g){$('v521ShotStatus').textContent='Tap the Goal Box heat map before saving this Save/Goal.';return}let sh={id:uidV(),outcome:vrDraft.outcome,shotSituation:vrDraft.shotSituation,situation:vrDraft.shotSituation,type:vrDraft.type,shotType:vrDraft.type,shotCategory:vrDraft.type,outnumbered:vrDraft.outnumbered,rebound:vrDraft.rebound==='No rebound'?'':vrDraft.rebound,note:note,dX:vrDraft.d.x,dY:vrDraft.d.y,time:new Date().toISOString(),period:ensureReview(m).currentPeriod||1,videoReview:videoMetaForShot()};if(vrDraft.outcome!=='Angle Closed Off'){sh.gX=vrDraft.g.x;sh.gY=vrDraft.g.y}(m.shots||(m.shots=[])).push(sh);ensureOrderV(m).push({kind:'shot',id:sh.id});m.timeline=m.timeline||[];m.timeline.push({eventType:'shot',shotId:sh.id,outcome:sh.outcome,type:sh.type,shotSituation:sh.shotSituation,outnumbered:sh.outnumbered,rebound:sh.rebound,time:sh.time,videoReview:sh.videoReview});m.oppGoals=(m.shots||[]).filter(s=>s.outcome==='Goal').length;saveV();resetDraft();renderV();renderRecordPanel();renderVideoTimeline();renderLongVideoTimeline522();updateVideoUI();}
+function saveVideoShot(){let m=currentMatchV();if(!m){alert('Open a match first.');return}if(!vrDraft)resetDraft();let note=$('v521ShotNote')?.value||'';if(vrDraft.shotSituation==='Penalty Stroke')vrDraft.d={x:50,y:36.7};if(!vrDraft.d){$('v521ShotStatus').textContent='Tap the D heat map before saving.';return}if(vrDraft.outcome!=='Angle Closed Off'&&!vrDraft.g){$('v521ShotStatus').textContent='Tap the Goal Box heat map before saving this Save/Goal.';return}let sh={id:uidV(),outcome:vrDraft.outcome,shotSituation:vrDraft.shotSituation,situation:vrDraft.shotSituation,type:vrDraft.type,shotType:vrDraft.type,shotCategory:vrDraft.type,outnumbered:vrDraft.outnumbered,rebound:(vrDraft.outcome!=='Save'||vrDraft.rebound==='No rebound')?'':vrDraft.rebound,note:note,dX:vrDraft.d.x,dY:vrDraft.d.y,time:new Date().toISOString(),period:ensureReview(m).currentPeriod||1,videoReview:videoMetaForShot()};if(vrDraft.outcome!=='Angle Closed Off'){sh.gX=vrDraft.g.x;sh.gY=vrDraft.g.y}(m.shots||(m.shots=[])).push(sh);ensureOrderV(m).push({kind:'shot',id:sh.id});m.timeline=m.timeline||[];m.timeline.push({eventType:'shot',shotId:sh.id,outcome:sh.outcome,type:sh.type,shotSituation:sh.shotSituation,outnumbered:sh.outnumbered,rebound:sh.rebound,time:sh.time,videoReview:sh.videoReview});m.oppGoals=(m.shots||[]).filter(s=>s.outcome==='Goal').length;saveV();resetDraft();renderV();renderRecordPanel();renderVideoTimeline();renderLongVideoTimeline522();updateVideoUI();}
 function timelineEvents(m){let order=ensureOrderV(m),shots=new Map((m.shots||[]).map(s=>[s.id,s])),markers=new Map((m.periodMarkers||[]).map(p=>[p.id,p]));let p=1,events=[];order.forEach(it=>{if(it.kind==='shot'&&shots.has(it.id))events.push({kind:'shot',period:p,shot:shots.get(it.id)});if(it.kind==='period'){events.push({kind:'period',period:p,marker:markers.get(it.id)});p++}});return events}
 function outcomeTickClass522(s){let o=s&&s.outcome||'Save';return o==='Goal'?'Goal':(o==='Angle Closed Off'?'Angle':'Save')}
 function videoLinkedShots522(m,a){return (m?.shots||[]).filter(s=>s.videoReview&&Number.isFinite(Number(s.videoReview.playlistTime))&&(!a||!s.videoReview.angleId||s.videoReview.angleId===a.id)).sort((x,y)=>Number(x.videoReview.playlistTime)-Number(y.videoReview.playlistTime))}

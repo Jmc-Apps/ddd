@@ -119,3 +119,5 @@ body{background:linear-gradient(145deg,#edf5f9 0,#dcebf3 55%,#c9dfe9 100%)}
 
 /* v1.34: show that the phone navigation scrolls sideways */
 @media(max-width:760px){.sidebar.more-right{-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}.sidebar.more-left{-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%);mask-image:linear-gradient(90deg,transparent,#000 18%)}.sidebar.more-left.more-right{-webkit-mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent);mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent)}}
+.rebound-choices.rebound-off{opacity:.38;pointer-events:none;filter:grayscale(1)}.rebound-choices.rebound-off::after{content:'Rebounds are recorded for saves only.';display:block;font-size:12px;margin-top:4px}
+.report-table td.low-rating{background:#fbebeb;color:#9b1c1c;font-weight:800;-webkit-print-color-adjust:exact;print-color-adjust:exact}.report-table td.low-rating::after{content:' low';font-size:10px;text-transform:uppercase;letter-spacing:.04em;margin-left:3px}

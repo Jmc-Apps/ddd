@@ -218,9 +218,107 @@
   let labelSeq=0;
   function linkLabels(){document.querySelectorAll('label:not([for])').forEach(l=>{if(l.querySelector('input,select,textarea'))return;let n=l.nextElementSibling;if(n&&!/^(INPUT|SELECT|TEXTAREA)$/.test(n.tagName))n=n.querySelector?.('input,select,textarea')&&n.children.length<=2?n.querySelector('input,select,textarea'):null;if(!n||!/^(INPUT|SELECT|TEXTAREA)$/.test(n.tagName)||n.type==='hidden')return;if(!n.id)n.id='v134f'+(++labelSeq);l.htmlFor=n.id})}
 
+  // 7h. Rebounds are recorded for saves only: grey out the rebound choices for goals and Angles Closed Off.
+  const rebCss=document.createElement('style');
+  rebCss.textContent='.v134RebOff{opacity:.38;pointer-events:none;filter:grayscale(1)}.v134RebNote{font-size:12px;color:#587386;margin:2px 0 6px}';
+  document.head.appendChild(rebCss);
+  function markReb(el,off){if(!el)return;el.classList.toggle('v134RebOff',off);if(el.tagName==='SELECT')el.disabled=off;let n=el.nextElementSibling;const has=n&&n.classList&&n.classList.contains('v134RebNote');if(off&&!has){n=document.createElement('div');n.className='v134RebNote';n.textContent='Rebounds are recorded for saves only.';el.insertAdjacentElement('afterend',n)}else if(!off&&has)n.remove()}
+  function updateRebounds(){
+    try{markReb(byId('reboundButtons'),selectedOutcome!=='Save')}catch(e){}
+    try{markReb(byId('editReboundButtons'),editOutcome!=='Save')}catch(e){}
+    try{const row=document.querySelector('[data-v521-draft^="rebound|"]')?.parentElement;if(row)markReb(row,!!vrDraft&&vrDraft.outcome!=='Save')}catch(e){}
+    const v459=byId('v459EditRebound'),v459o=byId('v459EditOutcome');if(v459&&v459o)markReb(v459,!/^save$/i.test(v459o.value||'Save')&&v459o.value!=='');
+  }
+  document.addEventListener('click',()=>setTimeout(updateRebounds,30),true);
+  document.addEventListener('change',e=>{if(e.target?.id==='v459EditOutcome'){const r=byId('v459EditRebound');if(r){r.value=/^save$/i.test(e.target.value)?(r.value||'Safe'):''}}setTimeout(updateRebounds,30)},true);
+
+  /* ---------- 8. Reports: coaching ratings and Training Focus insights (Data Driven Development Theory) ---------- */
+  const repCss=document.createElement('style');
+  repCss.textContent=`
+  #reportOutput .v134LowRating{background:#fbebeb!important;color:#9b1c1c;font-weight:800}
+  #reportOutput .v134LowRating::after{content:" low";font-size:11px;font-weight:700;margin-left:4px;text-transform:uppercase;letter-spacing:.04em}
+  #reportOutput .v134Section{margin:18px 0;break-inside:avoid}
+  #reportOutput .v134Insight{border:1px solid #c3d8e4;border-left:5px solid #087fa4;border-radius:10px;padding:10px 12px;margin:8px 0;background:#f7fbfd}
+  #reportOutput .v134Insight.warn{border-left-color:#d97706;background:#fffaf0}
+  #reportOutput .v134Insight.alert{border-left-color:#c62828;background:#fdf3f3}
+  #reportOutput .v134Insight.good{border-left-color:#1c9c5b;background:#f2faf5}
+  #reportOutput .v134Insight b{display:block;margin-bottom:3px}
+  #reportOutput .v134Muted{color:#587386;font-size:13px}
+  @media print{#reportOutput .v134LowRating{-webkit-print-color-adjust:exact;print-color-adjust:exact}}`;
+  document.head.appendChild(repCss);
+  const pctTxt=(n,d)=>d?Math.round(n/d*100)+'%':'N/C';
+  const outcomeOf=s=>{const o=String(s&&s.outcome||'');return /^goal$/i.test(o)?'Goal':/^angle/i.test(o)?'Angle Closed Off':'Save'};
+  function ratingKeys(ms){const keys=[];ms.forEach(m=>Object.keys(m&&m.ratings||{}).forEach(k=>{if(!keys.includes(k))keys.push(k)}));return keys}
+  function ratingVal(m,k){const v=Number(m&&m.ratings&&m.ratings[k]);return Number.isFinite(v)&&v>=1&&v<=5?v:null}
+  function highlightRatings(root,keys){if(!keys.length)return;root.querySelectorAll('tr').forEach(tr=>{const cells=[...tr.children];if(cells.length<2)return;const head=(cells[0].textContent||'').trim();if(!keys.includes(head))return;cells.slice(1).forEach(td=>{const v=Number((td.textContent||'').trim());if(v===1||v===2){td.classList.add('v134LowRating');td.title='Score of 1 or 2: needs a coaching intervention'}})})}
+  function reportMatchesFor(type,g){
+    let ms=filterReportList(g.matches||[]).slice().sort(asc);
+    if(type==='ddd')return reportMatches(g,'range');
+    if(['year','situation','period','training'].includes(type)){const y=byId('v471_reportYear')?.value||byId('reportYear')?.value;if(y)ms=ms.filter(m=>dateOf(m).slice(0,4)===String(y))}
+    return ms}
+  function ratingsSection(ms,keys,title){
+    if(!keys.length)return '';const rated=ms.filter(m=>keys.some(k=>ratingVal(m,k)!==null));if(!rated.length)return '';
+    const avg=k=>{const v=rated.map(m=>ratingVal(m,k)).filter(x=>x!==null);return v.length?(v.reduce((a,b)=>a+b,0)/v.length):null};
+    let h='<section class="v134Section"><h2>'+escHtml(title)+'</h2><p class="v134Muted">Scores of 1 or 2 are highlighted: they call for a coaching intervention.</p><div class="tableWrap"><table><tr><th>Match</th>'+keys.map(k=>'<th>'+escHtml(k)+'</th>').join('')+'</tr>';
+    h+=rated.map(m=>'<tr><td>'+escHtml(dateOf(m)+' vs '+(m.opponentTeam||m.opponent||''))+'</td>'+keys.map(k=>{const v=ratingVal(m,k);return '<td'+(v!==null&&v<=2?' class="v134LowRating" title="Needs a coaching intervention"':'')+'>'+(v===null?'–':v)+'</td>'}).join('')+'</tr>').join('');
+    h+='<tr><th>Average</th>'+keys.map(k=>{const a=avg(k);return '<th'+(a!==null&&a<=2.5?' class="v134LowRating"':'')+'>'+(a===null?'–':a.toFixed(1))+'</th>'}).join('')+'</tr></table></div></section>';
+    return h}
+  // Save % bands from Data Driven Development Theory: U13 65-75%, U16 70-80%, 1st Team 75-85%, Provincial 80%.
+  function saveBand(g,ms){
+    const levels=ms.map(m=>String(m.goalieTeamLevel||'')),tiers=ms.map(m=>String(m.goalieTeamTier||'')),ages=ms.map(m=>String(m.goalieAgeGroupAtMatch||''));
+    if(levels.some(l=>/provincial|national/i.test(l)))return {name:'Provincial',low:80,high:100};
+    const age=ages.find(Boolean)||'';
+    if(age==='U13'||age==='U11'||age==='U10')return {name:'U13',low:65,high:75};
+    if(age==='U14'||age==='U16')return {name:'U16',low:70,high:80};
+    if(tiers.some(t=>/^A/.test(t)))return {name:'1st Team',low:75,high:85};
+    return null}
+  function zoneOfD(s){const x=Number(s.dX),y=Number(s.dY);if(!Number.isFinite(x)||!Number.isFinite(y))return null;const side=x<36?'left':x>64?'right':'centre';const dist=Math.hypot(x-50,y-51);return (dist<25?'close range, ':'top of the D, ')+side}
+  function zoneOfGoal(s){const x=Number(s.gX),y=Number(s.gY);if(!Number.isFinite(x)||!Number.isFinite(y))return null;const col=x<36.33?'left':x>63.66?'right':'centre';const row=y<21.33?'top':y>34.66?'bottom':'middle';return row+' '+col}
+  function worstZone(shots,zoneFn,minAttempts){const z={};shots.forEach(s=>{const k=zoneFn(s);if(!k)return;const o=outcomeOf(s);if(o==='Angle Closed Off')return;const r=z[k]||(z[k]={saves:0,goals:0});if(o==='Goal')r.goals++;else r.saves++});
+    return Object.entries(z).map(([k,r])=>({zone:k,...r,att:r.saves+r.goals,rate:(r.saves+r.goals)?r.saves/(r.saves+r.goals):1})).filter(r=>r.att>=minAttempts&&r.goals>0).sort((a,b)=>b.goals-a.goals||a.rate-b.rate)[0]||null}
+  function insightsSection(g,ms){
+    const shots=[];ms.forEach(m=>(m.shots||[]).forEach(s=>shots.push(s)));if(!shots.length)return '';
+    const saves=shots.filter(s=>outcomeOf(s)==='Save'),goals=shots.filter(s=>outcomeOf(s)==='Goal'),aco=shots.filter(s=>outcomeOf(s)==='Angle Closed Off');
+    const sr=(saves.length+goals.length)?saves.length/(saves.length+goals.length)*100:null,n=Math.max(1,ms.length);
+    const out=[];const add=(cls,title,text)=>out.push('<div class="v134Insight '+cls+'"><b>'+escHtml(title)+'</b>'+text+'</div>');
+    const band=saveBand(g,ms);
+    if(sr!==null&&band){const pos=sr<band.low?'below':sr>band.high?'above':'within';add(pos==='below'?'warn':'good','Save rate against the '+band.name+' benchmark','Save rate '+Math.round(sr)+'% is '+pos+' the expected '+band.name+' range of '+band.low+(band.high<100?'–'+band.high:'')+'%.')}
+    if(sr!==null&&band&&sr<band.low)add('alert','Low save rate: individual technique','Usually points to late reactions, poor positioning or not being set before the shot. Train set position, footwork into position and reaction saves.');
+    const spm=shots.length/n,gpm=goals.length/n;
+    if(spm>=12&&gpm>=3)add('warn','Many shots and many goals: team defensive structure',''+spm.toFixed(1)+' shots and '+gpm.toFixed(1)+' goals a match. This volume points to the defence allowing too many quality entries, not only the goalkeeper. Review the defensive structure with the team.');
+    const reb=goals.filter(s=>/^rebound$/i.test(String(s.type||s.shotType||'')));
+    if(goals.length>=3&&reb.length/goals.length>=0.25)add('warn','Frequent rebound goals',reb.length+' of '+goals.length+' goals ('+pctTxt(reb.length,goals.length)+') came from rebounds. Focus on kicking width and clearing to the sidelines.');
+    const outn=s=>['2 vs 1','3 vs 1','4+ vs 1','4 vs 1','5 vs 1'].includes(String(s.outnumbered||''));
+    const og=goals.filter(outn);
+    if(goals.length>=3&&og.length/goals.length>=0.3)add('warn','Goals while outnumbered',og.length+' of '+goals.length+' goals ('+pctTxt(og.length,goals.length)+') were conceded while outnumbered. This may be a defensive structure problem in front of the goalkeeper rather than a technical failure.');
+    const safe=saves.filter(s=>/^safe$/i.test(String(s.rebound||''))).length,danger=saves.filter(s=>/^dangerous$/i.test(String(s.rebound||''))).length;
+    if(safe+danger>=5)add(danger/(safe+danger)>=0.3?'warn':'good','Rebound distribution',pctTxt(safe,safe+danger)+' of recorded rebounds went to a safe zone ('+safe+' safe, '+danger+' dangerous). '+(danger/(safe+danger)>=0.3?'Work on directing saves to an unmarked teammate or the open areas either side of the goal.':'Keep directing saves away from the strike zone.'));
+    const dz=worstZone(shots,zoneOfD,4);if(dz)add('warn','Where goals come from (D heat map)','Most goals ('+dz.goals+' from '+dz.att+' attempts, '+pctTxt(dz.saves,dz.att)+' saved) came from '+dz.zone+' as shown on the D heat map. Train shots from this area.');
+    const gz=worstZone(shots,zoneOfGoal,3);if(gz)add('warn','Where goals go in (goal box)','Most goals ('+gz.goals+') went into the '+gz.zone+' of the goal as shown on the goal box heat map. Train saves to this area.');
+    if(ms.length>=6){const sorted=ms.slice().sort(asc),last=sorted.slice(-5),prev=sorted.slice(-10,-5);const rate=list=>{let s=0,gl=0;list.forEach(m=>(m.shots||[]).forEach(x=>{const o=outcomeOf(x);if(o==='Save')s++;else if(o==='Goal')gl++}));return (s+gl)?s/(s+gl)*100:null};const a=rate(last),b=rate(prev);if(a!==null&&b!==null)add(a>=b?'good':'warn','5-match trend','Save rate over the last 5 matches is '+Math.round(a)+'%, compared with '+Math.round(b)+'% in the '+prev.length+' before.')}
+    const keys=ratingKeys(ms),lows=[];keys.forEach(k=>{const n2=ms.filter(m=>{const v=ratingVal(m,k);return v!==null&&v<=2}).length;if(n2)lows.push({k,n:n2})});
+    if(lows.length){let txt=lows.map(x=>escHtml(x.k)+' scored 1 or 2 in '+x.n+' match'+(x.n===1?'':'es')).join('; ')+'. A score of 1 or 2 needs a direct coaching intervention.';if(lows.some(x=>/communicat|organi/i.test(x.k)))txt+=' For communication: the goalkeeper should call out marking assignments at least 5 seconds before the ball enters the circle.';add('alert','Low coaching ratings',txt)}
+    if(!out.length)return '';
+    return '<section class="v134Section"><h2>Coaching Insights</h2><p class="v134Muted">Based on the Data Driven Development Theory. Look at trends over several matches rather than one match on its own.</p>'+out.join('')+'</section>'}
+  function decorateReport(){
+    const root=byId('reportOutput');if(!root||!root.innerHTML||root.querySelector('.v134Decorated'))return;
+    const g=currentGoalie();if(!g)return;const type=byId('v471ReportType')?.value||'';const text=root.textContent||'';
+    const ms=reportMatchesFor(type,g),keys=ratingKeys(g.matches||[]);
+    highlightRatings(root,keys);
+    const content=root.querySelector('.reportMainContent')||root;
+    const anchor=content.querySelector('.v517TimelineBlock,.v472Addendum');
+    const put=html=>{if(!html)return;if(anchor)anchor.insertAdjacentHTML('beforebegin',html);else content.insertAdjacentHTML('beforeend',html)};
+    if(/Training Focus Report/i.test(text)||type==='training'){put(insightsSection(g,ms));put(ratingsSection(ms,keys,'Coaching Ratings'))}
+    else if(/Data Driven Development Report/i.test(text)||type==='ddd'){put(ratingsSection(ms,keys,'Coaching Ratings'))}
+    const mark=document.createElement('span');mark.className='v134Decorated';mark.hidden=true;root.appendChild(mark);
+  }
+  let decoTimer=0;
+  function watchReport(){const panel=byId('reports')||document.body;new MutationObserver(()=>{if(!decoTimer)decoTimer=setTimeout(()=>{decoTimer=0;decorateReport()},600)}).observe(panel,{childList:true,subtree:true})}watchReport();
+  window.v134DecorateReport=decorateReport;
+
   // Keep everything current as the app re-renders.
   let pending=0;
-  function refreshUi(){pending=0;try{updateLock()}catch(e){}try{updateReadiness()}catch(e){}try{explainLocks()}catch(e){}try{legendToggles()}catch(e){}try{linkLabels()}catch(e){}try{if(byId('home')?.classList.contains('active'))renderStart()}catch(e){}}
+  function refreshUi(){pending=0;try{updateRebounds()}catch(e){}try{updateLock()}catch(e){}try{updateReadiness()}catch(e){}try{explainLocks()}catch(e){}try{legendToggles()}catch(e){}try{linkLabels()}catch(e){}try{if(byId('home')?.classList.contains('active'))renderStart()}catch(e){}}
   function schedule(){if(!pending)pending=setTimeout(refreshUi,120)}
   new MutationObserver(muts=>{if(muts.some(m=>!(m.target.closest&&m.target.closest('#v134Start,#v134Notice,#v134Ready,#videoReview'))))schedule()}).observe(document.body,{childList:true,subtree:true});
   document.addEventListener('change',e=>{if(e.target?.closest?.('#match'))schedule()},true);

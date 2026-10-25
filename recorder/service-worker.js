@@ -1,9 +1,9 @@
-const CACHE_NAME='ddd-stats-recorder-v1-44-sport-aware';
+const CACHE_NAME='ddd-stats-recorder-v1-45-save-rebounds';
 const FILES=[
  './',
  './index.html',
  './manifest.webmanifest',
- './manifest.webmanifest?v=1.44',
+ './manifest.webmanifest?v=1.45',
  './assets/d_heat_map.png',
  './assets/goal_box_heat_map.png',
  './assets/ddd-banner-v1-43.png',
