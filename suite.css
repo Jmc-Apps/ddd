@@ -194,3 +194,21 @@ html,body{background:linear-gradient(145deg,#edf5f9 0,#dcebf3 55%,#c9dfe9 100%);
 .sidebar-app-link img{max-height:46px}
 .sidebar-app-link.recorder-open img{width:108px;max-width:58%}
 .sidebar-app-link span{font-size:9px;letter-spacing:.02em}
+/* v1.34 usability: Get started checklist, captioned app links, enrolment form. */
+.get-started{border:1px solid var(--line);border-radius:22px;background:#f4f9fc;padding:22px 24px;margin:0 0 24px;box-shadow:0 12px 30px rgba(21,58,82,.08)}
+.get-started-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+.get-started-head h2{margin:2px 0 0;font-size:22px}
+.get-started-count{font-weight:800;color:#087fa4;white-space:nowrap;padding-top:4px}
+.get-started-steps{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.get-started-steps li{display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid #c3d8e4;border-radius:14px;background:#fff}
+.get-started-steps li.done{background:#eef7f1;border-color:#b9dcc7}
+.get-started-steps b{display:block;color:#17374e}.get-started-steps small{display:block;color:#587386;margin-top:2px;line-height:1.35}
+.step-mark{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:#dceaf2;color:#17374e}
+.get-started-steps li.done .step-mark{background:#1c9c5b;color:#fff}
+.step-action{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.step-action .secondary{display:inline-block;text-decoration:none;padding:10px 14px;font-size:14px}
+.step-done{font-weight:800;color:#1c7a49}
+@media(max-width:620px){.get-started{padding:18px 16px}.get-started-steps li{grid-template-columns:32px 1fr}.step-action{grid-column:2;justify-content:flex-start}}
+.sidebar-app-link.captioned{flex-direction:column;gap:3px;min-height:64px}
+.sidebar-app-link.captioned span{font-size:10px;letter-spacing:.04em;color:#17374e}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}

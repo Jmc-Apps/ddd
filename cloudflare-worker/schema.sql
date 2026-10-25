@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS benchmark_matches (
   opponent_team_tier TEXT NOT NULL,
   match_type TEXT NOT NULL,
   match_format TEXT NOT NULL DEFAULT '11-a-side',
+  sport TEXT NOT NULL DEFAULT 'field_hockey',
   participation TEXT NOT NULL,
   minutes_played REAL,
   periods INTEGER NOT NULL,
@@ -50,3 +51,5 @@ CREATE TABLE IF NOT EXISTS benchmark_shots (
 CREATE INDEX IF NOT EXISTS idx_benchmark_match_cohort ON benchmark_matches(goalkeeper_gender, goalkeeper_age_group, goalkeeper_team_level, goalkeeper_team_tier);
 CREATE INDEX IF NOT EXISTS idx_benchmark_match_goalkeeper ON benchmark_matches(goalkeeper_id);
 CREATE INDEX IF NOT EXISTS idx_benchmark_shot_match ON benchmark_shots(goalkeeper_id, benchmark_match_id);
+CREATE INDEX IF NOT EXISTS idx_benchmark_match_sport_cohort ON benchmark_matches(sport, match_format, goalkeeper_gender, goalkeeper_age_group, goalkeeper_team_level, goalkeeper_team_tier);
+CREATE INDEX IF NOT EXISTS idx_benchmark_match_goalkeeper_sport ON benchmark_matches(goalkeeper_id, sport);

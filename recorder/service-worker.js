@@ -1,9 +1,9 @@
-const CACHE_NAME='ddd-stats-recorder-v1-43-deflection-shot-type';
+const CACHE_NAME='ddd-stats-recorder-v1-44-sport-aware';
 const FILES=[
  './',
  './index.html',
  './manifest.webmanifest',
- './manifest.webmanifest?v=1.43',
+ './manifest.webmanifest?v=1.44',
  './assets/d_heat_map.png',
  './assets/goal_box_heat_map.png',
  './assets/ddd-banner-v1-43.png',
@@ -13,7 +13,7 @@ const FILES=[
  './favicon-32-v1-43.png'
 ];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(FILES)))});
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('ddd-stats-recorder-')&&k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{
  const url=new URL(e.request.url);
  if(e.request.mode==='navigate'||url.pathname.endsWith('/index.html')||url.pathname.endsWith('/manifest.webmanifest')){

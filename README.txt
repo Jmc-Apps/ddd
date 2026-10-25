@@ -1,8 +1,35 @@
-Data Driven Development Suite v1.33
-Field Hockey Goalie Stats v5.112
-Indoor Hockey Goalie Stats v1.8
-Hockey Goalie Trials v1.26
-Stats Recorder v1.43
+Data Driven Development Suite v1.34
+Field Hockey Goalie Stats v5.113
+Indoor Hockey Goalie Stats v1.9
+Hockey Goalie Trials v1.27
+Stats Recorder v1.44
+Benchmark Worker v1.2 (deploy separately, after migration 0003)
+
+Version 1.34 / Field v5.113 / Indoor v1.9 / Trials v1.27 / Recorder v1.44 fixes report filtering, benchmark separation, restore and the Recorder, and makes the suite easier for new users.
+
+Fixes
+- Data Driven Development report: the included matches, summaries, breakdowns, heat maps, timelines and the All Recorded Matches chart now use only matches for the selected home team and (Field) match format. The v1.33 range fix did not reach the report builder.
+- Shot Situation, Period, Training Focus and Goalie Development reports: match timelines and match-by-match trends follow the same filters. Indoor 5 Game, Year and Development reports now follow the Home Team Filter.
+- Opponent Analysis lists only opponents for the selected team and format. A report is cleared when its options change, so an old report can no longer be printed by mistake.
+- Stats tab per-type save rates use saves / (saves + goals), matching the reports.
+- Benchmarking: uploads carry the sport. Field and Indoor data are stored and compared separately, and one app's upload no longer deletes the other's matches. Indoor matches use the format "indoor". The Field Stats benchmark compares like with like by match format. Requires D1 migration 0003 and Worker v1.2.
+- Backup & Restore merge: matches missing on this device are restored even when the goalkeeper profile was edited more recently. Indoor no longer marks shared goalkeepers as edited every time it opens.
+- Recorder: Field Hockey offers 8 Second 1v1 (Indoor keeps 6 Second Shoot-out) and the export keeps it; Field matches can be 11-a-side or 7-a-side and the format is imported; heat-map taps work with a mouse or trackpad; Save Setup records the selected goalkeeper; it no longer deletes the other apps' offline caches. Field Hockey files any older "6 Second Shoot-out" shots as 8 Second 1v1.
+- Platform Recorder import uses the shared goalkeeper for Indoor matches instead of creating a duplicate.
+- Long videos: audio for waveforms and Auto Sync is streamed for files over 200 MB (or if decoding fails) instead of being loaded whole, and the sync search no longer freezes the page. Trials Auto Sync searches offsets up to 60 minutes.
+- Trials: rates with nothing to divide show N/C; equal scores share a rank (=1); final outcomes start as Outcome pending and must be chosen before confirming; a goalkeeper with no attempts cannot score from ratings alone; age groups and tiers match the platform (U10 to U21, Senior, Open, Masters; A / 1st format).
+- Heat-map legend shows the pink Deflection/Tip in outline. New Match and Heat Maps no longer scroll sideways on phones. Suite version is recorded correctly in backups.
+
+Usability
+- Home: Get started checklist (enrol a goalkeeper, add a team, record a first match). Menu app logos have text labels. Enrol spelling.
+- Enrol Goalie: the form opens when needed, starts with one team row, fills team age groups from the date of birth, and warns before saving without a team.
+- Field and Indoor: a start screen to choose the goalkeeper, start or resume a match and see recent matches; shot recording stays locked until the match is started; a benchmark-readiness note during match setup; Finish Match button; on-page messages instead of pop-ups; stacked, larger heat maps with a legend toggle on phones; locked Benchmarks button explains how to unlock; form labels are linked to their fields.
+- Trials: the phone navigation keeps the current page in view and shows when more items are off-screen.
+- Recorder: opens on Setup until a goalkeeper is chosen; on-page messages.
+- Resources: new Indoor Hockey and Hockey Goalie Trials quick start guides.
+
+Deployment order for benchmarking: run cloudflare-worker/migrations/0003_sport.sql once on hgs-benchmarks-prod, then deploy cloudflare-worker/worker.js. Uploading this app package does not change the Worker or the database.
+
 
 Version 1.33 / Field Hockey v5.112 / Indoor v1.8 applies team filters to the DDD report match ranges.
 
