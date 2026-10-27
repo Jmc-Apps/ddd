@@ -1,9 +1,26 @@
-Data Driven Development Suite v1.36
-Field Hockey Goalie Stats v5.115
-Indoor Hockey Goalie Stats v1.11
+Data Driven Development Suite v1.37
+Field Hockey Goalie Stats v5.116
+Indoor Hockey Goalie Stats v1.12
 Hockey Goalie Trials v1.29
 Stats Recorder v1.45
 Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.37 / Field v5.116 / Indoor v1.12 recalibrates the weighted scores and fixes the Weighted Score Report.
+
+Weighted score weights (chance of saving; matches the updated theory document)
+- Distance: close 0.60, middle 0.88, long 0.97. Angle: central 0.85, mid 0.93, wide 0.98. Placement: corners and edges 0.65, body height 0.92, low 0.97.
+- Deflection or tip-in x 0.75 and penalty stroke 0.25 (Myers and Daly's odds ratios converted to a chance of saving).
+- An ordinary shot is now about 0.70, so 0% really means "as expected"; the old weights put almost every goalkeeper far above 0.
+
+Weighted Score Report fixes
+- Shot Situation and Shot Type tables count every record, so their Save Rate and Defence Rate match the summary; weighted columns use the records with placements.
+- Penalty strokes appear as their own row in the Distance and Angle tables.
+- Matches with no shots are left out of the match table and graph (with a note).
+- Matches on the same date are numbered on the graph, e.g. 09-01 (1), 09-01 (2).
+- Difficulty bands updated for the new weights: Difficult under 50%, Moderate 50-75%, Routine 75% or more.
+
+Resources
+- Data Driven Development Theory updated with the recalibrated weighted score section.
 
 Version 1.36 / Field v5.115 / Indoor v1.11 / Trials v1.29 / Recorder v1.45 adds weighted scores, a Weighted Score report, shot counts beside every percentage and the updated theory document.
 
