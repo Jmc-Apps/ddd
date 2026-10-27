@@ -171,7 +171,7 @@
   // 7b. Start screen: choose goalkeeper, start or resume a match, see recent matches.
   function goalies(){try{return db.goalies||[]}catch(e){return []}}
   function setGoalie(id){try{currentGoalieId=id;db.currentGoalieId=id;saveDB()}catch(e){}try{renderAll()}catch(e){}renderStart()}
-  function matchRates(m){let sv=0,gl=0,an=0;(m.shots||[]).forEach(s=>{const o=String(s.outcome||'');if(/^goal$/i.test(o))gl++;else if(/^angle/i.test(o))an++;else sv++});return {save:(sv+gl)?Math.round(sv/(sv+gl)*100)+'%':'N/C'}}
+  function matchRates(m){let sv=0,gl=0,an=0;(m.shots||[]).forEach(s=>{const o=String(s.outcome||'');if(/^goal$/i.test(o))gl++;else if(/^angle/i.test(o))an++;else sv++});return {save:(sv+gl)?Math.round(sv/(sv+gl)*100)+'% ('+sv+'/'+(sv+gl)+')':'N/C'}}
   function teamsForSport(g){return (Array.isArray(g&&g.teamProfiles)?g.teamProfiles:[]).filter(p=>p&&String(p.name||'').trim()&&(INDOOR?true:(p.sportType||'field_hockey')==='field_hockey'))}
   function renderStart(){
     const home=byId('home');if(!home)return;let box=byId('v134Start');
@@ -282,7 +282,7 @@
     const sr=(saves.length+goals.length)?saves.length/(saves.length+goals.length)*100:null,n=Math.max(1,ms.length);
     const out=[];const add=(cls,title,text)=>out.push('<div class="v134Insight '+cls+'"><b>'+escHtml(title)+'</b>'+text+'</div>');
     const band=saveBand(g,ms);
-    if(sr!==null&&band){const pos=sr<band.low?'below':sr>band.high?'above':'within';add(pos==='below'?'warn':'good','Save rate against the '+band.name+' benchmark','Save rate '+Math.round(sr)+'% is '+pos+' the expected '+band.name+' range of '+band.low+(band.high<100?'–'+band.high:'')+'%.')}
+    if(sr!==null&&band){const pos=sr<band.low?'below':sr>band.high?'above':'within';add(pos==='below'?'warn':'good','Save rate against the '+band.name+' benchmark','Save rate '+Math.round(sr)+'% ('+saves.length+'/'+(saves.length+goals.length)+') is '+pos+' the expected '+band.name+' range of '+band.low+(band.high<100?'–'+band.high:'')+'%.')}
     if(sr!==null&&band&&sr<band.low)add('alert','Low save rate: individual technique','Usually points to late reactions, poor positioning or not being set before the shot. Train set position, footwork into position and reaction saves.');
     const spm=shots.length/n,gpm=goals.length/n;
     if(spm>=12&&gpm>=3)add('warn','Many shots and many goals: team defensive structure',''+spm.toFixed(1)+' shots and '+gpm.toFixed(1)+' goals a match. This volume points to the defence allowing too many quality entries, not only the goalkeeper. Review the defensive structure with the team.');
@@ -295,7 +295,7 @@
     if(safe+danger>=5)add(danger/(safe+danger)>=0.3?'warn':'good','Rebound distribution',pctTxt(safe,safe+danger)+' of recorded rebounds went to a safe zone ('+safe+' safe, '+danger+' dangerous). '+(danger/(safe+danger)>=0.3?'Work on directing saves to an unmarked teammate or the open areas either side of the goal.':'Keep directing saves away from the strike zone.'));
     const dz=worstZone(shots,zoneOfD,4);if(dz)add('warn','Where goals come from (D heat map)','Most goals ('+dz.goals+' from '+dz.att+' attempts, '+pctTxt(dz.saves,dz.att)+' saved) came from '+dz.zone+' as shown on the D heat map. Train shots from this area.');
     const gz=worstZone(shots,zoneOfGoal,3);if(gz)add('warn','Where goals go in (goal box)','Most goals ('+gz.goals+') went into the '+gz.zone+' of the goal as shown on the goal box heat map. Train saves to this area.');
-    if(ms.length>=6){const sorted=ms.slice().sort(asc),last=sorted.slice(-5),prev=sorted.slice(-10,-5);const rate=list=>{let s=0,gl=0;list.forEach(m=>(m.shots||[]).forEach(x=>{const o=outcomeOf(x);if(o==='Save')s++;else if(o==='Goal')gl++}));return (s+gl)?s/(s+gl)*100:null};const a=rate(last),b=rate(prev);if(a!==null&&b!==null)add(a>=b?'good':'warn','5-match trend','Save rate over the last 5 matches is '+Math.round(a)+'%, compared with '+Math.round(b)+'% in the '+prev.length+' before.')}
+    if(ms.length>=6){const sorted=ms.slice().sort(asc),last=sorted.slice(-5),prev=sorted.slice(-10,-5);const rate=list=>{let s=0,gl=0;list.forEach(m=>(m.shots||[]).forEach(x=>{const o=outcomeOf(x);if(o==='Save')s++;else if(o==='Goal')gl++}));return (s+gl)?{v:s/(s+gl)*100,t:Math.round(s/(s+gl)*100)+'% ('+s+'/'+(s+gl)+')'}:null};const ra=rate(last),rb=rate(prev),a=ra&&ra.v,b=rb&&rb.v;if(ra&&rb)add(a>=b?'good':'warn','5-match trend','Save rate over the last 5 matches is '+ra.t+', compared with '+rb.t+' in the '+prev.length+' before.')}
     const keys=ratingKeys(ms),lows=[];keys.forEach(k=>{const n2=ms.filter(m=>{const v=ratingVal(m,k);return v!==null&&v<=2}).length;if(n2)lows.push({k,n:n2})});
     if(lows.length){let txt=lows.map(x=>escHtml(x.k)+' scored 1 or 2 in '+x.n+' match'+(x.n===1?'':'es')).join('; ')+'. A score of 1 or 2 needs a direct coaching intervention.';if(lows.some(x=>/communicat|organi/i.test(x.k)))txt+=' For communication: the goalkeeper should call out marking assignments at least 5 seconds before the ball enters the circle.';add('alert','Low coaching ratings',txt)}
     if(!out.length)return '';
@@ -305,6 +305,7 @@
     const g=currentGoalie();if(!g)return;const type=byId('v471ReportType')?.value||'';const text=root.textContent||'';
     const ms=reportMatchesFor(type,g),keys=ratingKeys(g.matches||[]);
     highlightRatings(root,keys);
+    if(type!=='weighted'&&type!=='benchmark'&&!root.querySelector('.v136WeightedReport')){try{addWeightedCard(root,reportMatchesNow(type,g))}catch(e){}}
     const content=root.querySelector('.reportMainContent')||root;
     const anchor=content.querySelector('.v517TimelineBlock,.v472Addendum');
     const put=html=>{if(!html)return;if(anchor)anchor.insertAdjacentHTML('beforebegin',html);else content.insertAdjacentHTML('beforeend',html)};
@@ -318,13 +319,175 @@
 
   // Keep everything current as the app re-renders.
   let pending=0;
-  function refreshUi(){pending=0;try{updateRebounds()}catch(e){}try{updateLock()}catch(e){}try{updateReadiness()}catch(e){}try{explainLocks()}catch(e){}try{legendToggles()}catch(e){}try{linkLabels()}catch(e){}try{if(byId('home')?.classList.contains('active'))renderStart()}catch(e){}}
+  function refreshUi(){pending=0;try{updateRebounds()}catch(e){}try{updateLock()}catch(e){}try{updateReadiness()}catch(e){}try{explainLocks()}catch(e){}try{legendToggles()}catch(e){}try{linkLabels()}catch(e){}try{placeWeighted()}catch(e){}try{styleCounts()}catch(e){}try{if(byId('home')?.classList.contains('active'))renderStart()}catch(e){}}
   function schedule(){if(!pending)pending=setTimeout(refreshUi,120)}
   new MutationObserver(muts=>{if(muts.some(m=>!(m.target.closest&&m.target.closest('#v134Start,#v134Notice,#v134Ready,#videoReview'))))schedule()}).observe(document.body,{childList:true,subtree:true});
   document.addEventListener('change',e=>{if(e.target?.closest?.('#match'))schedule()},true);
   document.addEventListener('input',e=>{if(e.target?.closest?.('#match'))schedule()},true);
   document.addEventListener('click',e=>{if(e.target?.closest?.('[data-tab]'))setTimeout(refreshUi,50)},true);
   setTimeout(()=>{renderStart();refreshUi()},300);setTimeout(refreshUi,3200);
+
+  /* ---------- 9. Weighted Score (Data Driven Development; distance, angle and penalty-stroke/deflection weights from Myers & Daly 2022) ---------- */
+  const WS_W={dist:{green:.3,orange:.6,red:.9},angle:{green:.3,orange:.6,red:.9},place:{green:.5,orange:.7,red:.9},deflection:.45,stroke:.12};
+  // Zone boundaries measured from the diagrams in the theory document. D map: goal centre (50,51), circle radius 44. Goal map interior x 12-88, y 9-51, backboard line y 38.
+  const WS_ANG=[[0.2,90,90],[0.35,59.5,85],[0.45,47.5,76.5],[0.65,36,67],[0.8,31.5,63.5],[0.9,29.5,61.5],[1.3,27,59]];
+  const WS_CORNER=[[0.09,0.14],[0.12,0.135],[0.15,0.128],[0.18,0.12],[0.21,0.107],[0.24,0.09],[0.27,0.07],[0.285,0.055],[0.30,0.04],[0.315,0.035]];
+  const wsLerp=(t,v,i)=>{if(v<=t[0][0])return t[0][i];for(let k=1;k<t.length;k++)if(v<=t[k][0]){const a=t[k-1],b=t[k];return a[i]+(b[i]-a[i])*(v-a[0])/(b[0]-a[0])}return t[t.length-1][i]};
+  const wsNum=v=>(v===null||v===undefined||v==='')?null:(Number.isFinite(Number(v))?Number(v):null);
+  const wsHasD=s=>wsNum(s.dX)!==null&&wsNum(s.dY)!==null;
+  const wsHasG=s=>wsNum(s.gX)!==null&&wsNum(s.gY)!==null;
+  const wsIsStroke=s=>/penalty stroke/i.test([s.shotSituation,s.situation,s.type,s.shotType].join(' '));
+  const wsIsDeflection=s=>/deflect|tip/i.test(String(s.type||s.shotType||s.shotCategory||''));
+  // Own goals and empty-goal events never count against the goalkeeper.
+  const wsCounts=s=>{if(/own goal/i.test(String(s.type||s.shotType||'')))return false;if(/empty goal/i.test(String(s.outnumbered||'')))return false;return true};
+  const wsOnTarget=s=>wsCounts(s)&&outcomeOf(s)!=='Angle Closed Off';
+  function wsDistZone(s){const r=Math.hypot(wsNum(s.dX)-50,wsNum(s.dY)-51)/44;return r<0.38?'green':r<0.70?'orange':'red'}
+  function wsAngleZone(s){const x=wsNum(s.dX),y=wsNum(s.dY),r=Math.hypot(x-50,y-51)/44,up=51-y;const ang=up<=0?90:Math.atan2(Math.abs(x-50),up)*180/Math.PI;const g=wsLerp(WS_ANG,r,1),rd=wsLerp(WS_ANG,r,2);if(ang<=g)return 'green';if(rd<90&&ang>=rd)return 'red';return 'orange'}
+  function wsPlaceZone(s){const xx=Math.max(0,Math.min(1,(wsNum(s.gX)-12)/76)),yy=Math.max(0,Math.min(1,(wsNum(s.gY)-9)/42)),edge=Math.min(xx,1-xx);
+    if(yy>=0.69)return edge<0.035?'orange':'red';
+    if(yy<0.09||edge<0.035)return 'green';
+    if(yy<=0.315&&edge<wsLerp(WS_CORNER,yy,1))return 'green';
+    return 'orange'}
+  // Adjustment = the goalkeeper's chance of stopping the attempt (close to 1 = routine, close to 0 = nearly unstoppable).
+  // Saves and goals use distance x angle x placement. Angles Closed Off have no goal placement, so only distance and angle (position) count.
+  function wsShot(s){
+    if(!wsCounts(s))return null;
+    const o=outcomeOf(s),aco=o==='Angle Closed Off',stroke=wsIsStroke(s);
+    if(!aco&&!wsHasG(s))return {missing:true,aco};
+    if(!stroke&&!wsHasD(s))return {missing:true,aco};
+    const pz=aco?null:wsPlaceZone(s),dz=stroke?null:wsDistZone(s),az=stroke?null:wsAngleZone(s),defl=!stroke&&wsIsDeflection(s);
+    let adj=stroke?WS_W.stroke:WS_W.dist[dz]*WS_W.angle[az];if(!aco)adj*=WS_W.place[pz];if(defl)adj*=WS_W.deflection;
+    const ok=o!=='Goal';
+    return {adj,ok,save:o==='Save',aco,score:ok?1-adj:-adj,dz,az,pz,stroke,defl}}
+  // mode 'save': saves and goals only (Save Rate Weighted Score). mode 'defence': saves, goals and Angles Closed Off (Defence Rate Weighted Score).
+  function wsSummary(shots,mode){
+    const def=mode==='defence',r={mode:def?'defence':'save',n:0,ok:0,saves:0,goals:0,aco:0,missing:0,total:0,expected:0,sum:0,list:[]};
+    (shots||[]).forEach(s=>{const w=wsShot(s);if(!w)return;if(w.aco&&!def)return;r.total++;if(w.missing){r.missing++;return}r.n++;if(w.ok)r.ok++;if(w.save)r.saves++;else if(w.aco)r.aco++;else r.goals++;r.expected+=w.adj;r.sum+=w.score;r.list.push(Object.assign({shot:s},w))});
+    r.score=r.n?r.sum/r.n*100:null;r.above=r.ok-r.expected;return r}
+  const wsOf=(list,mode)=>{const l=mode==='defence'?list:list.filter(x=>!x.aco);return {n:l.length,score:l.length?l.reduce((a,x)=>a+x.score,0)/l.length*100:null,ok:l.filter(x=>x.ok).length,expected:l.reduce((a,x)=>a+x.adj,0)}};
+  const wsFmt=r=>r&&r.score!==null&&r.score!==undefined?(r.score>0.05?'+':r.score<-0.05?'−':'')+Math.abs(r.score).toFixed(1)+'%':'N/C';
+  const wsShotsOf=ms=>{const out=[];(ms||[]).forEach(m=>(m.shots||[]).forEach(s=>out.push(s)));return out};
+  const WS_LABEL={save:'Save Rate Weighted Score',defence:'Defence Rate Weighted Score'};
+  const wsNoteTxt=r=>r.n?r.n+' of '+r.total+(r.mode==='defence'?' records placed':' shots placed'):'needs heat map placements';
+  const wsTitle={save:'Save Rate weighted for shot difficulty (distance, angle and placement). 0% = as expected; above 0 = saved more than expected.',defence:'Defence Rate weighted for difficulty. Saves and goals use distance, angle and placement; Angles Closed Off use distance and angle only. 0% = as expected.'};
+  window.v136WeightedScore=function(ms,mode){return wsSummary(wsShotsOf(ms),mode)};
+  window.v136WeightedShot=wsShot;
+
+  // Stats tab: add both weighted score cards.
+  let lastStatsWs=null;
+  try{if(typeof window.calcStats==='function'&&!window.calcStats.v136){const oldCalc=window.calcStats;window.calcStats=function(ms){const st=oldCalc.apply(this,arguments);if(!st||typeof st!=='object'||!('Save Rate' in st))return st;const out={};Object.keys(st).forEach(k=>{out[k]=st[k];if(k==='Save Rate'){const sh=wsShotsOf(ms),a=wsSummary(sh,'save'),b=wsSummary(sh,'defence');lastStatsWs={save:a,defence:b};out[WS_LABEL.save]=wsFmt(a);out[WS_LABEL.defence]=wsFmt(b)}});return out};window.calcStats.v136=true}}catch(e){}
+
+  // Reports: add both weighted score cards after Save Rate / Defence Rate in the summary.
+  function reportMatchesNow(type,g){try{if(typeof window.v517SelectedReportMatches==='function'){const m=window.v517SelectedReportMatches();if(Array.isArray(m)&&m.length)return m}}catch(e){}return reportMatchesFor(type,g)}
+  const cardLabel=c=>((c.querySelector('span')||c.querySelector('b')||{}).textContent||'').trim();
+  function addWeightedCard(root,ms){
+    if(root.querySelector('[data-v136-weighted]'))return;
+    const cards=[...root.querySelectorAll('.stat')];const save=cards.find(c=>/^save rate$/i.test(cardLabel(c)));if(!save)return;
+    const def=cards.find(c=>/^defence rate$/i.test(cardLabel(c)));let at=def&&def.parentElement===save.parentElement?def:save;
+    const sh=wsShotsOf(ms);
+    ['save','defence'].forEach(mode=>{const r=wsSummary(sh,mode),card=save.cloneNode(true);card.setAttribute('data-v136-weighted',mode);card.classList.remove('v514RateStat');
+      const span=card.querySelector('span'),b=card.querySelector('b');
+      if(span&&b){b.textContent=wsFmt(r);span.textContent=WS_LABEL[mode]}else if(b){b.textContent=WS_LABEL[mode];[...card.childNodes].filter(n=>n.nodeType===3).forEach(n=>n.remove());card.appendChild(document.createTextNode(wsFmt(r)))}
+      card.title=wsTitle[mode];const small=document.createElement('small');small.className='v136WsNote';small.textContent=wsNoteTxt(r);card.appendChild(small);
+      at.insertAdjacentElement('afterend',card);at=card})}
+  function placeWeighted(){const root=byId('statsOutput');if(root){const cards=[...root.querySelectorAll('.stat')],lab=c=>((c.querySelector('span')||{}).textContent||'').trim();let at=cards.find(c=>lab(c)==='Defence Rate');
+      ['save','defence'].forEach(mode=>{const w=cards.find(c=>lab(c)===WS_LABEL[mode]);if(!w)return;if(at&&at.nextElementSibling!==w&&at.parentElement===w.parentElement)at.insertAdjacentElement('afterend',w);if(lastStatsWs&&!w.querySelector('.v136WsNote')){const sm=document.createElement('small');sm.className='v136WsNote';sm.textContent=wsNoteTxt(lastStatsWs[mode]);w.appendChild(sm);w.title=wsTitle[mode]}at=w})}
+    const rep=byId('reportOutput'),type=byId('v471ReportType')?.value||'';if(rep&&type!=='benchmark'&&rep.querySelector('.stat')&&!rep.querySelector('[data-v136-weighted],.v136WeightedReport')){const g=currentGoalie();if(g)addWeightedCard(rep,reportMatchesNow(type,g))}}
+  window.v136AddWeightedCard=addWeightedCard;
+
+  // Smaller "(saves/shots)" counts beside percentages.
+  function styleCounts(){['statsOutput','reportOutput','v134Start'].forEach(id=>{const root=byId(id);if(!root)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const hits=[];let n;while((n=w.nextNode())){if(n.parentElement&&n.parentElement.closest('svg,.v136Cnt,script,style'))continue;if(/\d%\s\(\d+\/\d+\)/.test(n.textContent))hits.push(n)}
+    hits.forEach(n=>{const frag=document.createDocumentFragment();let rest=n.textContent;const re=/(\d+%)\s(\(\d+\/\d+\))/;let m;while((m=re.exec(rest))){frag.appendChild(document.createTextNode(rest.slice(0,m.index)+m[1]+' '));const sp=document.createElement('span');sp.className='v136Cnt';sp.textContent=m[2];frag.appendChild(sp);rest=rest.slice(m.index+m[0].length)}if(rest)frag.appendChild(document.createTextNode(rest));n.parentNode.replaceChild(frag,n)})})}
+  const wsCss=document.createElement('style');
+  wsCss.textContent=`.v136Cnt{font-size:.72em;font-weight:600;opacity:.75;white-space:nowrap}
+  .v136WsNote{display:block;font-size:11px;color:#587386;margin-top:2px}
+  #reportOutput .v136Explain{border:1px solid #c3d8e4;border-radius:10px;padding:10px 12px;background:#f7fbfd;margin:10px 0}
+  #reportOutput .v136Pos{color:#16794a;font-weight:800}#reportOutput .v136Neg{color:#b42318;font-weight:800}
+  #reportOutput .v136Zone{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+  #reportOutput .v136Trend{width:100%;max-width:920px;height:auto;border:1px solid #c3d8e4;border-radius:10px;background:#fff}
+  #reportOutput .v136Key{display:inline-block;width:14px;height:4px;border-radius:2px;margin:0 6px 2px 12px;vertical-align:middle}
+  @media print{#reportOutput .v136Zone,#reportOutput .v136Key,#reportOutput .v136Pos,#reportOutput .v136Neg{-webkit-print-color-adjust:exact;print-color-adjust:exact}}`;
+  document.head.appendChild(wsCss);
+
+  // Weighted Score report.
+  const WS_ZONE_NAMES={dist:{green:'Close range',orange:'Middle distance',red:'Long range'},angle:{green:'Central',orange:'Mid angle',red:'Wide angle'},place:{green:'Corners and edges',orange:'Body height',red:'Low, below the backboard line'}};
+  const WS_ZONE_COL={green:'#1aab4d',orange:'#f39321',red:'#e0262c'};
+  const wsCls=r=>r&&r.score!==null&&r.score!==undefined?(r.score>0.05?'v136Pos':r.score<-0.05?'v136Neg':''):'';
+  const wsCell=r=>'<td class="'+wsCls(r)+'">'+wsFmt(r)+'</td>';
+  const wsRate=(s,d)=>d?Math.round(s/d*100)+'% ('+s+'/'+d+')':'N/C';
+  const wsSigned=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(1);
+  // Group tables use every scored record. Save columns use saves and goals; defence columns add Angles Closed Off.
+  function wsRowCells(g){const sv=g.filter(x=>x.save).length,ac=g.filter(x=>x.aco).length,gl=g.length-sv-ac;return '<td>'+g.length+'</td><td>'+sv+'</td><td>'+gl+'</td><td>'+ac+'</td><td>'+wsRate(sv,sv+gl)+'</td>'+wsCell(wsOf(g,'save'))+'<td>'+wsRate(sv+ac,g.length)+'</td>'+wsCell(wsOf(g,'defence'))}
+  const WS_HEAD='<th>Records</th><th>Saves</th><th>Goals</th><th>Angles Closed Off</th><th>Save Rate</th><th>Save Rate Weighted</th><th>Defence Rate</th><th>Defence Rate Weighted</th>';
+  function wsGroupTable(title,list,keyFn,order,label){
+    const groups={};list.forEach(x=>{const k=keyFn(x);if(k==null)return;(groups[k]=groups[k]||[]).push(x)});
+    const keys=(order||Object.keys(groups).sort()).filter(k=>groups[k]);if(!keys.length)return '';
+    return '<h2>'+escHtml(title)+'</h2><div class="tableWrap"><table><tr><th>'+escHtml(label||'Area')+'</th>'+WS_HEAD+'</tr>'+keys.map(k=>'<tr><td>'+escHtml(k)+'</td>'+wsRowCells(groups[k])+'</tr>').join('')+'</table></div>'}
+  function wsZoneTable(title,list,field,names,head){
+    const groups={};list.forEach(x=>{const k=x[field];if(!k)return;(groups[k]=groups[k]||[]).push(x)});
+    const keys=['green','orange','red'].filter(k=>groups[k]);if(!keys.length)return '';const wkey=field==='dz'?'dist':field==='az'?'angle':'place';
+    if(field==='pz')return '<h2>'+escHtml(title)+'</h2><div class="tableWrap"><table><tr><th>'+escHtml(head)+'</th><th>Weight</th><th>Shots</th><th>Save Rate</th><th>Save Rate Weighted</th></tr>'+keys.map(k=>{const g=groups[k],sv=g.filter(x=>x.save).length;return '<tr><td><span class="v136Zone" style="background:'+WS_ZONE_COL[k]+'"></span>'+escHtml(names[k])+'</td><td>'+WS_W[wkey][k]+'</td><td>'+g.length+'</td><td>'+wsRate(sv,g.length)+'</td>'+wsCell(wsOf(g,'save'))+'</tr>'}).join('')+'</table></div><p class="v134Muted">Angles Closed Off have no goal placement, so they are not in this table.</p>';
+    return '<h2>'+escHtml(title)+'</h2><div class="tableWrap"><table><tr><th>'+escHtml(head)+'</th><th>Weight</th>'+WS_HEAD+'</tr>'+keys.map(k=>'<tr><td><span class="v136Zone" style="background:'+WS_ZONE_COL[k]+'"></span>'+escHtml(names[k])+'</td><td>'+WS_W[wkey][k]+'</td>'+wsRowCells(groups[k])+'</tr>').join('')+'</table></div>'}
+  function wsTrendSvg(rows){
+    const pts=rows.filter(r=>r.s.score!==null||r.d.score!==null);if(pts.length<2)return '';
+    const W=920,H=300,pL=56,pR=20,pT=22,pB=58,iW=W-pL-pR,iH=H-pT-pB;const vals=[];pts.forEach(p=>{if(p.s.score!==null)vals.push(p.s.score);if(p.d.score!==null)vals.push(p.d.score)});let lo=Math.min(-10,...vals),hi=Math.max(10,...vals);lo=Math.floor(lo/10)*10;hi=Math.ceil(hi/10)*10;
+    const X=i=>pL+i*iW/(pts.length-1),Y=v=>pT+(hi-v)/(hi-lo)*iH;let g='';
+    for(let v=lo;v<=hi;v+=10){g+='<line x1="'+pL+'" x2="'+(W-pR)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="'+(v===0?'#17374e':'#dbe7ee')+'" stroke-width="'+(v===0?1.6:1)+'"/><text x="'+(pL-8)+'" y="'+(Y(v)+4)+'" font-size="12" text-anchor="end" fill="#4b6475">'+(v>0?'+':'')+v+'%</text>'}
+    const line=(key,col,dash)=>{const p=pts.map((x,i)=>x[key].score===null?null:X(i)+','+Y(x[key].score)).filter(Boolean);return p.length>1?'<polyline fill="none" stroke="'+col+'" stroke-width="3"'+(dash?' stroke-dasharray="7 5"':'')+' points="'+p.join(' ')+'"/>':''};
+    g+=line('d','#d97706',true)+line('s','#087fa4',false);
+    g+=pts.map((p,i)=>(p.d.score!==null?'<circle cx="'+X(i)+'" cy="'+Y(p.d.score)+'" r="4" fill="#d97706"><title>'+escHtml(p.label)+': Defence Rate Weighted '+wsFmt(p.d)+'</title></circle>':'')+(p.s.score!==null?'<circle cx="'+X(i)+'" cy="'+Y(p.s.score)+'" r="5" fill="#087fa4"><title>'+escHtml(p.label)+': Save Rate Weighted '+wsFmt(p.s)+'</title></circle>':'')+'<text x="'+X(i)+'" y="'+(H-pB+18)+'" font-size="11" text-anchor="middle" fill="#4b6475">'+escHtml(p.short)+'</text>').join('');
+    return '<h2>Weighted Scores by Match</h2><p class="v134Muted"><span class="v136Key" style="background:#087fa4"></span>Save Rate Weighted Score<span class="v136Key" style="background:#d97706"></span>Defence Rate Weighted Score (dashed)</p><svg class="v136Trend" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Weighted scores by match">'+g+'<text x="'+pL+'" y="'+(H-12)+'" font-size="12" fill="#4b6475">Above the dark line = better than expected for the attempts faced.</text></svg>'}
+  function wsMatchRange(g){const all=filterReportList(g.matches||[]).slice().sort(asc);if(!all.length)return [];let si=all.findIndex(m=>String(m.id)===String(byId('v136WsStart')?.value)),ei=all.findIndex(m=>String(m.id)===String(byId('v136WsEnd')?.value));if(si<0)si=0;if(ei<0)ei=all.length-1;if(si>ei){const t=si;si=ei;ei=t}return all.slice(si,ei+1)}
+  function wsFields(){const w=byId('v471ReportFields'),g=currentGoalie();if(!w)return;const h=byId('v471ReportHint');if(h)h.textContent='Select the first and last match to include in the Weighted Score Report.';const ms=g?filterReportList(g.matches||[]).slice().sort(asc):[];const opts=ms.map(m=>'<option value="'+escHtml(m.id)+'">'+escHtml(dateOf(m)+' - '+(m.homeTeam||'')+' VS '+(m.opponentTeam||m.opponent||''))+'</option>').join('');
+    w.innerHTML='<div class="v472RangeGrid"><div><label for="v136WsStart">First Match to Include</label><select id="v136WsStart">'+opts+'</select></div><div><label for="v136WsEnd">Last Match to Include</label><select id="v136WsEnd">'+opts+'</select></div></div>';const end=byId('v136WsEnd');if(end&&ms.length)end.value=ms[ms.length-1].id}
+  function buildWeightedReport(){
+    const g=currentGoalie(),root=byId('reportOutput');if(!root)return;if(!g){root.innerHTML='<p class="v134Muted">Select a goalkeeper first.</p>';return}
+    const ms=wsMatchRange(g),shots=wsShotsOf(ms),rs=wsSummary(shots,'save'),rd=wsSummary(shots,'defence'),list=rd.list;
+    const counted=shots.filter(wsCounts),sv=counted.filter(s=>outcomeOf(s)==='Save').length,ac=counted.filter(s=>outcomeOf(s)==='Angle Closed Off').length,on=counted.filter(wsOnTarget).length;
+    const age=(()=>{try{return typeof ageGroup==='function'?ageGroup(g):(g.ageGroup||'')}catch(e){return ''}})();
+    const range=ms.length?dateOf(ms[0])+' to '+dateOf(ms[ms.length-1]):'No matches selected';
+    let h='<h1>Weighted Score Report</h1><p><b>'+escHtml(g.name||'')+'</b>'+(age?' • '+escHtml(age):'')+(g.gender?' • '+escHtml(g.gender):'')+'<br>'+ms.length+' match(es) · '+escHtml(range)+'<br>Generated: '+escHtml(new Date().toLocaleString())+'</p>';
+    h+='<div class="v136Explain"><b>What this shows.</b> Save Rate and Defence Rate treat every attempt the same. The weighted scores give each attempt a difficulty from where it was taken (distance and angle) and, for shots on target, where it went in the goal. A save on a hard shot earns almost a full point and a save on a routine shot earns little; a goal from a routine shot costs almost a full point. The <b>Save Rate Weighted Score</b> uses saves and goals. The <b>Defence Rate Weighted Score</b> also counts Angles Closed Off, weighted by the attacker\'s position and angle only. <b>0%</b> means exactly as expected for the attempts faced; above 0 means better. Read them with Save Rate and Defence Rate, and look at the trend over several matches.</div>';
+    const card=(v,l,cls)=>'<div class="stat"><b'+(cls?' class="'+cls+'"':'')+'>'+v+'</b><span>'+l+'</span></div>';
+    h+='<h2>Summary</h2><div class="statgrid">'+card(wsFmt(rs),WS_LABEL.save,wsCls(rs))+card(wsFmt(rd),WS_LABEL.defence,wsCls(rd))+card(wsRate(sv,on),'Save Rate')+card(wsRate(sv+ac,counted.length),'Defence Rate')+card(rs.n?wsSigned(rs.above):'N/C','Saves Above Expected')+card(rs.n?rs.expected.toFixed(1)+' of '+rs.n:'N/C','Expected Saves')+card(rs.n?Math.round((1-rs.expected/rs.n)*100)+'%':'N/C','Average Shot Difficulty')+card(rs.n+' of '+rs.total,'Shots on Target Scored')+card(rd.aco+' of '+ac,'Angles Closed Off Scored')+'</div>';
+    if(rd.missing)h+='<p class="v134Muted">'+rd.missing+' record'+(rd.missing===1?' is':'s are')+' missing a heat map placement and left out of the weighted scores (shots on target need the D and goal box placements; Angles Closed Off need the D placement). Add placements in the Heat Map Editor to include them.</p>';
+    if(!rd.n){h+='<p>No records with heat map placements in this range yet.</p>'}
+    else{
+      const rows=ms.map(m=>{const sh=m.shots||[],c=sh.filter(wsCounts),s2=c.filter(s=>outcomeOf(s)==='Save').length,a2=c.filter(s=>outcomeOf(s)==='Angle Closed Off').length;return {m,s:wsSummary(sh,'save'),d:wsSummary(sh,'defence'),sv:s2,ac:a2,on:c.length-a2,all:c.length,label:dateOf(m)+' vs '+(m.opponentTeam||m.opponent||''),short:dateOf(m).slice(5)||'M'}});
+      h+=wsTrendSvg(rows);
+      h+='<h2>Match by Match</h2><div class="tableWrap"><table><tr><th>Match</th><th>Save Rate</th><th>Save Rate Weighted</th><th>Defence Rate</th><th>Defence Rate Weighted</th><th>Saves Above Expected</th></tr>'+rows.map(x=>'<tr><td>'+escHtml(x.label)+'</td><td>'+wsRate(x.sv,x.on)+'</td>'+wsCell(x.s)+'<td>'+wsRate(x.sv+x.ac,x.all)+'</td>'+wsCell(x.d)+'<td>'+(x.s.n?wsSigned(x.s.above):'–')+'</td></tr>').join('')+'</table></div>';
+      const band=x=>x.adj>=0.4?'Routine':x.adj>=0.15?'Moderate':'Difficult';
+      h+=wsGroupTable('Attempt Difficulty',list,band,['Difficult','Moderate','Routine'],'Difficulty');
+      h+='<p class="v134Muted">Difficult: under a 15% expected chance of stopping it. Moderate: 15–40%. Routine: 40% or more.</p>';
+      h+=wsZoneTable('Distance (D heat map)',list,'dz',WS_ZONE_NAMES.dist,'Distance zone');
+      h+=wsZoneTable('Angle (D heat map)',list,'az',WS_ZONE_NAMES.angle,'Angle zone');
+      h+=wsZoneTable('Placement (goal box heat map)',list.filter(x=>!x.aco),'pz',WS_ZONE_NAMES.place,'Placement zone');
+      h+=wsGroupTable('Shot Situation',list,x=>x.shot.shotSituation||x.shot.situation||'Normal Game Play',null,'Situation');
+      h+=wsGroupTable('Shot Type',list,x=>x.shot.type||x.shot.shotType||'1st Shot',null,'Shot type');
+      const soft=list.filter(x=>!x.ok&&x.adj>=0.4),great=list.filter(x=>x.save&&x.adj<0.15),acoHard=list.filter(x=>x.aco&&x.adj<0.4);
+      const notes=[];
+      if(soft.length)notes.push('<div class="v134Insight warn"><b>Goals from routine shots</b>'+soft.length+' goal'+(soft.length===1?' was':'s were')+' conceded from routine shots (40% or better expected chance of a save). Review these on video first: they cost the most.</div>');
+      if(great.length)notes.push('<div class="v134Insight good"><b>Saves on difficult shots</b>'+great.length+' save'+(great.length===1?' was':'s were')+' made on difficult shots (under 15% expected chance). These lift the weighted scores above the plain rates.</div>');
+      if(acoHard.length)notes.push('<div class="v134Insight good"><b>Angles closed off from dangerous positions</b>'+acoHard.length+' angle'+(acoHard.length===1?' was':'s were')+' closed off from close or central positions. These add to the Defence Rate Weighted Score.</div>');
+      const sr=on?sv/on*100:null;if(sr!==null&&rs.score!==null){if(rs.score>=5&&sr<70)notes.push('<div class="v134Insight good"><b>Save Rate understates performance</b>The Save Rate is modest, but the goalkeeper is saving more than expected for the difficulty of shots faced. Strong opposition or a defence allowing quality chances is the likely reason.</div>');else if(rs.score<=-5&&sr>=70)notes.push('<div class="v134Insight warn"><b>Save Rate flatters performance</b>The Save Rate looks good, but many of the shots faced were routine. Goals conceded from easier chances are pulling the weighted score below expected.</div>')}
+      if(notes.length)h+='<section class="v134Section"><h2>Coaching Notes</h2>'+notes.join('')+'</section>';
+      h+='<h2>How the weighted scores are worked out</h2><p class="v134Muted">Each attempt gets an adjustment between 0 and 1: distance zone (close 0.3, middle 0.6, long 0.9) × angle zone (central 0.3, mid 0.6, wide 0.9) × placement zone (corners and edges 0.5, body height 0.7, low 0.9). Angles Closed Off have no goal placement, so they use distance × angle only. A deflection or tip-in multiplies by 0.45. A penalty stroke uses 0.12 in place of distance and angle. A save or an angle closed off scores 1 − adjustment and a goal scores − adjustment. Save Rate Weighted Score = the total for saves and goals ÷ the number of shots on target scored. Defence Rate Weighted Score = the total for saves, goals and Angles Closed Off ÷ the number of records scored. Own goals and empty-goal events are left out. Distance, angle, deflection and penalty-stroke weights come from Myers and Daly (2022); placement weights are the author’s estimates.</p>';
+    }
+    const logo=INDOOR?'assets/indoor-hockey-banner-v1-0.png':'assets/field-hockey-banner-v467.png';
+    root.style.display='block';
+    root.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="'+logo+'" alt="Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent v136WeightedReport">'+h+'</div></td></tr></tbody></table>';root.dataset.v504Applied='1';
+    try{root.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}}
+  window.buildWeightedScoreReportV136=buildWeightedReport;
+  function installWeightedReport(){
+    const sel=byId('v471ReportType');if(!sel)return;
+    if(!sel.querySelector('option[value="weighted"]')){const o=document.createElement('option');o.value='weighted';o.textContent='Weighted Score Report';const after=sel.querySelector('option[value="ddd"]');if(after)after.insertAdjacentElement('afterend',o);else sel.appendChild(o)}
+    if(!window.updateV471ReportFields||window.updateV471ReportFields.v136)return;
+    const oldU=window.updateV471ReportFields,oldG=window.generateV471SelectedReport;
+    window.updateV471ReportFields=function(){if(byId('v471ReportType')?.value==='weighted')return wsFields();return oldU.apply(this,arguments)};window.updateV471ReportFields.v136=true;
+    window.generateV471SelectedReport=function(){if(byId('v471ReportType')?.value==='weighted')return buildWeightedReport();return oldG.apply(this,arguments)};
+    REPORT_CONTROLS.push('v136WsStart','v136WsEnd');
+    if(sel.value==='weighted')wsFields()}
+  installWeightedReport();setTimeout(installWeightedReport,800);
 
   window.v134={INDOOR,byId,escHtml,formatOf,currentGoalie,dbRef,asc,desc,reportFilter};
 })();

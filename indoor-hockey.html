@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Indoor Hockey Goalie Stats: Data Driven Development v1.10</title>
+<title>Indoor Hockey Goalie Stats: Data Driven Development v1.11</title>
 <link rel="manifest" href="indoor-hockey.webmanifest">
 <meta name="theme-color" content="#d4e5ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2019,7 +2019,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 <nav id="v570Sidebar" class="tabs noPrint" aria-label="Main navigation">
 <button type="button" id="v570SidebarToggle" class="v570SidebarToggle" aria-expanded="true"><span class="v570Wide">Collapse Menu</span><span class="v570Narrow" aria-hidden="true">›</span></button>
 <button class="tab homeLogoTab active" data-tab="home" data-short="H" aria-label="Home"><span><img src="assets/home-banner-v1-0.png" alt="Home"></span></button><button class="tab" data-tab="match" data-short="NM"><span>New Match</span></button><button class="tab" data-tab="matchEditor" data-short="ME"><span>Match Editor</span></button><button class="tab" data-tab="stats" data-short="S"><span>Stats</span></button><button class="tab" data-tab="heat" data-short="HM"><span>Heat Maps</span></button><button class="tab" data-tab="reports" data-short="R"><span>Reports</span></button><a class="tab v570ExternalTab" href="./index.html#resources" data-short="?"><span>Shared Resources</span></a><a class="dddSidebarReturn" href="./index.html" aria-label="Return to Data Driven Development Home"><img src="assets/ddd-banner-v1-31.png" alt="Data Driven Development Home"></a>
-<div class="v573SidebarMeta"><span class="v573Full">Indoor Hockey Goalie Stats<br>Data Driven Development · Version 1.10</span><span class="v573Compact">v1.10</span></div>
+<div class="v573SidebarMeta"><span class="v573Full">Indoor Hockey Goalie Stats<br>Data Driven Development · Version 1.11</span><span class="v573Compact">v1.11</span></div>
 </nav>
 
 <section id="home" class="panel active">
@@ -2028,8 +2028,8 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
       <img src="assets/indoor-hockey-logo-v1-0.png" alt="Indoor Hockey Goalie Stats" class="homeLogo">
     </div>
     <div class="versionBox">
-      <b>Version 1.10</b>
-      <div class="small">Build Date: 2026-10-25</div>
+      <b>Version 1.11</b>
+      <div class="small">Build Date: 2026-10-27</div>
     </div>
     <div id="homeSummary" class="hiddenHomeSummary"></div>
   </div>
@@ -2147,7 +2147,7 @@ body.v570SidebarCollapsed .homeLogoTab img{display:none}
 </main>
 
 <script>
-const APP_VERSION_566='1.10';
+const APP_VERSION_566='1.11';
 window.APP_VERSION=APP_VERSION_566;
 const STORAGE_KEY='indoorHockeyGoalieStatsV1';
 const SHARED_DIRECTORY_KEY='hockeyGoalieStatsV3';
@@ -2370,7 +2370,8 @@ function clearActiveMatchProgress(){const g=goalie(),m=activeMatch();if(!g||!m){
 
 function shotsFor(ms){return ms.flatMap(m=>m.shots||[])}
 function pct(n,d){return d?Math.round(n/d*100):0}
-function calcStats(ms){const sh=shotsFor(ms),saves=sh.filter(s=>s.outcome==='Save').length,goals=sh.filter(s=>s.outcome==='Goal').length,angles=sh.filter(s=>s.outcome==='Angle Closed Off').length,sot=saves+goals,safe=sh.filter(s=>s.rebound==='Safe').length,danger=sh.filter(s=>s.rebound==='Dangerous').length;const count=t=>sh.filter(s=>s.type===t).length,save=t=>sh.filter(s=>s.type===t&&s.outcome==='Save').length,onT=t=>sh.filter(s=>s.type===t&&(s.outcome==='Save'||s.outcome==='Goal')).length;return {'Games Played':ms.length,'Wins':ms.filter(m=>m.result==='Win').length,'Losses':ms.filter(m=>m.result==='Loss').length,'Draws':ms.filter(m=>m.result==='Draw').length,'Shot Records':sh.length,'Saves':saves,'Goals':goals,'Angle Closed Off':angles,'Save Rate':pct(saves,sot)+'%','1st Shot Save Rate':pct(save('1st Shot'),onT('1st Shot'))+'%','Rebound Save Rate':pct(save('Rebound'),onT('Rebound'))+'%','Penalty Corner Save Rate':pct(save('Penalty Corner'),onT('Penalty Corner'))+'%','Penalty Stroke Save Rate':pct(save('Penalty Stroke'),onT('Penalty Stroke'))+'%','In Game 1v1 Save Rate':pct(save('In Game 1v1'),onT('In Game 1v1'))+'%','6 Second Shoot-out Save Rate':pct(save('6 Second Shoot-out'),onT('6 Second Shoot-out'))+'%','Safe Rebound Rate':pct(safe,safe+danger)+'%','Rate of Attempts at Goals Out Numbered':pct(sh.filter(s=>s.outnumbered&&s.outnumbered!=='1 vs 1').length,sh.length)+'%'}}
+function pctC(n,d){return pct(n,d)+'%'+(d?' ('+n+'/'+d+')':'')}
+function calcStats(ms){const sh=shotsFor(ms),saves=sh.filter(s=>s.outcome==='Save').length,goals=sh.filter(s=>s.outcome==='Goal').length,angles=sh.filter(s=>s.outcome==='Angle Closed Off').length,sot=saves+goals,safe=sh.filter(s=>s.rebound==='Safe').length,danger=sh.filter(s=>s.rebound==='Dangerous').length;const count=t=>sh.filter(s=>s.type===t).length,save=t=>sh.filter(s=>s.type===t&&s.outcome==='Save').length,onT=t=>sh.filter(s=>s.type===t&&(s.outcome==='Save'||s.outcome==='Goal')).length;return {'Games Played':ms.length,'Wins':ms.filter(m=>m.result==='Win').length,'Losses':ms.filter(m=>m.result==='Loss').length,'Draws':ms.filter(m=>m.result==='Draw').length,'Shot Records':sh.length,'Saves':saves,'Goals':goals,'Angle Closed Off':angles,'Save Rate':pctC(saves,sot),'1st Shot Save Rate':pctC(save('1st Shot'),onT('1st Shot')),'Rebound Save Rate':pctC(save('Rebound'),onT('Rebound')),'Penalty Corner Save Rate':pctC(save('Penalty Corner'),onT('Penalty Corner')),'Penalty Stroke Save Rate':pctC(save('Penalty Stroke'),onT('Penalty Stroke')),'In Game 1v1 Save Rate':pctC(save('In Game 1v1'),onT('In Game 1v1')),'6 Second Shoot-out Save Rate':pctC(save('6 Second Shoot-out'),onT('6 Second Shoot-out')),'Safe Rebound Rate':pctC(safe,safe+danger),'Rate of Attempts at Goals Out Numbered':pctC(sh.filter(s=>s.outnumbered&&s.outnumbered!=='1 vs 1').length,sh.length)}}
 function filterMatches(g,period='year',year='',home='All',opp='All'){let ms=allMatches(g);if(period==='match')ms=[matchById(g,statsMatch.value)].filter(Boolean);if(period==='year')ms=ms.filter(m=>yearOf(m)===String(year));if(period==='last5')ms=ms.slice(0,5);if(home&&home!=='All')ms=ms.filter(m=>m.homeTeam===home);if(opp&&opp!=='All')ms=ms.filter(m=>m.opponentTeam===opp);return ms}
 function renderStats(){const g=goalie();if(!g){statsOutput.innerHTML='<p class="muted">No goalie selected.</p>';return}statsMatch.disabled=statsPeriod.value!=='match';statsYear.disabled=statsPeriod.value==='match'||statsPeriod.value==='last5'||statsPeriod.value==='all';const ms=filterMatches(g,statsPeriod.value,statsYear.value,statsHome.value,statsOpp.value);statsOutput.innerHTML='<div class="statgrid">'+statCards(calcStats(ms))+'</div>'+matchTable(ms)}
 function matchTable(ms){return `<h3>Matches</h3><table><tr><th>Date</th><th>Match</th><th>Score</th><th>Result</th></tr>${ms.map(m=>`<tr><td>${esc(m.date)}</td><td>${esc(m.name)}</td><td>${esc(window.v511ReportScore?window.v511ReportScore(m):((m.homeGoals??'')+'-'+(m.oppGoals??'')))}</td><td>${esc(window.v511ReportResult?window.v511ReportResult(m):(m.result||''))}</td></tr>`).join('')}</table>`}
@@ -2872,7 +2873,7 @@ function exportGoaliesTeams(){
   };
 
   // Reports and stats refinements retained in one controller.
-  function pctText(n,d){n=Number(n||0); d=Number(d||0); return d>0?Math.round(n/d*100)+"%":"N/C";}
+  function pctText(n,d){n=Number(n||0); d=Number(d||0); return d>0?Math.round(n/d*100)+"% ("+n+"/"+d+")":"N/C";}
   window.calcStats = function(ms){
     ms=(ms||[]).filter(Boolean);
     const sh=ms.flatMap(m=>shots(m)).map(normalizeShot);
@@ -3474,7 +3475,7 @@ function exportGoaliesTeams(){
 /* Indoor Hockey Goalie Stats v5.23: added reports only */
 (function(){
   function e(v){try{return esc(v)}catch(x){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}}
-  function pctText(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100)+"%":"N/C"}
+  function pctText(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100)+"% ("+n+"/"+d+")":"N/C"}
   function pctNum(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100):0}
   function g(){try{return goalie()}catch(x){return null}}
   function all(gx){try{return allMatches(gx)}catch(x){return (gx?.matches||[]).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')))}}
@@ -3642,7 +3643,7 @@ function out(o){o=String(o||'Save');return /^goal$/i.test(o)?'Goal':(/^angle/i.t
 function normShot(s,m){return Object.assign({},s,{_match:m,outcome:out(s.outcome),type:String(s.type||s.shotType||'1st Shot'),shotSituation:String(s.shotSituation||s.situation||'None'),rebound:String(s.rebound||''),outnumbered:String(s.outnumbered||s.outNumbered||'Not Out Numbered')})}
 function shots(ms){return (ms||[]).reduce(function(a,m){return a.concat(shotList(m).map(function(s){return normShot(s,m)}))},[])}
 function pct(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100):null}
-function pctText(n,d){var v=pct(n,d);return v===null?'N/C':v+'%'}
+function pctText(n,d){var v=pct(n,d);return v===null?'N/C':v+'% ('+Number(n||0)+'/'+Number(d||0)+')'}
 function stats(ms){var a=shots(ms),s=a.filter(function(x){return x.outcome==='Save'}).length,g=a.filter(function(x){return x.outcome==='Goal'}).length,ang=a.filter(function(x){return x.outcome==='Angle Closed Off'}).length;return {records:a.length,saves:s,goals:g,angles:ang,attempts:s+g,savePct:pct(s,s+g),defPct:pct(s+ang,a.length),saveRate:pctText(s,s+g),defenceRate:pctText(s+ang,a.length)}}
 function statHtml(obj){try{return '<div class="statgrid">'+statCards(obj)+'</div>'}catch(x){return '<table>'+Object.entries(obj).map(function(kv){return '<tr><th>'+e(kv[0])+'</th><td>'+e(kv[1])+'</td></tr>'}).join('')+'</table>'}}
 function reportShell(title,g,ms,body){if(!g){alert('Select a goalie.');return}var header=typeof reportHeader==='function'?reportHeader(title,g,(ms||[]).length+' match(es)'):'<h1>'+e(title)+'</h1><p>'+e(g.name||'')+'</p>';reportOutput.style.display='block';reportOutput.innerHTML='<table class="reportPrintTable"><thead class="reportPrintHeader"><tr><td><img class="reportHeaderLogo" src="assets/indoor-hockey-banner-v1-0.png" alt="Indoor Hockey Goalie Stats"></td></tr></thead><tbody class="reportPrintBody"><tr><td><div class="reportMainContent">'+header+body+'</div></td></tr></tbody></table>';showTab('reports')}
@@ -3717,7 +3718,7 @@ function out(o){o=String(o||'Save');return /^goal$/i.test(o)?'Goal':(/^angle/i.t
 function normShot(s,m){return Object.assign({},s,{_match:m,outcome:out(s.outcome),type:String(s.type||s.shotType||'1st Shot'),shotSituation:String(s.shotSituation||s.situation||'None'),rebound:String(s.rebound||''),outnumbered:String(s.outnumbered||s.outNumbered||'Not Out Numbered')})}
 function shots(ms){return (ms||[]).reduce(function(a,m){return a.concat(shotList(m).map(function(s){return normShot(s,m)}))},[])}
 function pct(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100):null}
-function pctText(n,d){var v=pct(n,d);return v===null?'N/C':v+'%'}
+function pctText(n,d){var v=pct(n,d);return v===null?'N/C':v+'% ('+Number(n||0)+'/'+Number(d||0)+')'}
 function pnum(n,d){var v=pct(n,d);return v===null?0:v}
 function stats(ms){var a=shots(ms),s=a.filter(function(x){return x.outcome==='Save'}).length,g=a.filter(function(x){return x.outcome==='Goal'}).length,ang=a.filter(function(x){return x.outcome==='Angle Closed Off'}).length;return {records:a.length,saves:s,goals:g,angles:ang,attempts:s+g,savePct:pct(s,s+g),defPct:pct(s+ang,a.length),saveRate:pctText(s,s+g),defenceRate:pctText(s+ang,a.length)}}
 function statHtml(obj){try{return '<div class="statgrid">'+statCards(obj)+'</div>'}catch(x){return '<table>'+Object.entries(obj).map(function(kv){return '<tr><th>'+e(kv[0])+'</th><td>'+e(kv[1])+'</td></tr>'}).join('')+'</table>'}}
@@ -3941,7 +3942,7 @@ function shotList(m){return Array.isArray(m&&m.shots)?m.shots:[]}
 function normShot(s,m){return Object.assign({},s,{_match:m,outcome:outcome(s.outcome),type:String(s.type||s.shotType||'1st Shot'),shotSituation:situationText(s.shotSituation||s.situation),rebound:reboundText(s.rebound),outnumbered:String(s.outnumbered||s.outNumbered||'Not Out Numbered')})}
 function shots(ms){return (ms||[]).reduce(function(a,m){return a.concat(shotList(m).map(function(s){return normShot(s,m)}))},[])}
 function pct(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100):null}
-function pctText(n,d){var v=pct(n,d);return v===null?'N/C':v+'%'}
+function pctText(n,d){var v=pct(n,d);return v===null?'N/C':v+'% ('+Number(n||0)+'/'+Number(d||0)+')'}
 function pnum(n,d){var v=pct(n,d);return v===null?0:v}
 function stat(ms){var a=shots(ms),s=a.filter(function(x){return x.outcome==='Save'}).length,g=a.filter(function(x){return x.outcome==='Goal'}).length,ang=a.filter(function(x){return x.outcome==='Angle Closed Off'}).length;return {records:a.length,saves:s,goals:g,angles:ang,attempts:s+g,savePct:pct(s,s+g),defPct:pct(s+ang,a.length),saveRate:pctText(s,s+g),defenceRate:pctText(s+ang,a.length)}}
 function statHtml(obj){try{return '<div class="statgrid">'+statCards(obj)+'</div>'}catch(x){return '<table>'+Object.entries(obj).map(function(kv){return '<tr><th>'+esc2(kv[0])+'</th><td>'+esc2(kv[1])+'</td></tr>'}).join('')+'</table>'}}
@@ -4067,7 +4068,7 @@ function canFinalize88(m){
 function stat88(m){
   var so=ensureShootout88(m), opp=so.rounds.map(function(r){return r.opponent}).filter(function(c){return c&&c.result&&c.result!=='Not Taken'});
   var on=opp.filter(function(c){return ['Goal','Save'].includes(c.result)}), saves=opp.filter(function(c){return c.result==='Save'}).length, defended=opp.filter(function(c){return ['Save','Miss / Wide / Out','Time Expired','Forced Wide','Penalty Stroke Saved / Missed'].includes(c.result)}).length;
-  return {attempts:opp.length, saveRate:on.length?Math.round(saves/on.length*100)+'%':'N/C', defenceRate:opp.length?Math.round(defended/opp.length*100)+'%':'N/C'};
+  return {attempts:opp.length, saveRate:on.length?Math.round(saves/on.length*100)+'% ('+saves+'/'+on.length+')':'N/C', defenceRate:opp.length?Math.round(defended/opp.length*100)+'% ('+defended+'/'+opp.length+')':'N/C'};
 }
 function simpleResultOptions88(v){return ['Not Taken','Goal','Save'].map(function(o){return '<option '+(o===v?'selected':'')+'>'+esc88(o)+'</option>'}).join('')}
 function cellHtml88(r,side,i,name){
@@ -5208,7 +5209,7 @@ function group504(items,fn){
   });
   return Object.values(map).sort(function(a,b){return b.records-a.records});
 }
-function pct504(n,d){return d?Math.round(n/d*100)+'%':'N/C'}
+function pct504(n,d){return d?Math.round(n/d*100)+'% ('+n+'/'+d+')':'N/C'}
 function table504(title,rows){
   return '<div class="v470Camera Run v504Breakdown" data-v504-title="'+esc504(title)+'"><h2>'+esc504(title)+'</h2><table><tr><th>Area</th><th>Records</th><th>Saves</th><th>Goals</th><th>Angles</th><th>Save Rate</th><th>Defence Rate</th></tr>'+
     rows.map(function(r){return '<tr><td>'+esc504(r.name)+'</td><td>'+r.records+'</td><td>'+r.saves+'</td><td>'+r.goals+'</td><td>'+r.angles+'</td><td>'+pct504(r.saves,r.saves+r.goals)+'</td><td>'+pct504(r.saves+r.angles,r.records)+'</td></tr>'}).join('')+
@@ -5287,7 +5288,7 @@ const REB_ORDER_506=["No rebound","Safe","Dangerous"];
 let oldBasePitch506=null,oldBaseGoal506=null;
 function by506(id){return document.getElementById(id)}
 function esc506(v){try{return window.esc(v)}catch(e){return String(v??'').replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]||c})}}
-function pct506(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100)+"%":"N/C"}
+function pct506(n,d){n=Number(n||0);d=Number(d||0);return d>0?Math.round(n/d*100)+"% ("+n+"/"+d+")":"N/C"}
 function normOutcome506(v){v=String(v||'Save');return /^goal$/i.test(v)?'Goal':(/^angle/i.test(v)?'Angle Closed Off':'Save')}
 function normSit506(v){v=String(v||'').trim();if(!v||/^none$/i.test(v)||/^normal gameplay$/i.test(v)||/^normal game play$/i.test(v))return 'Normal Game Play';if(/^penalty corner$/i.test(v))return 'Penalty Corner';if(/^penalty stroke$/i.test(v))return 'Penalty Stroke';if(/^8\s*second\s*1v1$/i.test(v)||/^8 second 1v1$/i.test(v))return '6 Second Shoot-out';return 'Normal Game Play'}
 function normType506(v){v=String(v||'').trim();if(/^rebound$/i.test(v))return 'Rebound';if(/^(?:deflection\s*\/\s*tip\s*in|deflection|tip[- ]?in)$/i.test(v))return 'Deflection/Tip in';if(/^in game 1v1$/i.test(v)||/^in-game 1v1$/i.test(v))return 'In Game 1v1';if(/^own goal$/i.test(v))return 'Own Goal';if(/^other$/i.test(v))return 'Other';if(/^1st shot$/i.test(v)||/^first shot$/i.test(v)||!v)return '1st Shot';return 'Other'}
@@ -5983,7 +5984,7 @@ function replaceGenericTimelines517(root,ms){
     if(heat)heat.insertAdjacentHTML('afterend',html);else content.insertAdjacentHTML('beforeend',html);
   }
 }
-function percent517(n,d){return d?Math.round(n/d*100)+'%':'N/C'}
+function percent517(n,d){return d?Math.round(n/d*100)+'% ('+n+'/'+d+')':'N/C'}
 function alternateRates517(ctx){const shots=ctx.otherShots||[],goals=shots.filter(s=>normOutcome517(s.outcome)==='Goal').length,saves=shots.filter(s=>normOutcome517(s.outcome)==='Save').length,angles=shots.filter(s=>normOutcome517(s.outcome)==='Angle Closed Off').length;return {save:percent517(saves,saves+goals),defence:percent517(saves+angles,shots.length)}}
 function decorateTwoGoalieReports517(){const root=by517('reportOutput');if(!root||!root.innerHTML)return;root.querySelectorAll('.v589TwoGoalieSummary').forEach(el=>el.remove());const rows=selectedMatches517().map(m=>({m:m,ctx:twoGoalieContext517(m)})).filter(x=>x.ctx.isMulti);if(!rows.length)return;const section='<section class="v589TwoGoalieSummary reportPageBreakAvoid"><h2>Multiple-Goalie Matches</h2><p class="muted">The selected goalie is shown as the Primary Goalie. Only the Alternate Goalie’s save rate and defence rate are included.</p><div class="tableWrap"><table><thead><tr><th>Match</th><th>Primary Goalie</th><th>Alternate Goalie</th><th>Alternate Save Rate</th><th>Alternate Defence Rate</th></tr></thead><tbody>'+rows.map(x=>{const r=alternateRates517(x.ctx);return '<tr><td>'+esc517(matchName517(x.m))+'</td><td>'+esc517(x.ctx.selectedName)+'</td><td>'+esc517(x.ctx.otherName)+'</td><td>'+r.save+'</td><td>'+r.defence+'</td></tr>'}).join('')+'</tbody></table></div></section>';const content=root.querySelector('.reportMainContent')||root;const firstTimeline=content.querySelector('.v517TimelineBlock,.reportHeatMapPage');if(firstTimeline)firstTimeline.insertAdjacentHTML('beforebegin',section);else content.insertAdjacentHTML('beforeend',section)}
 function shootoutTaken590(cell){return !!(cell&&cell.result&&cell.result!=='Not Taken')}
@@ -6040,7 +6041,7 @@ function preparePrintTables591(){
     table.createTHead().appendChild(first);
   });
 }
-function run517(){installReportStyles589();fixHeatMapNumbers517();fixTimelines517();decorateTwoGoalieReports517();decorateShootoutReports590();fixHeatMapNumbers517();preparePrintTables591();}
+function run517(){if(document.querySelector('#reportOutput .v136WeightedReport'))return;installReportStyles589();fixHeatMapNumbers517();fixTimelines517();decorateTwoGoalieReports517();decorateShootoutReports590();fixHeatMapNumbers517();preparePrintTables591();}
 function schedule517(){[80,250,700,1300,2200,3500].forEach(ms=>setTimeout(run517,ms));}
 ['generateV471SelectedReport','buildIndividualMatchReportV470','buildFiveReport','buildYearReport','buildGoalieDevelopmentReportV470','buildOpponentAnalysisReportV470','buildTeamReportV470','buildShotSituationReportV470','buildPeriodReportV470','buildTrainingFocusReportV470','v506BuildDataDrivenDevelopmentReport','buildDataDrivenDevelopmentReportV471'].forEach(name=>{const old=window[name];if(typeof old==='function'&&!old.v517){const fn=function(){const r=old.apply(this,arguments);schedule517();return r};fn.v517=true;window[name]=fn;}});
 document.addEventListener('click',function(ev){if(ev.target&&/Generate Report|View Report|Print Report/i.test(ev.target.textContent||''))schedule517();},true);

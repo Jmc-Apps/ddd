@@ -1,9 +1,27 @@
-Data Driven Development Suite v1.35
-Field Hockey Goalie Stats v5.114
-Indoor Hockey Goalie Stats v1.10
-Hockey Goalie Trials v1.28
+Data Driven Development Suite v1.36
+Field Hockey Goalie Stats v5.115
+Indoor Hockey Goalie Stats v1.11
+Hockey Goalie Trials v1.29
 Stats Recorder v1.45
 Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.36 / Field v5.115 / Indoor v1.11 / Trials v1.29 / Recorder v1.45 adds weighted scores, a Weighted Score report, shot counts beside every percentage and the updated theory document.
+
+Weighted scores (Data Driven Development Theory; Myers and Daly 2022)
+- Each attempt gets an adjustment: distance zone (0.3 / 0.6 / 0.9) x angle zone (0.3 / 0.6 / 0.9) x goal placement zone (0.5 / 0.7 / 0.9). Deflection or tip-in x 0.45. Penalty stroke uses 0.12 in place of distance and angle.
+- A save scores 1 - adjustment, a goal scores - adjustment. 0% means as expected for the attempts faced.
+- Save Rate Weighted Score: saves and goals. Defence Rate Weighted Score: also counts Angles Closed Off, weighted by distance and angle only (no goal placement) and scored like a save.
+- Records without the heat map placements they need are left out and counted ("18 of 20 shots placed"). Own goals and empty-goal events are left out.
+- Both scores appear beside Save Rate and Defence Rate on the Stats tab and in every report summary (Field and Indoor).
+
+Weighted Score Report (new report type)
+- Pick a first and last match. Summary, weighted scores by match graph, match-by-match table, and breakdowns by difficulty, distance, angle, placement, shot situation and shot type, with coaching notes and the method.
+
+Shot counts
+- Every percentage now shows its count, for example Save Rate 69% (80/116) and Defence Rate 73% (96/132), across the Stats tab, reports, coaching insights, the start screen and Trials.
+
+Resources
+- Data Driven Development Theory replaced with the updated document (weighted score section), compressed from 34 MB to 4.3 MB.
 
 Version 1.35 / Field v5.114 / Indoor v1.10 / Trials v1.28 / Recorder v1.45 records rebounds for every save, highlights low coaching ratings and adds coaching insights to the Training Focus report.
 

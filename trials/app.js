@@ -75,7 +75,7 @@
   // A rate with nothing to divide by is N/C, never 0.0%.
   // Equal overall scores (to one decimal place) share a rank, shown as =2, =2, 4.
   const rankLabels = (list,offset=0) => { const out=[]; let rank=offset; list.forEach((r,i)=>{ const sc=Number(r.score||0).toFixed(1), prev=i?Number(list[i-1].score||0).toFixed(1):null; if(prev!==sc) rank=offset+i+1; out.push({rank,sc}); }); return out.map((x,i)=>{ const tied=out.some((y,j)=>j!==i&&y.rank===x.rank); return (tied?'=':'')+x.rank; }); };
-  const pctOf = (st,key) => { if(!st) return 'N/C'; const base = key==='saveRate' ? (Number(st.saves)||0)+(Number(st.goals)||0) : (Number(st.attempts)||((Number(st.saves)||0)+(Number(st.goals)||0)+(Number(st.aco)||0))); return base ? pct(st[key]) : 'N/C'; };
+  const pctOf = (st,key) => { if(!st) return 'N/C'; const base = key==='saveRate' ? (Number(st.saves)||0)+(Number(st.goals)||0) : (Number(st.attempts)||((Number(st.saves)||0)+(Number(st.goals)||0)+(Number(st.aco)||0))); const num = key==='saveRate' ? (Number(st.saves)||0) : (Number(st.saves)||0)+(Number(st.aco)||0); return base ? `${pct(st[key])} (${num}/${base})` : 'N/C'; };
   const average = values => values.length ? values.reduce((a,b)=>a+b,0)/values.length : 0;
 
   function videoHandleDb(){if(!('indexedDB' in window))return Promise.reject(new Error('IndexedDB is unavailable.'));if(videoHandleDbPromise)return videoHandleDbPromise;videoHandleDbPromise=new Promise((resolve,reject)=>{const request=indexedDB.open(VIDEO_HANDLE_DB,1);request.onupgradeneeded=()=>request.result.createObjectStore(VIDEO_HANDLE_STORE);request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});return videoHandleDbPromise;}
@@ -338,7 +338,7 @@
     const all = getEvents();
     const saves = all.filter(e=>e.outcome==='Save').length, goals=all.filter(e=>e.outcome==='Goal').length, aco=all.filter(e=>e.outcome==='Angle Closed Off').length;
     const metrics = [
-      ['Roster',state.goalies.length,'goalkeepers'],['Scheduled',state.drills.length,'trial sections'],['Recorded',all.length,'total attempts'],['Defence rate',all.length?pct((saves+aco)/all.length*100):'N/C','combined trial']
+      ['Roster',state.goalies.length,'goalkeepers'],['Scheduled',state.drills.length,'trial sections'],['Recorded',all.length,'total attempts'],['Defence rate',all.length?`${pct((saves+aco)/all.length*100)} (${saves+aco}/${all.length})`:'N/C','combined trial']
     ];
     $('dashboardMetrics').innerHTML = metrics.map(m=>`<article class="metric-card"><span class="metric-label">${m[0]}</span><strong class="metric-value">${m[1]}</strong><span class="metric-sub">${m[2]}</span></article>`).join('');
     $('setupNotice').classList.toggle('hidden',trialReady());
