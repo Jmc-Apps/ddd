@@ -940,6 +940,17 @@
   function reportResults(){const finalDay=state.days.at(-1),progress=finalDay&&state.progressions[finalDay.id],finalConfirmed=Boolean(progress?.final&&progress?.confirmed);if(!finalConfirmed)return allReportResults();const statuses=finalStatusMap(progress);return allReportResults().filter(item=>['selected','reserve','non_travelling_reserve'].includes(statuses[item.goalie.id]))}
   function reportHeader(title){return `<div class="report-brand"><img src="assets/trials-banner-v1-26.png" alt=""><span>${esc(state.trial.name||'Goalkeeper Trial')}<br>${esc(state.trial.team||'Team not set')}<br>${new Date().toLocaleDateString()}</span></div><h2 class="report-title">${esc(title)}</h2><p class="report-subtitle">${esc(state.trial.gender)} · ${esc(state.trial.ageGroup)} · ${esc(state.trial.level)} · ${esc(state.trial.tier)}</p>`}
 
+  // Browsers use the page title as the saved PDF's file name.
+  let savedPageTitle=null;
+  function reportFileName(){
+    const clean=v=>String(v||'').replace(/[\\/:*?"<>|#%]+/g,'-').replace(/\s+/g,' ').trim();
+    const trial=state.trial.name||'Goalkeeper Trial',date=new Date().toISOString().slice(0,10),feedback=$('reportType')?.value==='feedback';
+    const goalie=feedback?state.goalies.find(g=>g.id===$('reportGoalie')?.value)?.name:'';
+    return clean([trial,feedback?'Individual Feedback':'Goalkeeper Selection Report',goalie,date].filter(Boolean).join(' - ')).slice(0,150);
+  }
+  function applyReportFileName(){if(currentPage!=='reports')return;if(savedPageTitle===null)savedPageTitle=document.title;document.title=reportFileName()}
+  function restoreReportFileName(){if(savedPageTitle!==null){document.title=savedPageTitle;savedPageTitle=null}}
+  function printReportNamed(){applyReportFileName();window.print()}
   function renderReport(){
     const results=reportResults(),allResults=allReportResults(),selected=$('reportGoalie').value||allResults[0]?.goalie.id||'',individual=$('reportType').value==='feedback';$('reportGoalie').innerHTML=optionList(state.goalies,selected);$('reportGoalieWrap').classList.toggle('hidden',!individual);$('reportNotesLabel').textContent=individual?'Selectors’ feedback':'Selector notes and decision evidence';$('reportNotes').placeholder=individual?'Add feedback for this goalkeeper...':'Add the selectors’ observations, context and final reasoning...';$('reportNotes').value=individual?(state.feedbackNotes?.[$('reportGoalie').value]||''):state.reportNotes;
     $('reportCanvas').innerHTML=$('reportType').value==='feedback'?feedbackReport(allResults.find(r=>r.goalie.id===$('reportGoalie').value)||allResults[0]):selectionReport(results);
@@ -1051,7 +1062,7 @@
     ['compareDay','compareDrill','compareShot','compareSituation'].forEach(id=>$(id).addEventListener('change',renderComparison));
     $('reportType').addEventListener('change',renderReport);$('reportGoalie').addEventListener('change',renderReport);
     $('reportNotes').addEventListener('input',()=>{if($('reportType').value==='feedback'){const goalieId=$('reportGoalie').value;if(goalieId){state.feedbackNotes=state.feedbackNotes||{};state.feedbackNotes[goalieId]=$('reportNotes').value;}}else state.reportNotes=$('reportNotes').value;saveState();$('reportCanvas').innerHTML=$('reportType').value==='feedback'?feedbackReport(allReportResults().find(r=>r.goalie.id===$('reportGoalie').value)):selectionReport(reportResults());});
-    $('printReport').addEventListener('click',()=>window.print());
+    $('printReport').addEventListener('click',printReportNamed);addEventListener('beforeprint',applyReportFileName);addEventListener('afterprint',restoreReportFileName);
     window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;$('installButton').classList.remove('hidden');});
     $('installButton').addEventListener('click',async()=>{if(!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;$('installButton').classList.add('hidden');});
     window.addEventListener('beforeunload',stopAllRunningTimers);

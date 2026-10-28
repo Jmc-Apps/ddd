@@ -1,9 +1,16 @@
-Data Driven Development Suite v1.42
-Field Hockey Goalie Stats v5.120
-Indoor Hockey Goalie Stats v1.16
-Hockey Goalie Trials v1.30
+Data Driven Development Suite v1.43
+Field Hockey Goalie Stats v5.121
+Indoor Hockey Goalie Stats v1.17
+Hockey Goalie Trials v1.31
 Stats Recorder v1.45
 Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.43 / Field v5.121 / Indoor v1.17 / Trials v1.31 names saved report PDFs.
+
+Report PDF file names
+- Field and Indoor: goalkeeper - report - match or date range, for example "Test Keeper - 5 Game Report - 2026-03-13 to 2026-04-17".
+- Trials: trial - report type - goalkeeper (individual feedback) - date, for example "Test Trial - Goalkeeper Selection Report - 2026-10-28".
+- Works from the Print / Save PDF button and from the browser's own print command. Safari on iPhone and iPad may still use its own name.
 
 Version 1.42 / Trials v1.30 adds heat map placements, xSD, xDD and the Trial Score to Hockey Goalie Trials.
 

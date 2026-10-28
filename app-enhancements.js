@@ -503,5 +503,23 @@
     if(sel.value==='weighted')wsFields()}
   installWeightedReport();setTimeout(installWeightedReport,800);
 
+  /* ---------- 10. Name saved PDFs after the report (browsers use the page title as the file name) ---------- */
+  const pdfClean=v=>String(v||'').replace(/[\\/:*?"<>|#%]+/g,'-').replace(/\s+/g,' ').trim().slice(0,150);
+  function reportFileName(){
+    const root=byId('reportOutput');if(!root||!root.innerHTML.trim())return null;
+    const tab=byId('reports');if(tab&&!tab.classList.contains('active')&&getComputedStyle(tab).display==='none')return null;
+    const title=(root.querySelector('h1')?.textContent||'Report').trim(),g=currentGoalie(),type=byId('v471ReportType')?.value||'';
+    let ms=[];try{ms=type==='weighted'?wsMatchRange(g):reportMatchesNow(type,g)}catch(e){}
+    ms=(ms||[]).slice().sort(asc);let detail='';
+    if(ms.length===1){const m=ms[0];detail=dateOf(m)+' vs '+(m.opponentTeam||m.opponent||'')}else if(ms.length>1)detail=dateOf(ms[0])+' to '+dateOf(ms[ms.length-1]);
+    return pdfClean([g&&g.name,title,detail].filter(Boolean).join(' - '));
+  }
+  let pdfSavedTitle=null;
+  function applyPdfName(){const n=reportFileName();if(!n)return;if(pdfSavedTitle===null)pdfSavedTitle=document.title;document.title=n}
+  function restorePdfName(){if(pdfSavedTitle!==null){document.title=pdfSavedTitle;pdfSavedTitle=null}}
+  addEventListener('beforeprint',applyPdfName);addEventListener('afterprint',restorePdfName);
+  if(typeof window.printCurrentReport==='function'&&!window.printCurrentReport.v136){const oldPrint=window.printCurrentReport;window.printCurrentReport=function(){applyPdfName();return oldPrint.apply(this,arguments)};window.printCurrentReport.v136=true}
+  window.v136ReportFileName=reportFileName;
+
   window.v134={INDOOR,byId,escHtml,formatOf,currentGoalie,dbRef,asc,desc,reportFilter};
 })();
