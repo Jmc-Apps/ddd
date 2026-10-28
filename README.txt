@@ -1,9 +1,20 @@
-Data Driven Development Suite v1.39
-Field Hockey Goalie Stats v5.118
-Indoor Hockey Goalie Stats v1.14
+Data Driven Development Suite v1.40
+Field Hockey Goalie Stats v5.119
+Indoor Hockey Goalie Stats v1.15
 Hockey Goalie Trials v1.29
 Stats Recorder v1.45
 Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.40 / Field v5.119 / Indoor v1.15 adds the rebound adjustment to xSD and xDD.
+
+Rebound adjustment
+- Shots with the shot type Rebound have their chance of a save multiplied by 0.80 (Macdonald, Lennon and Sturdivant 2012: about 1.73 times the odds of a goal at the same distance and angle).
+- Every factor that applies to a shot is multiplied in: distance x angle x placement x outnumbered x rebound x deflection. Example: an ordinary shot (0.69) as a rebound while 3 vs 1 is 0.69 x 0.80 x 0.65 = 0.36.
+- Angles Closed Off use distance x angle with any outnumbered or rebound adjustment (no placement). Penalty strokes use 0.25 x placement only.
+- Report text updated to describe the rebound adjustment and multiple factors.
+
+Resources
+- Data Driven Development Theory updated with the rebound section and compressed diagrams (4.4 MB).
 
 Version 1.39 / Field v5.118 / Indoor v1.14 renames the weighted scores to xSD and xDD and adds the outnumbered adjustment.
 
