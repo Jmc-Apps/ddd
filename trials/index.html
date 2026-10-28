@@ -9,7 +9,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icon-192-v1-26.png">
   <link rel="apple-touch-icon" href="assets/icon-192-v1-26.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=1.30">
 </head>
 <body>
   <header class="app-header">
@@ -34,7 +34,7 @@
         <button class="nav-button" data-page="reports"><span>▤</span>Selection Report</button>
       </nav>
       <a class="ddd-sidebar-return" href="../index.html" aria-label="Return to Data Driven Development Home"><img src="../assets/ddd-banner-v1-31.png" alt="Data Driven Development Home"></a>
-      <div class="sidebar-footer">Version 1.29<br><span>Data Driven Development</span></div>
+      <div class="sidebar-footer">Version 1.30<br><span>Data Driven Development</span></div>
     </aside>
 
     <main id="mainContent" class="main-content">
@@ -363,6 +363,7 @@
         <label class="field"><span>Shot situation</span><select id="editShotSituation"></select><small id="editShotSituationHelp" class="muted"></small></label>
         <label class="field"><span>Out numbered</span><select id="editShotOutnumbered"></select></label>
         <label class="field"><span>Rebound result</span><select id="editShotRebound"></select></label>
+        <div id="editShotPlacement" class="span-2"></div>
         <label class="field span-2"><span>Notes</span><textarea id="editShotNote" rows="3"></textarea></label>
       </div>
       <div class="modal-actions"><button type="button" class="button ghost" data-close-dialog>Cancel</button><button type="submit" class="button primary">Save Shot Changes</button></div>
@@ -379,6 +380,6 @@
   </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js"></script>
+  <script src="app.js?v=1.30"></script>
 </body>
 </html>

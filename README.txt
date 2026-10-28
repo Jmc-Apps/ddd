@@ -1,9 +1,29 @@
-Data Driven Development Suite v1.41
+Data Driven Development Suite v1.42
 Field Hockey Goalie Stats v5.120
 Indoor Hockey Goalie Stats v1.16
-Hockey Goalie Trials v1.29
+Hockey Goalie Trials v1.30
 Stats Recorder v1.45
 Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.42 / Trials v1.30 adds heat map placements, xSD, xDD and the Trial Score to Hockey Goalie Trials.
+
+Recording
+- Trial Recording and Video Review have a D map and goal box map for each attempt: tap where it was taken and where it reached the goal. Placements are optional; attempts saved without them are left out of xSD and xDD.
+- Penalty Stroke sections place the attempt on the penalty spot automatically. The goal box map is greyed out for an angle closed off.
+- The shot editor shows both maps so placements can be added or corrected later.
+
+Trial Score
+- Trial Score = ((Save Rate + xSD) + (Defence Rate + xDD)) / 2, using the same weights as Field Hockey Goalie Stats (distance, angle, placement, rebound, deflection, In Game 1v1, 8 Second 1v1, outnumbered, penalty stroke, minimum 0.05).
+- The ranking and overall score now use the Trial Score in place of Defence Rate. The ratings influence slider works as before: at 100% ratings count the same as the Trial Score.
+- Comparison, Promotion / Selection and the stats tables show xSD, xDD and the Trial Score.
+
+Selection Report and individual feedback
+- Provisional ranking: Save rate, xSD, Defence, xDD, Trial Score, ratings, overall score and Rank on Defence, with the formula explained.
+- New sections: Difficulty faced (with an unequal-difficulty flag), By trial section (save rate and xSD), Saves by difficulty, and Placements coverage.
+- Individual feedback adds xSD, xDD, Trial Score with rank, saves above expected, D and goal box heat maps, and xSD by section against the trial average.
+
+Platform
+- Trials code files are versioned so updates take effect on the first open.
 
 Version 1.41 / Field v5.120 / Indoor v1.16 adds the remaining shot type and situation adjustments to xSD and xDD.
 
