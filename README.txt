@@ -1,9 +1,33 @@
-Data Driven Development Suite v1.37
-Field Hockey Goalie Stats v5.116
-Indoor Hockey Goalie Stats v1.12
+Data Driven Development Suite v1.39
+Field Hockey Goalie Stats v5.118
+Indoor Hockey Goalie Stats v1.14
 Hockey Goalie Trials v1.29
 Stats Recorder v1.45
 Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.39 / Field v5.118 / Indoor v1.14 renames the weighted scores to xSD and xDD and adds the outnumbered adjustment.
+
+Expected Save Differential (xSD) and Expected Defence Differential (xDD)
+- The Save Rate and Defence Rate Weighted Scores are now called Expected Save Differential (xSD) and Expected Defence Differential (xDD), matching the theory document. Cards on the Stats tab and in every report summary use the new names.
+- The Weighted Score Report is now the Expected Differential Report (xSD / xDD).
+
+Outnumbered adjustment
+- When the goalkeeper is outnumbered the chance of a save is multiplied by 0.70 (2 vs 1), 0.65 (3 vs 1) or 0.60 (4+ vs 1; Indoor 4 vs 1 and 5 vs 1 also use 0.60).
+- Applies to saves, goals and Angles Closed Off. Penalty strokes are not adjusted. Empty-goal events stay excluded.
+- The Expected Differential Report has a new Outnumbered table (records, save rate, xSD, defence rate, xDD).
+
+Other
+- The Training Focus coaching insight refers to the benchmark save rate for the level.
+- Data Driven Development Theory updated (outnumbered adjustments, xSD and xDD).
+
+Version 1.38 / Field v5.117 / Indoor v1.13 makes updates take effect on the first open.
+
+Updates
+- After an update, the first open could show the new version number but still run the previous calculation code until the app was reloaded (a v1.37 Weighted Score Report showed the old weights this way).
+- The app's code files are now loaded with the version number attached (for example app-enhancements.js?v=1.38), and the offline copy always downloads fresh files when a new version installs. The new code runs on the first open.
+
+Weighted Score Report
+- Coaching notes read correctly for one or several items ("1 save was made on a difficult shot... This lifts...").
 
 Version 1.37 / Field v5.116 / Indoor v1.12 recalibrates the weighted scores and fixes the Weighted Score Report.
 
