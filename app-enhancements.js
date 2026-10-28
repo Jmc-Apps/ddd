@@ -177,7 +177,7 @@
     const home=byId('home');if(!home)return;let box=byId('v134Start');
     if(!box){box=document.createElement('div');box.id='v134Start';box.className='card v134Start';home.insertBefore(box,home.firstElementChild)}
     const list=goalies(),g=currentGoalie();
-    if(!list.length){box.innerHTML='<h2>Get started</h2><p>No goalkeepers yet. Goalkeepers and their teams are added once, on the Data Driven Development platform, and then appear here.</p><div class="v134Row"><a class="btn good v134Big" href="index.html#goalies">Enrol a goalkeeper</a></div>';return}
+    if(!list.length){box.dataset.v136Html='';box.innerHTML='<h2>Get started</h2><p>No goalkeepers yet. Goalkeepers and their teams are added once, on the Data Driven Development platform, and then appear here.</p><div class="v134Row"><a class="btn good v134Big" href="index.html#goalies">Enrol a goalkeeper</a></div>';return}
     const opts=list.map(x=>'<option value="'+escHtml(x.id)+'"'+(g&&String(g.id)===String(x.id)?' selected':'')+'>'+escHtml(x.name||'Unnamed goalie')+'</option>').join('');
     const ms=(g&&g.matches||[]).slice().sort(desc),draft=(()=>{try{const a=activeMatch();if(a&&g.matches.includes(a))return a}catch(e){}return ms.find(m=>m.matchStatus==='draft')})();
     const teams=g?teamsForSport(g):[];
@@ -186,8 +186,11 @@
     html+='<div class="v134Row">'+(draft?'<button type="button" class="btn good v134Big" data-v134-resume="'+escHtml(draft.id)+'">Resume match: '+escHtml(draft.name||((draft.homeTeam||'')+' vs '+(draft.opponentTeam||'')))+'</button>':'')+'<button type="button" class="btn '+(draft?'':'good v134Big')+'" data-v134-go="match">New Match</button><button type="button" class="btn" data-v134-go="stats">Stats</button><button type="button" class="btn" data-v134-go="reports">Reports</button></div>';
     const recent=ms.filter(m=>m!==draft).slice(0,3);
     html+=recent.length?'<b>Recent matches</b><ul class="v134Recent">'+recent.map(m=>'<li><span>'+escHtml(m.date||'')+' · '+escHtml((m.homeTeam||'')+' vs '+(m.opponentTeam||m.opponent||''))+'</span><span>Save rate '+matchRates(m).save+'</span></li>').join('')+'</ul>':'<p class="small">No matches recorded yet for this goalkeeper. Press New Match to record the first one.</p>';
-    box.innerHTML=html;
-    byId('v134StartGoalie')?.addEventListener('change',e=>setGoalie(e.target.value));
+    // Rebuilding while the goalkeeper list is open closes it, so only rebuild when something changed and the list is not in use.
+    if(box.dataset.v136Html===html&&box.innerHTML)return;
+    if(document.activeElement&&document.activeElement.id==='v134StartGoalie'&&box.dataset.v136Html)return;
+    box.dataset.v136Html=html;box.innerHTML=html;
+    byId('v134StartGoalie')?.addEventListener('change',e=>{box.dataset.v136Html='';setGoalie(e.target.value);e.target.blur()});
     box.querySelectorAll('[data-v134-go]').forEach(b=>b.addEventListener('click',()=>{try{showTab(b.dataset.v134Go)}catch(e){}}));
     box.querySelector('[data-v134-resume]')?.addEventListener('click',e=>{try{activeMatchId=e.currentTarget.dataset.v134Resume;db.activeMatchId=activeMatchId;saveDB();renderAll()}catch(x){}try{showTab('match')}catch(x){}});
   }

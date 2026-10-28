@@ -1,9 +1,13 @@
-Data Driven Development Suite v1.43
-Field Hockey Goalie Stats v5.121
-Indoor Hockey Goalie Stats v1.17
+Data Driven Development Suite v1.44
+Field Hockey Goalie Stats v5.122
+Indoor Hockey Goalie Stats v1.18
 Hockey Goalie Trials v1.31
 Stats Recorder v1.45
 Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.44 / Field v5.122 / Indoor v1.18 fixes the goalkeeper list on the start screen.
+
+- The start screen kept rebuilding itself (the small save-rate counts set off another rebuild each time), which closed the goalkeeper drop-down as soon as it opened. It now only rebuilds when something changes, and never while the list is in use.
 
 Version 1.43 / Field v5.121 / Indoor v1.17 / Trials v1.31 names saved report PDFs.
 
