@@ -1,9 +1,24 @@
-Data Driven Development Suite v1.40
-Field Hockey Goalie Stats v5.119
-Indoor Hockey Goalie Stats v1.15
+Data Driven Development Suite v1.41
+Field Hockey Goalie Stats v5.120
+Indoor Hockey Goalie Stats v1.16
 Hockey Goalie Trials v1.29
 Stats Recorder v1.45
 Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.41 / Field v5.120 / Indoor v1.16 adds the remaining shot type and situation adjustments to xSD and xDD.
+
+New adjustments (from the updated theory document)
+- In Game 1v1 (shot type) x 0.70. If it is also recorded as outnumbered, both apply.
+- 8 Second 1v1 (Field) / 6 Second Shoot-out (Indoor) x 0.60, on top of distance, angle and placement.
+- Penalty Corner x 1.00 (no extra adjustment; Myers and Daly found it not significant once distance, angle and shot type are included).
+- Minimum adjustment 0.05: no attempt can fall below a 5% chance of a save.
+- All factors that apply are multiplied together, for saves, goals and Angles Closed Off (no placement for Angles Closed Off). Penalty stroke stays 0.25 x placement.
+
+Platform
+- The platform Reports page now has an Expected Differential Report button for Field and Indoor.
+
+Resources
+- Data Driven Development Theory updated with the new shot type and situation adjustments.
 
 Version 1.40 / Field v5.119 / Indoor v1.15 adds the rebound adjustment to xSD and xDD.
 
