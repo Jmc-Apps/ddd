@@ -322,7 +322,7 @@
 
   // Keep everything current as the app re-renders.
   let pending=0;
-  function refreshUi(){pending=0;try{updateRebounds()}catch(e){}try{updateLock()}catch(e){}try{updateReadiness()}catch(e){}try{explainLocks()}catch(e){}try{legendToggles()}catch(e){}try{linkLabels()}catch(e){}try{placeWeighted()}catch(e){}try{styleCounts()}catch(e){}try{if(byId('home')?.classList.contains('active'))renderStart()}catch(e){}}
+  function refreshUi(){pending=0;try{updateRebounds()}catch(e){}try{updateLock()}catch(e){}try{updateReadiness()}catch(e){}try{explainLocks()}catch(e){}try{legendToggles()}catch(e){}try{linkLabels()}catch(e){}try{placeWeighted()}catch(e){}try{orderMatchSummary()}catch(e){}try{addXColumns()}catch(e){}try{addDevelopmentX()}catch(e){}try{styleCounts()}catch(e){}try{if(byId('home')?.classList.contains('active'))renderStart()}catch(e){}}
   function schedule(){if(!pending)pending=setTimeout(refreshUi,120)}
   new MutationObserver(muts=>{if(muts.some(m=>!(m.target.closest&&m.target.closest('#v134Start,#v134Notice,#v134Ready,#videoReview'))))schedule()}).observe(document.body,{childList:true,subtree:true});
   document.addEventListener('change',e=>{if(e.target?.closest?.('#match'))schedule()},true);
@@ -389,21 +389,89 @@
 
   // Reports: add both weighted score cards after Save Rate / Defence Rate in the summary.
   function reportMatchesNow(type,g){try{if(typeof window.v517SelectedReportMatches==='function'){const m=window.v517SelectedReportMatches();if(Array.isArray(m)&&m.length)return m}}catch(e){}return reportMatchesFor(type,g)}
-  const cardLabel=c=>((c.querySelector('span')||c.querySelector('b')||{}).textContent||'').trim();
+  const cardLabel=c=>((c.querySelector(':scope > span:not(.v136Cnt)')||c.querySelector(':scope > b')||{}).textContent||'').trim();
   function addWeightedCard(root,ms){
     if(root.querySelector('[data-v136-weighted]'))return;
+    if([...root.querySelectorAll('.stat')].some(c=>cardLabel(c)===WS_LABEL.save))return;
     const cards=[...root.querySelectorAll('.stat')];const save=cards.find(c=>/^save rate$/i.test(cardLabel(c)));if(!save)return;
     const def=cards.find(c=>/^defence rate$/i.test(cardLabel(c)));let at=def&&def.parentElement===save.parentElement?def:save;
     const sh=wsShotsOf(ms);
     ['save','defence'].forEach(mode=>{const r=wsSummary(sh,mode),card=save.cloneNode(true);card.setAttribute('data-v136-weighted',mode);card.classList.remove('v514RateStat');
-      const span=card.querySelector('span'),b=card.querySelector('b');
+      card.querySelectorAll('.v136Cnt').forEach(x=>x.remove());const span=card.querySelector(':scope > span'),b=card.querySelector(':scope > b');
       if(span&&b){b.textContent=wsFmt(r);span.textContent=WS_LABEL[mode]}else if(b){b.textContent=WS_LABEL[mode];[...card.childNodes].filter(n=>n.nodeType===3).forEach(n=>n.remove());card.appendChild(document.createTextNode(wsFmt(r)))}
       card.title=wsTitle[mode];const small=document.createElement('small');small.className='v136WsNote';small.textContent=wsNoteTxt(r);card.appendChild(small);
       at.insertAdjacentElement('afterend',card);at=card})}
-  function placeWeighted(){const root=byId('statsOutput');if(root){const cards=[...root.querySelectorAll('.stat')],lab=c=>((c.querySelector('span')||{}).textContent||'').trim();let at=cards.find(c=>lab(c)==='Defence Rate');
+  function placeWeighted(){const root=byId('statsOutput');if(root){const cards=[...root.querySelectorAll('.stat')],lab=c=>((c.querySelector(':scope > span:not(.v136Cnt)')||{}).textContent||'').trim();let at=cards.find(c=>lab(c)==='Defence Rate');
       ['save','defence'].forEach(mode=>{const w=cards.find(c=>lab(c)===WS_LABEL[mode]);if(!w)return;if(at&&at.nextElementSibling!==w&&at.parentElement===w.parentElement)at.insertAdjacentElement('afterend',w);if(lastStatsWs&&!w.querySelector('.v136WsNote')){const sm=document.createElement('small');sm.className='v136WsNote';sm.textContent=wsNoteTxt(lastStatsWs[mode]);w.appendChild(sm);w.title=wsTitle[mode]}at=w})}
     const rep=byId('reportOutput'),type=byId('v471ReportType')?.value||'';if(rep&&type!=='benchmark'&&rep.querySelector('.stat')&&!rep.querySelector('[data-v136-weighted],.v136WeightedReport')){const g=currentGoalie();if(g)addWeightedCard(rep,reportMatchesNow(type,g))}}
   window.v136AddWeightedCard=addWeightedCard;
+  // Goalie Development Report: recent 5 vs previous 5 xSD and xDD beside the recent/previous rates.
+  function addDevelopmentX(){
+    const rep=byId('reportOutput');if(!rep||rep.querySelector('[data-v136-dev]'))return;
+    const cards=[...rep.querySelectorAll('.stat')],find=l=>cards.find(c=>cardLabel(c)===l);const r5=find('Recent 5 Save Rate');if(!r5)return;
+    const g=currentGoalie();if(!g)return;let ms=[];try{ms=reportMatchesNow(byId('v471ReportType')?.value||'development',g)}catch(e){}ms=(ms||[]).slice().sort(asc);if(!ms.length)return;
+    const recent=ms.slice(-5),prev=ms.slice(-10,-5),sh=list=>wsShotsOf(list);
+    const mk=(label,r)=>{const c=r5.cloneNode(true);c.setAttribute('data-v136-dev','1');c.querySelectorAll('.v136Cnt').forEach(x=>x.remove());const b=c.querySelector(':scope > b'),sp=c.querySelector(':scope > span');if(b)b.textContent=wsFmt(r);if(sp)sp.textContent=label;return c};
+    const items=[mk('Recent 5 xSD',wsSummary(sh(recent),'save')),mk('Previous 5 xSD',prev.length?wsSummary(sh(prev),'save'):null),mk('Recent 5 xDD',wsSummary(sh(recent),'defence')),mk('Previous 5 xDD',prev.length?wsSummary(sh(prev),'defence'):null)];
+    const grid=r5.parentElement,p5s=find('Previous 5 Save Rate'),p5d=find('Previous 5 Defence Rate');
+    if(p5s&&p5d&&p5s.parentElement===grid&&p5d.parentElement===grid){p5s.insertAdjacentElement('afterend',items[1]);p5s.insertAdjacentElement('afterend',items[0]);p5d.insertAdjacentElement('afterend',items[3]);p5d.insertAdjacentElement('afterend',items[2]);}else items.forEach(c=>grid.appendChild(c));
+  }
+
+  // xSD and xDD columns beside Save Rate and Defence Rate in every breakdown table of a report.
+  function reportShotsWithContext(ms){
+    const out=[];(ms||[]).forEach(m=>{const periods=Number(m.periodCount||m.periods)||4;let items=[];try{items=typeof window.v589TimelineItems==='function'?window.v589TimelineItems(m):[]}catch(e){items=[]}
+      const byId=new Map();items.forEach(it=>{if(it&&it.kind==='shot'&&it.shot&&it.owner!=='other')byId.set(String(it.shot.id),Number(it.period)||1)});
+      (m.shots||[]).forEach(s=>{const p=byId.get(String(s.id))||Number(s.period)||1;out.push({s,m,period:p,half:periods<=1?'Full Match':(p<=Math.ceil(periods/2)?'First Half':'Second Half')})})});
+    return out}
+  const normLabel=v=>String(v||'').toLowerCase().replace(/[^a-z0-9+]/g,'');
+  const GROUPERS=[x=>x.s.shotSituation||x.s.situation||'Normal Game Play',x=>x.s.type||x.s.shotType||'1st Shot',x=>x.s.outnumbered||'Not Out Numbered',x=>'Period '+x.period,x=>'Quarter '+x.period,x=>x.half];
+  function countsOf(list){let sv=0,gl=0,an=0;list.forEach(x=>{const o=outcomeOf(x.s);if(o==='Goal')gl++;else if(o==='Angle Closed Off')an++;else sv++});return {rec:list.length,sv,gl,an}}
+  function addXColumns(){
+    const root=byId('reportOutput'),type=byId('v471ReportType')?.value||'';if(!root||!root.innerHTML||type==='benchmark'||root.querySelector('.v136WeightedReport'))return;
+    const tables=[...root.querySelectorAll('table:not(.reportPrintTable)')].filter(t=>!t.dataset.v136x);if(!tables.length)return;
+    const g=currentGoalie();if(!g)return;let ms=[];try{ms=reportMatchesNow(type,g)}catch(e){}if(!ms||!ms.length)return;
+    let ctx=null;
+    tables.forEach(tb=>{
+      const rows=[...tb.rows];if(rows.length<2)return;const head=rows[0],hc=[...head.cells].map(c=>(c.textContent||'').trim().toLowerCase());
+      const iSR=hc.indexOf('save rate'),iDR=hc.indexOf('defence rate');if(iSR<0||iDR<0||hc.includes('xsd'))return;
+      const col=n=>hc.indexOf(n),iRec=col('records'),iSv=col('saves'),iGl=col('goals'),iAn=col('angles'),iDate=col('date');
+      ctx=ctx||reportShotsWithContext(ms);
+      const num=(r,i)=>i<0?null:Number(String(r.cells[i]?.textContent||'').trim());
+      const pick=r=>{
+        const want={rec:num(r,iRec),sv:num(r,iSv),gl:num(r,iGl),an:num(r,iAn)},ok=c=>(want.rec===null||Number.isNaN(want.rec)||want.rec===c.rec)&&(want.sv===null||want.sv===c.sv)&&(want.gl===null||want.gl===c.gl)&&(want.an===null||want.an===c.an);
+        if(iDate>=0){const d=String(r.cells[iDate]?.textContent||'').trim();const cand=ms.filter(m=>dateOf(m)===d).map(m=>ctx.filter(x=>x.m===m));return cand.find(l=>ok(countsOf(l)))||cand[0]||null}
+        const label=normLabel(r.cells[0]?.textContent);if(!label)return null;
+        if(/^(total|all|overall)/.test(label)){return ctx}
+        let fallback=null;for(const fn of GROUPERS){const l=ctx.filter(x=>normLabel(fn(x))===label);if(!l.length)continue;if(ok(countsOf(l)))return l;fallback=fallback||l}
+        return fallback};
+      const cell=(tag,html,cls)=>{const c=document.createElement(tag);c.innerHTML=html;if(cls)c.className=cls;return c};
+      // insert Defence column first so the Save Rate index stays valid
+      const insertAfter=(row,i,el)=>{const ref=row.cells[i];if(ref&&ref.nextSibling)row.insertBefore(el,ref.nextSibling);else row.appendChild(el)};
+      insertAfter(head,iDR,cell(head.cells[0]?.tagName||'TH','xDD'));insertAfter(head,iSR,cell(head.cells[0]?.tagName||'TH','xSD'));
+      rows.slice(1).forEach(r=>{if(r.cells.length<=Math.max(iSR,iDR))return;const l=pick(r);const a=l?wsSummary(l.map(x=>x.s),'save'):null,b=l?wsSummary(l.map(x=>x.s),'defence'):null;
+        insertAfter(r,iDR,cell('TD',b?wsFmt(b):'–',b?wsCls(b):''));insertAfter(r,iSR,cell('TD',a?wsFmt(a):'–',a?wsCls(a):''))});
+      tb.dataset.v136x='1'});
+  }
+
+  // Report summaries: match/context details first, then Save Rate, Defence Rate, xSD and xDD, then the counts. The Individual Match Report's "Match" card repeats date and teams, so it is dropped.
+  const SUMMARY_ORDER=['Date','Home Team','Opponent','Score','Result','Matches','Matches Included','Games Played','Wins','Losses','Draws','Save Rate','Defence Rate',WS_LABEL.save,WS_LABEL.defence,'Total Shot Records','Shot Records','Attempts at Goal','Saves','Goals','Goals Conceded','Angles Closed Off','Angle Closed Off','Dangerous Rebounds','Outnumbered Attempts'];
+  function orderMatchSummary(){
+    const rep=byId('reportOutput');if(!rep||rep.querySelector('.v136WeightedReport'))return;
+    const lab=c=>((c.querySelector(':scope > span:not(.v136Cnt)')||c.querySelector(':scope > b')||{}).textContent||'').trim();
+    const grids=new Set();rep.querySelectorAll('.stat').forEach(c=>{if(lab(c)==='Save Rate'&&c.parentElement)grids.add(c.parentElement)});
+    grids.forEach(grid=>{let cards=[...grid.children].filter(c=>c.classList&&c.classList.contains('stat'));
+      const has=l=>cards.some(c=>lab(c)===l);
+      if(has('Date')&&has('Score'))cards.filter(c=>lab(c)==='Match').forEach(c=>c.remove());
+      // keep one card per weighted score
+      [WS_LABEL.save,WS_LABEL.defence].forEach(l=>{const dup=cards.filter(c=>lab(c)===l);dup.slice(1).forEach(c=>c.remove())});
+      cards=[...grid.children].filter(c=>c.classList&&c.classList.contains('stat'));
+      cards.forEach(c=>{if(c.style.getPropertyValue('grid-column')!=='auto')c.style.setProperty('grid-column','auto','important')});
+      const rank=c=>{const i=SUMMARY_ORDER.indexOf(lab(c));return i<0?SUMMARY_ORDER.length+cards.indexOf(c):i};
+      const want=cards.slice().sort((a,b)=>rank(a)-rank(b));if(want.every((c,i)=>c===cards[i]))return;
+      want.forEach(c=>grid.appendChild(c))});
+  }
+
+
 
   // Smaller "(saves/shots)" counts beside percentages.
   function styleCounts(){['statsOutput','reportOutput','v134Start'].forEach(id=>{const root=byId(id);if(!root)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const hits=[];let n;while((n=w.nextNode())){if(n.parentElement&&n.parentElement.closest('svg,.v136Cnt,script,style'))continue;if(/\d%\s\(\d+\/\d+\)/.test(n.textContent))hits.push(n)}

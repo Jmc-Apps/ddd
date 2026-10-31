@@ -1,9 +1,20 @@
-Data Driven Development Suite v1.44
-Field Hockey Goalie Stats v5.122
-Indoor Hockey Goalie Stats v1.18
+Data Driven Development Suite v1.45
+Field Hockey Goalie Stats v5.123
+Indoor Hockey Goalie Stats v1.19
 Hockey Goalie Trials v1.31
 Stats Recorder v1.45
 Benchmark Worker v1.2 (deployed 25 Oct 2026; no Worker or database change in this version)
+
+Version 1.45 / Field v5.123 / Indoor v1.19 reorders report summaries and adds xSD and xDD to every breakdown.
+
+Report summaries
+- Match or context details first, then Save Rate, Defence Rate, xSD and xDD, then the counts. Applies to the Individual Match, 5 Game, Year, Opponent Analysis, Team / Home Team and Data Driven Development reports. All summary blocks are the same width.
+- Individual Match Report: Date, Home Team, Opponent, Score, Result first. The Match block is removed because it repeats the date and teams.
+- 5 Game and Year reports no longer show the xSD and xDD blocks twice.
+- Goalie Development Report adds Recent 5 / Previous 5 xSD and xDD beside the recent and previous rates.
+
+Breakdown tables
+- Every breakdown table (periods, halves, shot situation, shot type, outnumbered, match-by-match trend) has xSD after Save Rate and xDD after Defence Rate. Rows with no placed shots show "-".
 
 Version 1.44 / Field v5.122 / Indoor v1.18 fixes the goalkeeper list on the start screen.
 
